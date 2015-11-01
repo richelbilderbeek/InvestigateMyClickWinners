@@ -11,8 +11,6 @@ struct person
 {
   person();
 
-  void buy(const winner_package_name name);
-
   ///The amount of money in the person his/her MyClickWinners BankWallet
   ///Cannot be negative
   double get_bank_wallet_euros() const noexcept { return m_bank_wallet_euros; }
@@ -26,6 +24,14 @@ struct person
   ///Give money from MyClickWinners profit
   ///This money is distributed over the BankWallet and ShopWallet
   void give_income(const double money_euros) noexcept;
+
+  bool has_click_card() const noexcept { return !m_card.empty(); }
+
+  ///person pays for a ClickCard
+  void pay(const click_card& c);
+
+  ///person pays for a Winner
+  void pay(const winner& w);
 
   constexpr static const double proportion_of_profit_to_bank_wallet = 0.75;
   constexpr static const double proportion_of_profit_to_shop_wallet = 0.25;
@@ -45,7 +51,6 @@ struct person
 
   ///A person can have or have not one card
   std::vector<click_card> m_card;
-
 
   ///The amount of money in the person his/her MyClickWinners ShopWallet
   ///Cannot be negative

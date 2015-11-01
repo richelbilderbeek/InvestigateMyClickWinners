@@ -3,7 +3,9 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <sstream>
 
+#include "company.h"
 #include "winner_package.h"
 
 person::person()
@@ -19,30 +21,6 @@ person::person()
   #endif
 }
 
-void person::buy(const winner_package_name name)
-{
-  assert(m_card.empty());
-  const winner_package p(name);
-  const int n_winners = p.get_n_winners();
-
-  //card
-  {
-    click_card c;
-    m_card.push_back(c);
-    m_balance_euros -= c.cost_inc_vat_euros;
-  }
-
-  for (int i=0; i!=n_winners; ++i)
-  {
-    winner w;
-    //winners
-    m_winners.push_back(w);
-    //money
-    m_balance_euros -= w.cost_vat_exempt_euros;
-  }
-
-}
-
 void person::give_income(const double money_euros) noexcept
 {
   const double prev_money = m_bank_wallet_euros + m_shop_wallet_euros;
@@ -52,6 +30,32 @@ void person::give_income(const double money_euros) noexcept
   const double new_money = m_bank_wallet_euros + m_shop_wallet_euros;
   assert(prev_money + money_euros == new_money);
 
+}
+
+void person::pay(const click_card& c)
+{
+  if (has_click_card())
+  {
+    std::stringstream s;
+    s << __func__
+      << "Cannot buy a ClickCard when customer already has one";
+    throw std::logic_error(s.str());
+  }
+  m_card.push_back(c);
+  m_balance_euros -= c.cost_inc_vat_euros;
+}
+
+void person::pay(const winner& w)
+{
+  if (!has_click_card())
+  {
+    std::stringstream s;
+    s << __func__
+      << "Cannot buy a Winner when customer has no ClickCard";
+    throw std::logic_error(s.str());
+  }
+  m_winners.push_back(w);
+  m_balance_euros -= w.cost_vat_exempt_euros;
 }
 
 #ifndef NDEBUG
@@ -72,7 +76,8 @@ void person::test() noexcept
   //A person buying a starter winner package has to pay 100 euros
   {
     person p;
-    p.buy(winner_package_name::starter);
+    company c;
+    c.buy(p,winner_package_name::starter);
     const double expected = -100.0;
     const double observed = p.get_balance_euros();
     assert(std::abs(expected - observed) < 0.005);
@@ -80,7 +85,8 @@ void person::test() noexcept
   //A person buying an executive winner package has to pay 60+(50*40) euros
   {
     person p;
-    p.buy(winner_package_name::executive);
+    company c;
+    c.buy(p,winner_package_name::executive);
     const double expected = -2060.0;
     const double observed = p.get_balance_euros();
     assert(std::abs(expected - observed) < 0.005);
