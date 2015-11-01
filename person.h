@@ -38,6 +38,9 @@ struct person
   ///person pays for a Winner
   void pay(std::shared_ptr<winner> w);
 
+  constexpr static const double max_tranfer_from_bank_wallet_euros = 2250.0;
+  constexpr static const double min_tranfer_from_bank_wallet_euros = 100.0;
+  constexpr static const int max_n_winners = 100;
   constexpr static const double proportion_of_profit_to_bank_wallet = 0.75;
   constexpr static const double proportion_of_profit_to_shop_wallet = 0.25;
 
