@@ -1,6 +1,7 @@
 #ifndef PERSON_H
 #define PERSON_H
 
+#include <memory>
 #include <vector>
 
 #include "clickcard.h"
@@ -21,6 +22,10 @@ struct person
 
   double get_balance_euros() const noexcept { return m_balance_euros; }
 
+  ///The winners
+  const auto& get_winners() const noexcept { return m_winners; }
+        auto& get_winners()       noexcept { return m_winners; }
+
   ///Give money from MyClickWinners profit
   ///This money is distributed over the BankWallet and ShopWallet
   void give_income(const double money_euros) noexcept;
@@ -31,7 +36,7 @@ struct person
   void pay(const click_card& c);
 
   ///person pays for a Winner
-  void pay(const winner& w);
+  void pay(std::shared_ptr<winner> w);
 
   constexpr static const double proportion_of_profit_to_bank_wallet = 0.75;
   constexpr static const double proportion_of_profit_to_shop_wallet = 0.25;
@@ -56,9 +61,8 @@ struct person
   ///Cannot be negative
   double m_shop_wallet_euros;
 
-
-  ///The winners
-  std::vector<winner> m_winners;
+  ///The Winners, shared by both customer and company
+  std::vector<std::shared_ptr<winner>> m_winners;
 
   #ifndef NDEBUG
   static void test() noexcept;

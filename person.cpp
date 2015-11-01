@@ -45,7 +45,7 @@ void person::pay(const click_card& c)
   m_balance_euros -= c.cost_inc_vat_euros;
 }
 
-void person::pay(const winner& w)
+void person::pay(std::shared_ptr<winner> w)
 {
   if (!has_click_card())
   {
@@ -55,7 +55,7 @@ void person::pay(const winner& w)
     throw std::logic_error(s.str());
   }
   m_winners.push_back(w);
-  m_balance_euros -= w.cost_vat_exempt_euros;
+  m_balance_euros -= winner::prive_vat_exempt_euros;
 }
 
 #ifndef NDEBUG

@@ -3,6 +3,7 @@
 #include <cmath>
 #include <cassert>
 #include <sstream>
+#include <iostream>
 
 #include "winner_package.h"
 company::company()
@@ -10,7 +11,7 @@ company::company()
     m_balance_holding_euros{0.0},
     m_balance_reserves_euros{0.0},
     m_balance_undistributed_euros{0.0},
-    m_customers{}
+    m_winners{}
 {
   #ifndef NDEBUG
   test();
@@ -38,11 +39,31 @@ void company::buy(person& customer, const winner_package_name name)
   //Winners
   for (int i=0; i!=n_winners; ++i)
   {
-    winner w;
+    auto w = std::make_shared<winner>();
+    m_winners.push_back(w);
     customer.pay(w);
-    m_balance_undistributed_euros += w.cost_vat_exempt_euros;
+    m_balance_undistributed_euros += winner::prive_vat_exempt_euros;
   }
 
+}
+
+void company::distribute_net_profit(const double money_euros) noexcept
+{
+  const double change_compensation_plan_euros = money_euros * proportion_of_profit_to_compensation_plan;
+  const double change_holding_euros           = money_euros * proportion_of_profit_to_holding;
+  const double change_reserves_euros          = money_euros * proportion_of_profit_to_reserves;
+  const double change_winners_euros           = money_euros * proportion_of_profit_to_winners;
+
+  m_balance_compensation_plan_euros += change_compensation_plan_euros;
+  m_balance_holding_euros += change_holding_euros;
+  m_balance_reserves_euros += change_reserves_euros;
+
+  const int n_winners = get_n_winners();
+  const double income_per_winners_euros
+    = change_winners_euros
+    / static_cast<double>(n_winners)
+  ;
+  for (const auto p: m_winners) { p->add_value_euros(income_per_winners_euros); }
 }
 
 #ifndef NDEBUG
@@ -59,7 +80,7 @@ void company::test() noexcept
     assert(c.get_balance_compensation_plan_euros() == 0.0);
     assert(c.get_balance_holding_euros () == 0.0);
     assert(c.get_balance_reserves_euros() == 0.0);
-    assert(c.get_customers().empty());
+    //assert(c.get_customers().empty());
   }
   //When a company is started, all balances are zero
   {
@@ -69,7 +90,7 @@ void company::test() noexcept
     assert(c.get_balance_compensation_plan_euros() == 0.0);
     assert(c.get_balance_holding_euros () == 0.0);
     assert(c.get_balance_reserves_euros() == 0.0);
-    assert(c.get_customers().empty());
+    //assert(c.get_customers().empty());
   }
   //A person buying a starter winner package results in 100 euros in the undistributed money balance
   {
@@ -88,6 +109,23 @@ void company::test() noexcept
     const double expected = 2060.0;
     const double observed = c.get_balance_undistributed_euros();
     assert(std::abs(expected - observed) < 0.005);
+  }
+  //When a company distributes profit, it is distributed as expected
+  {
+    company c;
+    person p;
+    c.buy(p,winner_package_name::starter);
+    assert(c.get_balance_compensation_plan_euros() == 0.0);
+    assert(c.get_balance_holding_euros () == 0.0);
+    assert(c.get_balance_reserves_euros() == 0.0);
+    //100 euros is distributed
+    c.distribute_net_profit(100.0);
+    assert(c.get_balance_compensation_plan_euros() == 15.0);
+    assert(c.get_balance_holding_euros () == 10.0);
+    assert(c.get_balance_reserves_euros() == 30.0);
+    assert(p.get_winners().size() == 1);
+    assert(p.get_winners()[0]);
+    assert(p.get_winners()[0]->get_value_euros() == 45.0);
   }
 }
 #endif

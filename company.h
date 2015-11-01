@@ -1,6 +1,7 @@
 #ifndef COMPANY_H
 #define COMPANY_H
 
+#include <memory>
 #include <vector>
 #include "person.h"
 
@@ -39,8 +40,8 @@ struct company
   ///Negative values denote there is a money shortage
   double get_balance_undistributed_euros() const noexcept { return m_balance_undistributed_euros; }
 
-  ///The customers
-  const std::vector<person>& get_customers() const noexcept { return m_customers; }
+  ///Get the number of Winners distributed
+  int get_n_winners() const noexcept { return static_cast<int>(m_winners.size()); }
 
   constexpr static const double proportion_of_profit_to_compensation_plan = 0.15;
   constexpr static const double proportion_of_profit_to_holding = 0.10;
@@ -71,8 +72,8 @@ struct company
   ///Negative values denote there is a money shortage
   double m_balance_undistributed_euros;
 
-  ///The customers
-  std::vector<person> m_customers;
+  ///The Winners, shared by both customer and company
+  std::vector<std::shared_ptr<winner>> m_winners;
 
   #ifndef NDEBUG
   static void test() noexcept;
