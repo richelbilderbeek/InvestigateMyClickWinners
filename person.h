@@ -22,6 +22,8 @@ struct person
 
   double get_balance_euros() const noexcept { return m_balance_euros; }
 
+  int get_n_winners() const noexcept { return static_cast<int>(m_winners.size()); }
+
   ///The winners
   const auto& get_winners() const noexcept { return m_winners; }
         auto& get_winners()       noexcept { return m_winners; }
@@ -36,10 +38,15 @@ struct person
   void pay(const click_card& c);
 
   ///person pays for a Winner
-  void pay(std::shared_ptr<winner> w);
+  void pay(const winner& w);
+
+  ///Transfer money from BankWallet to m_balance_euros
+  ///First transfer costs a fee of tranfer_from_bank_wallet_first_time_fee_euros
+  void transfer(const double money_euros) = delete; //TODO
 
   constexpr static const double max_tranfer_from_bank_wallet_euros = 2250.0;
   constexpr static const double min_tranfer_from_bank_wallet_euros = 100.0;
+  constexpr static const double tranfer_from_bank_wallet_first_time_fee_euros = 1000000000.0; //Unknown
   constexpr static const int max_n_winners = 100;
   constexpr static const double proportion_of_profit_to_bank_wallet = 0.75;
   constexpr static const double proportion_of_profit_to_shop_wallet = 0.25;
@@ -64,8 +71,8 @@ struct person
   ///Cannot be negative
   double m_shop_wallet_euros;
 
-  ///The Winners, shared by both customer and company
-  std::vector<std::shared_ptr<winner>> m_winners;
+  ///The Winners a customer has
+  std::vector<winner> m_winners;
 
   #ifndef NDEBUG
   static void test() noexcept;
@@ -73,5 +80,7 @@ struct person
 
   static_assert(proportion_of_profit_to_bank_wallet + proportion_of_profit_to_shop_wallet == 1.0,"");
 };
+
+bool operator==(const person& lhs, const person& rhs) noexcept;
 
 #endif // PERSON_H

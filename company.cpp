@@ -1,5 +1,6 @@
 #include "company.h"
 
+#include <algorithm>
 #include <cmath>
 #include <cassert>
 #include <sstream>
@@ -11,7 +12,7 @@ company::company()
     m_balance_holding_euros{0.0},
     m_balance_reserves_euros{0.0},
     m_balance_undistributed_euros{0.0},
-    m_winners{}
+    m_customers{}
 {
   #ifndef NDEBUG
   test();
@@ -27,24 +28,52 @@ void company::buy(person& customer, const winner_package_name name)
       << "Cannot buy a WinnerPackage when customer already has a ClickCard";
     throw std::logic_error(s.str());
   }
+  assert(!is_customer(customer));
+
+
+  #ifndef NDEBUG
+  const auto n_customers_before = m_customers.size();
+  #endif // NDEBUG
+
   const winner_package p(name);
   const int n_winners = p.get_n_winners();
 
-  //ClickCard
+  //ClickCard, makes person a customer
   {
     click_card c;
     customer.pay(c);
+    m_customers.push_back(customer);
     m_balance_undistributed_euros += c.cost_inc_vat_euros;
   }
   //Winners
   for (int i=0; i!=n_winners; ++i)
   {
-    auto w = std::make_shared<winner>();
-    m_winners.push_back(w);
+    winner w;
     customer.pay(w);
     m_balance_undistributed_euros += winner::prive_vat_exempt_euros;
   }
+  assert(customer.get_n_winners() == n_winners);
 
+  #ifndef NDEBUG
+  const auto n_customers_after = m_customers.size();
+  assert(n_customers_after == n_customers_before + 1);
+  #endif // NDEBUG
+
+}
+
+std::vector<std::reference_wrapper<winner>> company::collect_winners() noexcept
+{
+  std::vector<std::reference_wrapper<winner>> v;
+  for (const auto& p: m_customers)
+  {
+    auto winners = p.get().get_winners();
+    std::copy(
+      std::begin(winners),
+      std::end(winners),
+      std::back_inserter(v)
+    );
+  }
+  return v;
 }
 
 void company::distribute_net_profit(const double money_euros) noexcept
@@ -58,12 +87,29 @@ void company::distribute_net_profit(const double money_euros) noexcept
   m_balance_holding_euros += change_holding_euros;
   m_balance_reserves_euros += change_reserves_euros;
 
-  const int n_winners = get_n_winners();
+  //Collect the Winners from all customers
+  const auto winners = collect_winners();
+
+  //Distribute the money over the winners
+  const int n_winners{static_cast<int>(winners.size())};
   const double income_per_winners_euros
     = change_winners_euros
     / static_cast<double>(n_winners)
   ;
-  for (const auto p: m_winners) { p->add_value_euros(income_per_winners_euros); }
+  for (auto& winner: winners)
+  {
+    winner.get().add_value_euros(income_per_winners_euros);
+  }
+}
+
+bool company::is_customer(const person& p) const noexcept
+{
+  const auto iter = std::find_if(
+    std::begin(m_customers),
+    std::end(m_customers),
+    [p](const auto customer) { return p == customer; }
+  );
+  return iter != std::end(m_customers);
 }
 
 #ifndef NDEBUG
@@ -124,8 +170,40 @@ void company::test() noexcept
     assert(c.get_balance_holding_euros () == 10.0);
     assert(c.get_balance_reserves_euros() == 30.0);
     assert(p.get_winners().size() == 1);
-    assert(p.get_winners()[0]);
-    assert(p.get_winners()[0]->get_value_euros() == 45.0);
+    assert(p.get_winners()[0].get_value_euros() == 45.0);
   }
+  //Winners end when exceeding 50 euros
+  {
+    company c;
+    person p;
+    c.buy(p,winner_package_name::starter);
+    assert(c.get_balance_compensation_plan_euros() == 0.0);
+    assert(c.get_balance_holding_euros () == 0.0);
+    assert(c.get_balance_reserves_euros() == 0.0);
+    //100 euros is distributed
+    //customer will have one Winner with 45 euro on it
+    c.distribute_net_profit(100.0);
+    assert(c.get_balance_compensation_plan_euros() == 15.0);
+    assert(c.get_balance_holding_euros () == 10.0);
+    assert(c.get_balance_reserves_euros() == 30.0);
+    assert(p.get_winners().size() == 1);
+    assert(p.get_winners()[0].get_value_euros() == 45.0);
+    assert(p.get_bank_wallet_euros() == 0.0);
+    //100 euros is distributed again
+    //customer had one Winner with 45 euro on it, so this goes to 50,
+    //and will get a new Winner with 40 euro on it
+    //the 10 euros from the first winner is distributed
+    // - 75% to BankWallet, equals 7.50 euros
+    // - 25% to ShopWallet, equals 2.50 euros
+    c.distribute_net_profit(100.0);
+    assert(c.get_balance_compensation_plan_euros() == 30.0);
+    assert(c.get_balance_holding_euros () == 20.0);
+    assert(c.get_balance_reserves_euros() == 60.0);
+    assert(p.get_winners().size() == 1);
+    assert(p.get_winners()[0].get_value_euros() == 40.0);
+    assert(p.get_bank_wallet_euros() == 7.50);
+    assert(p.get_shop_wallet_euros() == 2.50);
+  }
+  assert(!"Green");
 }
 #endif

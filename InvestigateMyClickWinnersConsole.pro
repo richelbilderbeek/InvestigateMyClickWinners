@@ -9,7 +9,10 @@ SOURCES += main.cpp \
     winner_package.cpp \
     winner_package_name.cpp \
     winner.cpp \
-    company.cpp
+    company.cpp \
+    simulation.cpp \
+    simulation_parameters.cpp \
+    calendar.cpp
 
 HEADERS += \
     person.h \
@@ -17,4 +20,7 @@ HEADERS += \
     winner_package.h \
     winner_package_name.h \
     winner.h \
-    company.h
+    company.h \
+    simulation.h \
+    simulation_parameters.h \
+    calendar.h

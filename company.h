@@ -41,7 +41,10 @@ struct company
   double get_balance_undistributed_euros() const noexcept { return m_balance_undistributed_euros; }
 
   ///Get the number of Winners distributed
-  int get_n_winners() const noexcept { return static_cast<int>(m_winners.size()); }
+  //int get_n_winners() const noexcept { return static_cast<int>(m_winners.size()); }
+
+  ///Is the person already a customer?
+  bool is_customer(const person& p) const noexcept;
 
   constexpr static const double proportion_of_profit_to_compensation_plan = 0.15;
   constexpr static const double proportion_of_profit_to_holding = 0.10;
@@ -72,8 +75,11 @@ struct company
   ///Negative values denote there is a money shortage
   double m_balance_undistributed_euros;
 
-  ///The Winners, shared by both customer and company
-  std::vector<std::shared_ptr<winner>> m_winners;
+  ///All customers
+  std::vector<std::reference_wrapper<person>> m_customers;
+
+  ///Collect all Winners from all customers
+  std::vector<std::reference_wrapper<winner>> collect_winners() noexcept;
 
   #ifndef NDEBUG
   static void test() noexcept;

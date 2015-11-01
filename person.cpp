@@ -45,7 +45,7 @@ void person::pay(const click_card& c)
   m_balance_euros -= c.cost_inc_vat_euros;
 }
 
-void person::pay(std::shared_ptr<winner> w)
+void person::pay(const winner& w)
 {
   if (!has_click_card())
   {
