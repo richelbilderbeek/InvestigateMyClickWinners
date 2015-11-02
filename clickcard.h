@@ -2,6 +2,7 @@
 #define CLICKCARD_H
 
 #include <chrono>
+#include "money.h"
 
 struct click_card
 {

@@ -8,9 +8,15 @@
 #include "winner.h"
 #include "winner_package_name.h"
 
+struct company;
+
 struct person
 {
   person();
+
+  void add_click_card(const click_card& w);
+
+  void add_winner(const winner& w);
 
   ///The amount of money in the person his/her MyClickWinners BankWallet
   ///Cannot be negative
@@ -20,13 +26,14 @@ struct person
   ///Cannot be negative
   double get_shop_wallet_euros() const noexcept { return m_shop_wallet_euros; }
 
-  double get_balance_euros() const noexcept { return m_balance_euros; }
+  const double& get_balance_euros() const noexcept { return m_balance_euros; }
+        double& get_balance_euros()       noexcept { return m_balance_euros; }
 
   int get_n_winners() const noexcept { return static_cast<int>(m_winners.size()); }
 
   ///The winners
-  const auto& get_winners() const noexcept { return m_winners; }
-        auto& get_winners()       noexcept { return m_winners; }
+  const std::vector<winner>& get_winners() const noexcept { return m_winners; }
+        std::vector<winner>& get_winners()       noexcept { return m_winners; }
 
   ///Give money from MyClickWinners profit
   ///This money is distributed over the BankWallet and ShopWallet
@@ -37,8 +44,14 @@ struct person
   ///person pays for a ClickCard
   void pay(const click_card& c);
 
-  ///person pays for a Winner
-  void pay(const winner& w);
+  ///After profit of MyClickWinners has been distributed,
+  ///Winners my have more than 50 euros
+  void process_winners(company& the_company);
+
+  ///Remove the ClickCard, assuming he/she has one
+  void remove_card();
+
+  void set_auto_buy(const bool auto_buy) noexcept { m_auto_buy = auto_buy; }
 
   ///Transfer money from BankWallet to m_balance_euros
   ///First transfer costs a fee of tranfer_from_bank_wallet_first_time_fee_euros
@@ -52,6 +65,10 @@ struct person
   constexpr static const double proportion_of_profit_to_shop_wallet = 0.25;
 
   private:
+
+  ///Will the person automatically buy Winners when
+  ///the ShopWallet exceeds the price of a Winner?
+  bool m_auto_buy;
 
   ///The amount of money in euros in possession of the person,
   ///that is, on his/her personal bank account
@@ -67,6 +84,9 @@ struct person
   ///A person can have or have not one card
   std::vector<click_card> m_card;
 
+  ///Unique ID
+  const int m_id;
+
   ///The amount of money in the person his/her MyClickWinners ShopWallet
   ///Cannot be negative
   double m_shop_wallet_euros;
@@ -74,11 +94,16 @@ struct person
   ///The Winners a customer has
   std::vector<winner> m_winners;
 
+  ///The new ID to be assigned
+  static int sm_current_id;
+
   #ifndef NDEBUG
   static void test() noexcept;
   #endif
 
   static_assert(proportion_of_profit_to_bank_wallet + proportion_of_profit_to_shop_wallet == 1.0,"");
+
+  friend bool operator==(const person& lhs, const person& rhs) noexcept;
 };
 
 bool operator==(const person& lhs, const person& rhs) noexcept;

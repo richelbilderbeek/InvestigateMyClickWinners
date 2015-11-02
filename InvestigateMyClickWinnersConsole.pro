@@ -12,7 +12,9 @@ SOURCES += main.cpp \
     company.cpp \
     simulation.cpp \
     simulation_parameters.cpp \
-    calendar.cpp
+    calendar.cpp \
+    helper.cpp \
+    money.cpp
 
 HEADERS += \
     person.h \
@@ -23,4 +25,6 @@ HEADERS += \
     company.h \
     simulation.h \
     simulation_parameters.h \
-    calendar.h
+    calendar.h \
+    helper.h \
+    money.h

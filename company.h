@@ -13,9 +13,22 @@ struct company
   ///Add any customer, these persons are setup in the simulation
   void add(person& customer);
 
+  #ifndef NDEBUG
+  ///Ban any customer, removing his/her clickcard
+  void ban(const person& customer);
+  #endif
+
+  ///A customer buys Winner
+  ///This money is added to the balance of undistributed money
+  void buy_winner(person& customer, double& account_euros);
+
   ///A customer buys a WinnerPackage
   ///This money is added to the balance of undistributed money
-  void buy(person& customer, const winner_package_name name);
+  void buy_winner_package(
+    person& customer,
+    const winner_package_name name,
+    double& account_euros
+  );
 
   ///When MyClickWinners makes a profit,
   ///it is distributed over customers and other entities
@@ -42,6 +55,9 @@ struct company
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
   double get_balance_undistributed_euros() const noexcept { return m_balance_undistributed_euros; }
+
+  const auto& get_customers() const noexcept { return m_customers; }
+        auto& get_customers()       noexcept { return m_customers; }
 
   ///Get the number of Winners distributed
   //int get_n_winners() const noexcept { return static_cast<int>(m_winners.size()); }
@@ -80,6 +96,8 @@ struct company
 
   ///All customers
   std::vector<std::reference_wrapper<person>> m_customers;
+
+  bool m_verbose;
 
   ///Collect all Winners from all customers
   std::vector<std::reference_wrapper<winner>> collect_winners() noexcept;
