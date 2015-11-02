@@ -6,11 +6,13 @@
 #include "person.h"
 #include "simulation_parameters.h"
 
+///A simulation describes the profit of a focal person,
+///compared with other persons
 struct simulation
 {
   simulation(const simulation_parameters& parameters);
 
-  void run();
+  void run() noexcept;
 
   private:
   company m_company;

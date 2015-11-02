@@ -10,6 +10,9 @@ struct company
 {
   company();
 
+  ///Add any customer, these persons are setup in the simulation
+  void add(person& customer);
+
   ///A customer buys a WinnerPackage
   ///This money is added to the balance of undistributed money
   void buy(person& customer, const winner_package_name name);
