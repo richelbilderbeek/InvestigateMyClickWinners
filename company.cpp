@@ -324,13 +324,14 @@ void company::test() noexcept
     assert(c.get_balance_holding_euros () == 0.0);
     assert(c.get_balance_reserves_euros() == 0.0);
     //200 euros is distributed
-    //customer will have one Winner with 90 euro on it,
+    //customer will have one Winner with 40 euro on it,
     //that will break down
     c.distribute_net_profit(2.0 * 100.0);
     assert(c.get_balance_compensation_plan_euros() == 2.0 * 15.0);
     assert(c.get_balance_holding_euros () == 2.0 * 10.0);
     assert(c.get_balance_reserves_euros() == 2.0 * 30.0);
-    assert(p.get_winners().size() == 2);
+    assert(p.get_winners().size() == 1);
+    assert(p.get_winners()[0].get_value() == 40.0);
     assert(p.get_bank_wallet_euros() == 7.50);
     assert(p.get_shop_wallet_euros() == 2.50);
   }
@@ -339,13 +340,17 @@ void company::test() noexcept
 
 std::ostream& operator<<(std::ostream& os, const company& c) noexcept
 {
-  os
+  std::stringstream s;
+  s
     << "Balance compensation plan: " << c.m_balance_compensation_plan_euros << " euros" << '\n'
     << "Balance holding: " << c.m_balance_holding_euros << " euros" << '\n'
     << "Balance reserves: " << c.m_balance_reserves_euros << " euros" << '\n'
     << "Balance undistributed: " << c.m_balance_undistributed_euros << " euros" << '\n'
     << "#customers: " << c.m_customers.size() << '\n'
   ;
-  for (const auto& d: c.m_customers) { std::cout << d << std::endl; }
+  for (const auto& d: c.m_customers) { s << d << std::endl; }
+  std::string t{s.str()};
+  t.pop_back();
+  os << t;
   return os;
 }

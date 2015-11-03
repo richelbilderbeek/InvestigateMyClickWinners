@@ -1,6 +1,7 @@
 #ifndef WINNER_H
 #define WINNER_H
 
+#include <iosfwd>
 
 struct winner
 {
@@ -25,10 +26,11 @@ struct winner
   ///The value of the Winner in euros
   double m_value_euros;
 
-
   #ifndef NDEBUG
   static void test() noexcept;
   #endif
 };
+
+std::ostream& operator<<(std::ostream& os, const winner& w) noexcept;
 
 #endif // WINNER_H

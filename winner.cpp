@@ -1,6 +1,7 @@
 #include "winner.h"
 
 #include <cassert>
+#include <iostream>
 
 winner::winner()
   : m_value_euros{0.0}
@@ -30,3 +31,9 @@ void winner::test() noexcept
   }
 }
 #endif
+
+std::ostream& operator<<(std::ostream& os, const winner& w) noexcept
+{
+  os << w.get_value_euros() << " euros";
+  return os;
+}

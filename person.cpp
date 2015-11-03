@@ -165,7 +165,8 @@ bool operator==(const person& lhs, const person& rhs) noexcept
 
 std::ostream& operator<<(std::ostream& os, const person& p) noexcept
 {
-  os
+  std::stringstream s;
+  s
     << "ID: " << p.m_id << '\n'
     << "Auto buy: " << p.m_auto_buy << '\n'
     << "Balance: " << p.m_balance_euros << " euros" << '\n'
@@ -174,5 +175,9 @@ std::ostream& operator<<(std::ostream& os, const person& p) noexcept
     << "ClickCard: " << (p.has_click_card() ? "Y" : "N") << '\n'
     << "#Winners: " << p.m_winners.size() << '\n'
   ;
+  for (const auto w: p.m_winners) s << w << '\n';
+  std::string t{s.str()};
+  t.pop_back();
+  os << t;
   return os;
 }
