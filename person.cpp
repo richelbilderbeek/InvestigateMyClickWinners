@@ -162,3 +162,17 @@ bool operator==(const person& lhs, const person& rhs) noexcept
 {
   return lhs.m_id == rhs.m_id;
 }
+
+std::ostream& operator<<(std::ostream& os, const person& p) noexcept
+{
+  os
+    << "ID: " << p.m_id << '\n'
+    << "Auto buy: " << p.m_auto_buy << '\n'
+    << "Balance: " << p.m_balance_euros << " euros" << '\n'
+    << "BankWallet: " << p.m_bank_wallet_euros << " euros" << '\n'
+    << "ShopWallet: " << p.m_shop_wallet_euros << " euros" << '\n'
+    << "ClickCard: " << (p.has_click_card() ? "Y" : "N") << '\n'
+    << "#Winners: " << p.m_winners.size() << '\n'
+  ;
+  return os;
+}

@@ -113,7 +113,12 @@ struct company
     + proportion_of_profit_to_winners
     == 1.0,"Proportions must sum up to one"
   );
+  friend std::ostream& operator<<(std::ostream& os, const company& c) noexcept;
 
 };
+
+
+std::ostream& operator<<(std::ostream& os, const company& c) noexcept;
+
 
 #endif // COMPANY_H

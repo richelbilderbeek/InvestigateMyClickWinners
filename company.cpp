@@ -16,7 +16,7 @@ company::company()
     m_balance_reserves_euros{0.0},
     m_balance_undistributed_euros{0.0},
     m_customers{},
-    m_verbose{true}
+    m_verbose{false}
 {
   #ifndef NDEBUG
   test();
@@ -25,6 +25,21 @@ company::company()
 
 void company::add(person& customer)
 {
+  if (
+    std::find(
+      std::begin(m_customers),
+      std::end(m_customers),
+      customer
+    ) != std::end(m_customers)
+  ) {
+    std::stringstream msg;
+    msg
+      << __func__ << ": cannot add existing customer (ID: "
+      << customer.get_id() << ") again"
+    ;
+    throw std::logic_error(msg.str());
+  }
+
   m_customers.push_back(customer);
 }
 
@@ -321,3 +336,16 @@ void company::test() noexcept
   }
 }
 #endif
+
+std::ostream& operator<<(std::ostream& os, const company& c) noexcept
+{
+  os
+    << "Balance compensation plan: " << c.m_balance_compensation_plan_euros << " euros" << '\n'
+    << "Balance holding: " << c.m_balance_holding_euros << " euros" << '\n'
+    << "Balance reserves: " << c.m_balance_reserves_euros << " euros" << '\n'
+    << "Balance undistributed: " << c.m_balance_undistributed_euros << " euros" << '\n'
+    << "#customers: " << c.m_customers.size() << '\n'
+  ;
+  for (const auto& d: c.m_customers) { std::cout << d << std::endl; }
+  return os;
+}

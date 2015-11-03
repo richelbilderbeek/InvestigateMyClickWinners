@@ -29,6 +29,9 @@ struct person
   const double& get_balance_euros() const noexcept { return m_balance_euros; }
         double& get_balance_euros()       noexcept { return m_balance_euros; }
 
+
+  int get_id() const noexcept { return m_id; }
+
   int get_n_winners() const noexcept { return static_cast<int>(m_winners.size()); }
 
   ///The winners
@@ -103,8 +106,12 @@ struct person
 
   static_assert(proportion_of_profit_to_bank_wallet + proportion_of_profit_to_shop_wallet == 1.0,"");
 
+  friend std::ostream& operator<<(std::ostream& os, const person& p) noexcept;
   friend bool operator==(const person& lhs, const person& rhs) noexcept;
 };
+
+
+std::ostream& operator<<(std::ostream& os, const person& p) noexcept;
 
 bool operator==(const person& lhs, const person& rhs) noexcept;
 
