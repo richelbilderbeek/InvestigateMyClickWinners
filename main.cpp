@@ -1,6 +1,7 @@
 #include "bank.h"
 #include "calendar.h"
 #include "company.h"
+#include "money.h"
 #include "person.h"
 #include "winner_package.h"
 #include "simulation.h"

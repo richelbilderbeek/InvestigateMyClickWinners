@@ -3,7 +3,9 @@
 #include <iostream>
 #include <sstream>
 
+#include "balance.h"
 #include "helper.h"
+#include "money.h"
 
 ribi::imcw::bank::bank()
   : m_transfers{}
@@ -31,10 +33,10 @@ void ribi::imcw::bank::test() noexcept
   {
     bank the_bank;
     balance sender("sender",0.0);
-    const double amount_euros = 100.0;
+    const money amount_euros(100.0);
     balance receiver("receiver",0.0);
-    assert(sender.get_value_euros() == 0.0);
-    assert(receiver.get_value_euros() == 0.0);
+    assert(sender.get_value() == money(0.0));
+    assert(receiver.get_value() == money(0.0));
     assert(the_bank.get_transfers().empty());
     the_bank.transfer(
       sender,
@@ -42,8 +44,8 @@ void ribi::imcw::bank::test() noexcept
       receiver,
       today
     );
-    assert(sender.get_value_euros()   == -amount_euros);
-    assert(receiver.get_value_euros() ==  amount_euros);
+    assert(sender.get_value()   == -amount_euros);
+    assert(receiver.get_value() ==  amount_euros);
     assert(!the_bank.get_transfers().empty());
   }
 }
@@ -51,16 +53,15 @@ void ribi::imcw::bank::test() noexcept
 
 void ribi::imcw::bank::transfer(
   balance& sender,
-  const double value_in_euros,
+  const money& value_in_euros,
   balance& receiver,
   const date& day
 )
 {
-  const auto sum_before = sender.get_value_euros() + receiver.get_value_euros();
-  sender.set_value_euros(sender.get_value_euros() - value_in_euros);
-  receiver.set_value_euros(receiver.get_value_euros() + value_in_euros);
-  //sender   = balance(sender.get_value_euros() - value_in_euros);
-  //receiver = balance(receiver.get_value_euros() + value_in_euros);
+  assert(sender != receiver);
+  const money sum_before = sender.get_value() + receiver.get_value();
+  sender.set_value(    sender.get_value() - value_in_euros);
+  receiver.set_value(receiver.get_value() + value_in_euros);
 
   std::stringstream msg;
   msg << day << ": " << sender.get_description() << " sent "
@@ -69,16 +70,14 @@ void ribi::imcw::bank::transfer(
   ;
   m_transfers.push_back(msg.str());
 
-  const auto sum_after = sender.get_value_euros() + receiver.get_value_euros();
-
-  assert(helper().is_about_equal(sum_before,sum_after));
-  //assert(sum_before == sum_after);
+  const money sum_after = sender.get_value() + receiver.get_value();
+  assert(sum_before == sum_after);
 }
 
 
 void ribi::imcw::bank::transfer(
   balance& sender,
-  const double value_in_euros,
+  const money& value_in_euros,
   const double proportion_to_a,
   balance& receiver_a,
   balance& receiver_b,
@@ -86,27 +85,27 @@ void ribi::imcw::bank::transfer(
 )
 {
   const auto sum_before
-    = sender.get_value_euros()
-    + receiver_a.get_value_euros()
-    + receiver_b.get_value_euros()
+    = sender.get_value()
+    + receiver_a.get_value()
+    + receiver_b.get_value()
   ;
   const double proportion_to_b{
     1.0 - proportion_to_a
   };
-  const double value_in_euros_to_a{
+  const money value_in_euros_to_a{
     proportion_to_a * value_in_euros
   };
-  const double value_in_euros_to_b{
+  const money value_in_euros_to_b{
     proportion_to_b * value_in_euros
   };
-  sender.set_value_euros(
-    sender.get_value_euros() - value_in_euros
+  sender.set_value(
+    sender.get_value() - value_in_euros
   );
-  receiver_a.set_value_euros(
-    receiver_a.get_value_euros() + value_in_euros_to_a
+  receiver_a.set_value(
+    receiver_a.get_value() + value_in_euros_to_a
   );
-  receiver_b.set_value_euros(
-    receiver_b.get_value_euros() + value_in_euros_to_b
+  receiver_b.set_value(
+    receiver_b.get_value() + value_in_euros_to_b
   );
 
   {
@@ -127,30 +126,12 @@ void ribi::imcw::bank::transfer(
   }
 
   const auto sum_after
-    = sender.get_value_euros()
-    + receiver_a.get_value_euros()
-    + receiver_b.get_value_euros()
+    = sender.get_value()
+    + receiver_a.get_value()
+    + receiver_b.get_value()
   ;
   assert(sum_before == sum_after);
 }
-
-/*
-void ribi::imcw::bank::transfer_profit_to_customer(
-  balance& sender,
-  const double value_in_euros,
-  person& person,
-  const boost::gregorian::date& day
-)
-{
-  const auto prev_money = m_bank_wallet_euros + m_shop_wallet_euros;
-  person
-  m_bank_wallet_euros += (proportion_of_profit_to_bank_wallet * money_euros);
-  m_shop_wallet_euros += (proportion_of_profit_to_shop_wallet * money_euros);
-
-  const auto new_money = m_bank_wallet_euros + m_shop_wallet_euros;
-  assert(prev_money + money_euros == new_money);
-}
-*/
 
 std::ostream& ribi::imcw::operator<<(std::ostream& os, const bank b) noexcept
 {

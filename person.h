@@ -27,16 +27,16 @@ public:
 
   ///The amount of money in the person his/her MyClickWinners BankWallet
   ///Cannot be negative
-  const balance& get_bank_wallet_euros() const noexcept { return m_bank_wallet_euros; }
-        balance& get_bank_wallet_euros()       noexcept { return m_bank_wallet_euros; }
+  const balance& get_bank_wallet() const noexcept { return m_bank_wallet; }
+        balance& get_bank_wallet()       noexcept { return m_bank_wallet; }
 
   ///The amount of money in the person his/her MyClickWinners ShopWallet
   ///Cannot be negative
-  const balance& get_shop_wallet_euros() const noexcept { return m_shop_wallet_euros; }
-        balance& get_shop_wallet_euros()       noexcept { return m_shop_wallet_euros; }
+  const balance& get_shop_wallet() const noexcept { return m_shop_wallet; }
+        balance& get_shop_wallet()       noexcept { return m_shop_wallet; }
 
-  const balance& get_balance_euros() const noexcept { return m_balance_euros; }
-        balance& get_balance_euros()       noexcept { return m_balance_euros; }
+  const balance& get_balance() const noexcept { return m_balance; }
+        balance& get_balance()       noexcept { return m_balance; }
 
 
   int get_id() const noexcept { return m_id; }
@@ -48,10 +48,6 @@ public:
   ///The winners
   const std::vector<winner>& get_winners() const noexcept { return m_winners; }
         std::vector<winner>& get_winners()       noexcept { return m_winners; }
-
-  ///Give money from MyClickWinners profit
-  ///This money is distributed over the BankWallet and ShopWallet
-  //void give_income(const double money_euros) noexcept;
 
   ///Is this balance an account of the person?
   bool has_account(const balance& an_account) const noexcept;
@@ -97,11 +93,11 @@ private:
   ///Before buying something, this is zero
   ///Positive values denote profit
   ///Negative values denote loss
-  balance m_balance_euros;
+  balance m_balance;
 
   ///The amount of money in the person his/her MyClickWinners BankWallet
   ///Cannot be negative
-  balance m_bank_wallet_euros;
+  balance m_bank_wallet;
 
   ///A person can have or have not one card
   std::vector<click_card> m_card;
@@ -113,7 +109,7 @@ private:
 
   ///The amount of money in the person his/her MyClickWinners ShopWallet
   ///Cannot be negative
-  balance m_shop_wallet_euros;
+  balance m_shop_wallet;
 
   ///The Winners a customer has
   std::vector<winner> m_winners;

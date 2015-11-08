@@ -28,7 +28,7 @@ void ribi::imcw::simulation::run() noexcept
   m_company.buy_winner_package(
     focal_person,
     winner_package_name::starter,
-    focal_person.get_balance_euros(),
+    focal_person.get_balance(),
     m_bank,
     m_calendar
   );
@@ -53,10 +53,10 @@ void ribi::imcw::simulation::run() noexcept
   //Do the sim
   for (
   ;
-    the_calendar.get_current_day() != m_parameters.get_end();
+    the_calendar.get_today() != m_parameters.get_end();
     the_calendar.go_to_next_day()
   ) {
-    std::cout << "today: " << the_calendar.get_current_day() << std::endl;
+    std::cout << "today: " << the_calendar.get_today() << std::endl;
 
     if (the_calendar.distibute_profit_winners_today()) {
       balance winners_net_profit(
@@ -71,7 +71,7 @@ void ribi::imcw::simulation::run() noexcept
         m_bank,
         m_calendar
       );
-      assert(winners_net_profit.get_value_euros() == 0.0);
+      assert(winners_net_profit.get_value() == money(0.0));
       std::cout << m_company << std::endl;
       std::cout << "***************************" << std::endl;
     }
@@ -88,7 +88,7 @@ void ribi::imcw::simulation::run() noexcept
         m_bank,
         m_calendar
       );
-      assert(webshop_net_profit.get_value_euros() == 0.0);
+      assert(webshop_net_profit.get_value() == money(0.0));
       std::cout << m_company << std::endl;
       std::cout << "***************************" << std::endl;
     }
@@ -104,8 +104,8 @@ void ribi::imcw::simulation::run() noexcept
   std::cout << "Company" << '\n';
   std::cout << "***************" << std::endl;
   std::cout << m_company << std::endl;
-  std::cout << "***************" << std::endl;
-  std::cout << "Bank" << '\n';
-  std::cout << "***************" << std::endl;
-  std::cout << m_bank << std::endl;
+//  std::cout << "***************" << std::endl;
+//  std::cout << "Bank" << '\n';
+//  std::cout << "***************" << std::endl;
+//  std::cout << m_bank << std::endl;
 }

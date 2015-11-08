@@ -3,6 +3,8 @@
 
 #include <iosfwd>
 #include <string>
+#include "money.h"
+
 
 namespace ribi {
 namespace imcw {
@@ -20,9 +22,9 @@ public:
 
   const std::string& get_description() const noexcept { return m_description; }
 
-  double get_value_euros() const noexcept { return m_euros;  }
+  const money& get_value() const noexcept { return m_value;  }
 
-  void set_value_euros(const double value_euros) noexcept { m_euros = value_euros;  }
+  void set_value(const money& value) noexcept { m_value = value; }
 
 private:
 
@@ -30,7 +32,7 @@ private:
   std::string m_description;
 
   //The amount of money in euros
-  double m_euros;
+  money m_value;
 
   #ifndef NDEBUG
   static void test() noexcept;
@@ -41,17 +43,9 @@ private:
 
 std::ostream& operator<<(std::ostream& os, const balance& b) noexcept;
 
-//Equal if less than half a eurocent different
 bool operator==(const balance& a, const balance& b) noexcept;
-
-//Unequal if at least half a eurocent different
 bool operator!=(const balance& a, const balance& b) noexcept;
 
-bool operator<(const balance& a, const balance& b) noexcept;
-bool operator>(const balance& a, const balance& b) noexcept;
-bool operator>=(const balance& a, const balance& b) noexcept;
-
-//balance operator*(const balance& b, const double multiplier);
 
 } //~namespace imcw
 } //~namespace ribi

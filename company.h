@@ -4,11 +4,12 @@
 #include <memory>
 #include <vector>
 #include "balance.h"
-#include "bank.h"
 #include "person.h"
 
 namespace ribi {
 namespace imcw {
+
+class bank;
 
 ///The company MyClickWinners
 struct company
@@ -42,6 +43,8 @@ struct company
     calendar& the_calendar
   );
 
+  //int count_winners() noexcept;
+
   ///When MyClickWinners makes a profit,
   ///it is distributed over customers and other entities
   void distribute_net_profit(
@@ -53,24 +56,24 @@ struct company
   ///The balance of the compensation plan of MyClickWinners
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
-  const balance& get_balance_compensation_plan_euros() const noexcept { return m_balance_compensation_plan_euros; }
+  const balance& get_balance_compensation_plan() const noexcept { return m_balance_compensation_plan; }
 
   ///The balance of the holding of MyClickWinners
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
-  const balance& get_balance_holding_euros() const noexcept { return m_balance_holding_euros; }
+  const balance& get_balance_holding() const noexcept { return m_balance_holding; }
 
   ///The balance of the reserves of MyClickWinners
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
-  const balance& get_balance_reserves_euros() const noexcept { return m_balance_reserves_euros; }
+  const balance& get_balance_reserves() const noexcept { return m_balance_reserves; }
 
   ///The balance of the money that is not yet distributed,
   ///for example, when a customer has just bought a WinnerPackage,
   ///but before distribution of the net profit
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
-  const balance& get_balance_undistributed_euros() const noexcept { return m_balance_undistributed_euros; }
+  const balance& get_balance_undistributed() const noexcept { return m_balance_undistributed; }
 
   const auto& get_customers() const noexcept { return m_customers; }
         auto& get_customers()       noexcept { return m_customers; }
@@ -91,24 +94,24 @@ struct company
   ///The balance of the compensation plan of MyClickWinners
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
-  balance m_balance_compensation_plan_euros;
+  balance m_balance_compensation_plan;
 
   ///The balance of the holding of MyClickWinners
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
-  balance m_balance_holding_euros;
+  balance m_balance_holding;
 
   ///The balance of the reserves of MyClickWinners
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
-  balance m_balance_reserves_euros;
+  balance m_balance_reserves;
 
   ///The balance of the money that is not yet distributed,
   ///for example, when a customer has just bought a WinnerPackage,
   ///but before distribution of the net profit
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
-  balance m_balance_undistributed_euros;
+  balance m_balance_undistributed;
 
   ///All customers
   std::vector<std::reference_wrapper<person>> m_customers;

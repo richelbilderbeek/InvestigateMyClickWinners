@@ -3,6 +3,7 @@
 
 #include <iosfwd>
 #include "balance.h"
+#include "money.h"
 
 namespace ribi {
 namespace imcw {
@@ -14,14 +15,14 @@ struct winner
   ///Get value of the Winner in euros
   //void add_value_euros(const double euros);
 
-  bool is_full() const noexcept { return m_balance.get_value_euros() >= max_value_euros; }
+  bool is_full() const noexcept { return get_value() >= money(max_value_euros); }
 
   ///Get value of the Winner in euros
   const balance& get_balance() const noexcept { return m_balance; }
         balance& get_balance()       noexcept { return m_balance; }
 
   ///Get value of the Winner in euros
-  double get_value() const noexcept { return m_balance.get_value_euros(); }
+  const money& get_value() const noexcept { return m_balance.get_value(); }
 
   ///A winner costs 40 euros (exempt from VAT) to buy
   constexpr static const double price_vat_exempt_euros = 40.0;
@@ -34,9 +35,16 @@ struct winner
   ///The value of the Winner in euros
   balance m_balance;
 
+  ///Unique ID
+  int m_id;
+
+  static int sm_ids;
+
   #ifndef NDEBUG
   static void test() noexcept;
   #endif
+
+  friend std::ostream& operator<<(std::ostream& os, const winner& w) noexcept;
 };
 
 std::ostream& operator<<(std::ostream& os, const winner& w) noexcept;

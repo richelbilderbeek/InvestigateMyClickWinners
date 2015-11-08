@@ -15,7 +15,8 @@ SOURCES += main.cpp \
     simulation_parameters.cpp \
     winner.cpp \
     winner_package.cpp \
-    winner_package_name.cpp
+    winner_package_name.cpp \
+    money.cpp
 
 HEADERS += \
     balance.h \
@@ -29,4 +30,5 @@ HEADERS += \
     simulation_parameters.h \
     winner.h \
     winner_package.h \
-    winner_package_name.h
+    winner_package_name.h \
+    money.h

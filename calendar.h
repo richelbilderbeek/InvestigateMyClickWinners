@@ -15,7 +15,7 @@ public:
     const boost::gregorian::date& today = boost::gregorian::day_clock::local_day()
   );
 
-  const boost::gregorian::date& get_current_day() const noexcept { return m_today; }
+  const boost::gregorian::date& get_today() const noexcept { return m_today; }
 
   void go_to_next_day() noexcept { m_today += boost::gregorian::days(1); }
 

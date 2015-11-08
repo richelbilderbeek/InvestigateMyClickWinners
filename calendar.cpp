@@ -45,10 +45,10 @@ void ribi::imcw::calendar::test() noexcept
     {
       boost::gregorian::date next_month = today + boost::gregorian::months(1);
       bool has_distributed_winners{false};
-      for ( ; c.get_current_day() != next_month; c.go_to_next_day() ) {
+      for ( ; c.get_today() != next_month; c.go_to_next_day() ) {
         if (c.distibute_profit_winners_today()) {
           if (verbose) {
-            std::cout << "Distribute Winners profit at " << c.get_current_day() << std::endl;
+            std::cout << "Distribute Winners profit at " << c.get_today() << std::endl;
           }
           has_distributed_winners = true;
         }
@@ -63,10 +63,10 @@ void ribi::imcw::calendar::test() noexcept
     calendar c(today);
     const boost::gregorian::date next_year = today + boost::gregorian::years(1);
     int n_profit_of_webshop_distributed = 0;
-    for ( ; c.get_current_day() != next_year; c.go_to_next_day() ) {
+    for ( ; c.get_today() != next_year; c.go_to_next_day() ) {
       if (c.distibute_profit_webshop_today()) {
         if (verbose) {
-          std::cout << "Distribute webshop profit at " << c.get_current_day() << std::endl;
+          std::cout << "Distribute webshop profit at " << c.get_today() << std::endl;
         }
         ++n_profit_of_webshop_distributed;
       }

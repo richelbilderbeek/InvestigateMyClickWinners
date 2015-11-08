@@ -6,16 +6,18 @@
 #include <sstream>
 #include <iostream>
 
+#include "bank.h"
 #include "calendar.h"
 #include "helper.h"
+#include "money.h"
 #include "winner.h"
 #include "winner_package.h"
 
 ribi::imcw::company::company()
-  : m_balance_compensation_plan_euros{"CompensationPlan",0.0},
-    m_balance_holding_euros{"Holding",0.0},
-    m_balance_reserves_euros{"Reserves",0.0},
-    m_balance_undistributed_euros{"Undistributed",0.0},
+  : m_balance_compensation_plan{"CompensationPlan",0.0},
+    m_balance_holding{"Holding",0.0},
+    m_balance_reserves{"Reserves",0.0},
+    m_balance_undistributed{"Undistributed",0.0},
     m_customers{},
     m_verbose{false}
 {
@@ -79,14 +81,14 @@ void ribi::imcw::company::buy_winner(
 )
 {
   assert(customer.has_account(account_euros));
-  const auto before = account_euros;
+  const auto before = account_euros.get_value();
   the_bank.transfer(
     account_euros,
-    winner::price_vat_exempt_euros,
-    m_balance_undistributed_euros,
-    the_calendar.get_current_day()
+    money(winner::price_vat_exempt_euros),
+    m_balance_undistributed,
+    the_calendar.get_today()
   );
-  const auto after = account_euros;
+  const auto after = account_euros.get_value();
   assert(after < before);
 
   winner w(customer.get_name());
@@ -112,7 +114,7 @@ void ribi::imcw::company::buy_winner_package(
   assert(customer.has_account(account_euros));
 
   #ifndef NDEBUG
-  const auto account_before = account_euros;
+  const auto account_before = account_euros.get_value();
   const auto n_customers_before = m_customers.size();
   #endif // NDEBUG
 
@@ -123,9 +125,9 @@ void ribi::imcw::company::buy_winner_package(
   {
     the_bank.transfer(
       account_euros,
-      click_card::cost_inc_vat_euros,
-      m_balance_undistributed_euros,
-      the_calendar.get_current_day()
+      money(click_card::cost_inc_vat_euros),
+      m_balance_undistributed,
+      the_calendar.get_today()
     );
     //account_euros                 -= c.cost_inc_vat_euros;
     //m_balance_undistributed_euros += c.cost_inc_vat_euros;
@@ -145,7 +147,7 @@ void ribi::imcw::company::buy_winner_package(
   assert(customer.get_n_winners() == n_winners);
 
   #ifndef NDEBUG
-  const auto account_after = account_euros;
+  const auto account_after = account_euros.get_value();
   assert(account_after < account_before);
   const auto n_customers_after = m_customers.size();
   assert(n_customers_after == n_customers_before + 1);
@@ -175,61 +177,62 @@ void ribi::imcw::company::distribute_net_profit(
   ) noexcept
 {
 
-  const auto change_compensation_plan_euros = source.get_value_euros() * proportion_of_profit_to_compensation_plan;
-  const auto change_holding_euros           = source.get_value_euros() * proportion_of_profit_to_holding;
-  const auto change_reserves_euros          = source.get_value_euros() * proportion_of_profit_to_reserves;
-  const auto change_winners_euros           = source.get_value_euros() * proportion_of_profit_to_winners;
+  const auto change_compensation_plan_euros = source.get_value() * proportion_of_profit_to_compensation_plan;
+  const auto change_holding_euros           = source.get_value() * proportion_of_profit_to_holding;
+  const auto change_reserves_euros          = source.get_value() * proportion_of_profit_to_reserves;
+  const auto change_winners_euros           = source.get_value() * proportion_of_profit_to_winners;
 
   the_bank.transfer(
     source,
     change_compensation_plan_euros,
-    m_balance_compensation_plan_euros,
-    the_calendar.get_current_day()
+    m_balance_compensation_plan,
+    the_calendar.get_today()
   );
 
   the_bank.transfer(
     source,
     change_holding_euros,
-    m_balance_holding_euros,
-    the_calendar.get_current_day()
+    m_balance_holding,
+    the_calendar.get_today()
   );
 
   the_bank.transfer(
     source,
     change_reserves_euros,
-    m_balance_reserves_euros,
-    the_calendar.get_current_day()
+    m_balance_reserves,
+    the_calendar.get_today()
   );
 
   //Collect the Winners from all customers
-  auto winners = collect_winners();
+  std::vector<std::reference_wrapper<winner>> winners = collect_winners();
 
   //Distribute the money over the winners
+  //const int n_winners{count_winners()};
   const int n_winners{static_cast<int>(winners.size())};
   assert(n_winners > 0);
 
-  const double income_per_winners_euros
+  const money income_per_winners_euros
     = change_winners_euros
     / static_cast<double>(n_winners)
   ;
-  for (auto& winner: winners)
+  for (std::reference_wrapper<winner>& w: winners)
   {
-    const auto winner_value_before = winner.get().get_value();
+    const auto winner_value_before = w.get().get_value();
     the_bank.transfer(
       source,
       income_per_winners_euros,
-      winner.get().get_balance(),
-      the_calendar.get_current_day()
+      w.get().get_balance(),
+      the_calendar.get_today()
     );
     //winner.get().add_value_euros(income_per_winners_euros);
-    const auto winner_value_after = winner.get().get_value();
+    const auto winner_value_after = w.get().get_value();
     assert(winner_value_after > winner_value_before);
   }
 
   if (m_verbose) { std::clog << "Process the Winners" << std::endl; }
-  for (auto& customer: m_customers)
+  for (person& customer: m_customers)
   {
-    customer.get().process_winners(
+    customer.process_winners(
       the_bank,
       the_calendar,
       *this
@@ -271,9 +274,9 @@ void ribi::imcw::company::test() noexcept
     calendar c;
     person p("Mr A");
     company mcw;
-    assert(mcw.get_balance_compensation_plan_euros().get_value_euros() == 0.0);
-    assert(mcw.get_balance_holding_euros ().get_value_euros() == 0.0);
-    assert(mcw.get_balance_reserves_euros().get_value_euros() == 0.0);
+    assert(mcw.get_balance_compensation_plan().get_value() == money(0.0));
+    assert(mcw.get_balance_holding ().get_value() == money(0.0));
+    assert(mcw.get_balance_reserves().get_value() == money(0.0));
     //assert(c.get_customers().empty());
   }
   //When a company is started, all balances are zero
@@ -282,10 +285,10 @@ void ribi::imcw::company::test() noexcept
     calendar c;
     person p("Mr B");
     company mcw;
-    mcw.buy_winner_package(p,winner_package_name::basic,p.get_balance_euros(),b,c);
-    assert(mcw.get_balance_compensation_plan_euros().get_value_euros() == 0.0);
-    assert(mcw.get_balance_holding_euros ().get_value_euros() == 0.0);
-    assert(mcw.get_balance_reserves_euros().get_value_euros() == 0.0);
+    mcw.buy_winner_package(p,winner_package_name::basic,p.get_balance(),b,c);
+    assert(mcw.get_balance_compensation_plan().get_value() == money(0.0));
+    assert(mcw.get_balance_holding ().get_value() == money(0.0));
+    assert(mcw.get_balance_reserves().get_value() == money(0.0));
     //assert(c.get_customers().empty());
   }
   //When a person buys a WinnerPackage he/she is added to the company
@@ -295,7 +298,7 @@ void ribi::imcw::company::test() noexcept
     person p("Mr C");
     company mcw;
     assert(mcw.get_customers().empty());
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance_euros(),b,c);
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c);
     assert(mcw.get_customers().size() == 1);
   }
   //A person buying a starter winner package results in 100 euros in the undistributed money balance
@@ -304,9 +307,9 @@ void ribi::imcw::company::test() noexcept
     calendar c;
     person p("Mr D");
     company mcw;
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance_euros(),b,c);
-    const auto expected(100.0);
-    const auto observed = mcw.get_balance_undistributed_euros().get_value_euros();
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c);
+    const money expected(100.0);
+    const auto observed = mcw.get_balance_undistributed().get_value();
     assert(expected == observed);
   }
   //A person buying an executive winner package has to pay 60+(50*40) euros in the undistributed money balance
@@ -315,9 +318,9 @@ void ribi::imcw::company::test() noexcept
     calendar c;
     person p("Mr E");
     company mcw;
-    mcw.buy_winner_package(p,winner_package_name::executive,p.get_balance_euros(),b,c);
-    const auto expected{2060.0};
-    const auto observed = mcw.get_balance_undistributed_euros().get_value_euros();
+    mcw.buy_winner_package(p,winner_package_name::executive,p.get_balance(),b,c);
+    const money expected{2060.0};
+    const auto observed = mcw.get_balance_undistributed().get_value();
     assert(expected == observed);
   }
   //When a person is banned, his/her ClickCard is removed
@@ -326,7 +329,7 @@ void ribi::imcw::company::test() noexcept
     calendar c;
     person p("Mr F");
     company mcw;
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance_euros(),b,c);
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c);
     assert(p.has_click_card());
     mcw.ban(p);
     assert(!p.has_click_card());
@@ -337,7 +340,7 @@ void ribi::imcw::company::test() noexcept
     calendar c;
     person p("Mr G");
     company mcw;
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance_euros(),b,c);
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c);
     assert(!p.get_winners().empty());
     mcw.ban(p);
     assert( p.get_winners().empty());
@@ -348,24 +351,24 @@ void ribi::imcw::company::test() noexcept
     calendar c;
     person p("Mr H");
     company mcw;
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance_euros(),b,c);
-    assert(mcw.get_balance_compensation_plan_euros().get_value_euros() == 0.0);
-    assert(mcw.get_balance_holding_euros ().get_value_euros() == 0.0);
-    assert(mcw.get_balance_reserves_euros().get_value_euros() == 0.0);
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c);
+    assert(mcw.get_balance_compensation_plan().get_value() == money(0.0));
+    assert(mcw.get_balance_holding ().get_value() == money(0.0));
+    assert(mcw.get_balance_reserves().get_value() == money(0.0));
     //100 euros is distributed, this ends up one the 1 winner of the 1 customer
     balance net_profit("test net profit",100.0);
     mcw.distribute_net_profit(net_profit,b,c);
-    assert(mcw.get_balance_compensation_plan_euros().get_value_euros() == 15.0);
-    assert(mcw.get_balance_holding_euros ().get_value_euros() == 10.0);
-    assert(mcw.get_balance_reserves_euros().get_value_euros() == 30.0);
+    assert(mcw.get_balance_compensation_plan().get_value() == money(15.0));
+    assert(mcw.get_balance_holding ().get_value() == money(10.0));
+    assert(mcw.get_balance_reserves().get_value() == money(30.0));
     assert(p.get_winners().size() == 1);
     assert(mcw.get_customers().size() == 1);
     assert(mcw.get_customers()[0].get().get_winners().size() == 1);
     assert(
         mcw.get_customers()[0].get().get_winners()[0].get_value()
-         == 45.0
+         == money(45.0)
     );
-    assert(p.get_winners()[0].get_value() == 45.0);
+    assert(p.get_winners()[0].get_value() == money(45.0));
   }
   //Winners end when exceeding 50 euros and are converted to
   //BankWallet and ShopWallet when customer does not automatically
@@ -376,22 +379,22 @@ void ribi::imcw::company::test() noexcept
     person p("Mr I");
     company mcw;
     p.set_auto_buy(false);
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance_euros(),b,c);
-    assert(mcw.get_balance_compensation_plan_euros().get_value_euros() == 0.0);
-    assert(mcw.get_balance_holding_euros ().get_value_euros() == 0.0);
-    assert(mcw.get_balance_reserves_euros().get_value_euros() == 0.0);
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c);
+    assert(mcw.get_balance_compensation_plan().get_value() == money(0.0));
+    assert(mcw.get_balance_holding ().get_value() == money(0.0));
+    assert(mcw.get_balance_reserves().get_value() == money(0.0));
     //200 euros is distributed
     //customer will have one Winner with 90 euro on it,
     //that will break down
     balance net_profit("test net profit",2.0 * 100.0);
     mcw.distribute_net_profit(net_profit,b,c);
-    assert(net_profit.get_value_euros() == 0.0);
-    assert(mcw.get_balance_compensation_plan_euros().get_value_euros() == 2.0 * 15.0);
-    assert(mcw.get_balance_holding_euros ().get_value_euros() == 2.0 * 10.0);
-    assert(mcw.get_balance_reserves_euros().get_value_euros() == 2.0 * 30.0);
+    assert(net_profit.get_value() == money(0.0));
+    assert(mcw.get_balance_compensation_plan().get_value() == money(2.0 * 15.0));
+    assert(mcw.get_balance_holding ().get_value() == money(2.0 * 10.0));
+    assert(mcw.get_balance_reserves().get_value() == money(2.0 * 30.0));
     assert(p.get_winners().size() == 0);
-    assert(p.get_bank_wallet_euros().get_value_euros() == 87.50);
-    assert(p.get_shop_wallet_euros().get_value_euros() ==  2.50);
+    assert(p.get_bank_wallet().get_value() == money(87.50));
+    assert(p.get_shop_wallet().get_value() ==  money(2.50));
   }
   //Winners end when exceeding 50 euros and are converted to
   //a new Winner, BankWallet and ShopWallet,
@@ -401,10 +404,10 @@ void ribi::imcw::company::test() noexcept
     calendar c;
     person p("Mr J");
     company mcw;
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance_euros(),b,c);
-    assert(mcw.get_balance_compensation_plan_euros().get_value_euros() == 0.0);
-    assert(mcw.get_balance_holding_euros ().get_value_euros() == 0.0);
-    assert(mcw.get_balance_reserves_euros().get_value_euros() == 0.0);
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c);
+    assert(mcw.get_balance_compensation_plan().get_value() == money(0.0));
+    assert(mcw.get_balance_holding ().get_value() == money(0.0));
+    assert(mcw.get_balance_reserves().get_value() == money(0.0));
     //200 euros is distributed, 90 euros go to customer
     //He/she has one empty winner
     // - 90 euros go to customer
@@ -424,15 +427,15 @@ void ribi::imcw::company::test() noexcept
     //that will break down
     balance net_profit("test net profit",2.0 * 100.0);
     mcw.distribute_net_profit(net_profit,b,c);
-    assert(net_profit.get_value_euros() == 0.0);
-    assert(mcw.get_balance_compensation_plan_euros().get_value_euros() == 2.0 * 15.0);
-    assert(mcw.get_balance_holding_euros ().get_value_euros() == 2.0 * 10.0);
-    assert(mcw.get_balance_reserves_euros().get_value_euros() == 2.0 * 30.0);
+    assert(net_profit.get_value() == money(0.0));
+    assert(mcw.get_balance_compensation_plan().get_value() == money(2.0 * 15.0));
+    assert(mcw.get_balance_holding ().get_value() == money(2.0 * 10.0));
+    assert(mcw.get_balance_reserves().get_value() == money(2.0 * 30.0));
     assert(p.get_winners().size() == 2);
-    assert(p.get_winners()[0].get_value() == 0.0);
-    assert(p.get_winners()[1].get_value() == 0.0);
-    assert(p.get_bank_wallet_euros().get_value_euros() == 7.50);
-    assert(p.get_shop_wallet_euros().get_value_euros() == 2.50);
+    assert(p.get_winners()[0].get_value() == money(0.0));
+    assert(p.get_winners()[1].get_value() == money(0.0));
+    assert(p.get_bank_wallet().get_value() == money(7.50));
+    assert(p.get_shop_wallet().get_value() == money(2.50));
   }
 }
 #endif
@@ -441,10 +444,10 @@ std::ostream& ribi::imcw::operator<<(std::ostream& os, const company& c) noexcep
 {
   std::stringstream s;
   s
-    << "Balance compensation plan: " << c.m_balance_compensation_plan_euros << " euros" << '\n'
-    << "Balance holding: " << c.m_balance_holding_euros << " euros" << '\n'
-    << "Balance reserves: " << c.m_balance_reserves_euros << " euros" << '\n'
-    << "Balance undistributed: " << c.m_balance_undistributed_euros << " euros" << '\n'
+    << "Balance compensation plan: " << c.m_balance_compensation_plan << " euros" << '\n'
+    << "Balance holding: " << c.m_balance_holding << " euros" << '\n'
+    << "Balance reserves: " << c.m_balance_reserves << " euros" << '\n'
+    << "Balance undistributed: " << c.m_balance_undistributed << " euros" << '\n'
     << "#customers: " << c.m_customers.size() << '\n'
   ;
   for (const auto& d: c.m_customers) { s << d << std::endl; }

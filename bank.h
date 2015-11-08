@@ -2,12 +2,13 @@
 #define RIBI_IMCW_BANK_H
 
 #include <iosfwd>
-#include "balance.h"
-#include "person.h"
 #include <boost/date_time/gregorian/gregorian.hpp>
 
 namespace ribi {
 namespace imcw {
+
+struct balance;
+struct money;
 
 ///The only class that can tranfer money
 struct bank
@@ -20,14 +21,14 @@ public:
 
   void transfer(
     balance& sender,
-    const double value_in_euros,
+    const money& value_in_euros,
     balance& receiver,
     const date& day
   );
 
   void transfer(
     balance& sender,
-    const double value_in_euros,
+    const money& value_in_euros,
     const double proportion_to_a,
     balance& receiver_a,
     balance& receiver_b,
