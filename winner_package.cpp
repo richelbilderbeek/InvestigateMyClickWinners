@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-winner_package::winner_package(const winner_package_name name)
+ribi::imcw::winner_package::winner_package(const winner_package_name name)
   : m_n_winners{calculate_n_winners(name)}
 {
   #ifndef NDEBUG
@@ -10,7 +10,7 @@ winner_package::winner_package(const winner_package_name name)
   #endif
 }
 
-constexpr int calculate_n_winners(const winner_package_name name)
+constexpr int ribi::imcw::calculate_n_winners(const winner_package_name name)
 {
   switch (name)
   {
@@ -25,7 +25,7 @@ constexpr int calculate_n_winners(const winner_package_name name)
 }
 
 #ifndef NDEBUG
-void winner_package::test() noexcept
+void ribi::imcw::winner_package::test() noexcept
 {
   {
     static bool is_tested{false};

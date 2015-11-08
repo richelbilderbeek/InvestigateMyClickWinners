@@ -1,18 +1,28 @@
-#ifndef PERSON_H
-#define PERSON_H
+#ifndef RIBI_IMCW_PERSON_H
+#define RIBI_IMCW_PERSON_H
 
 #include <memory>
 #include <vector>
 
+#include "balance.h"
 #include "clickcard.h"
 #include "winner.h"
 #include "winner_package_name.h"
 
-struct company;
+namespace ribi {
+namespace imcw {
 
-struct person
+struct bank;
+struct company;
+struct calendar;
+
+class person
 {
-  person();
+public:
+  person(
+    bank& the_bank,
+    calendar& the_calendar
+  ) noexcept;
 
   void add_click_card(const click_card& w);
 
@@ -20,14 +30,16 @@ struct person
 
   ///The amount of money in the person his/her MyClickWinners BankWallet
   ///Cannot be negative
-  double get_bank_wallet_euros() const noexcept { return m_bank_wallet_euros; }
+  const balance& get_bank_wallet_euros() const noexcept { return m_bank_wallet_euros; }
+        balance& get_bank_wallet_euros()       noexcept { return m_bank_wallet_euros; }
 
   ///The amount of money in the person his/her MyClickWinners ShopWallet
   ///Cannot be negative
-  double get_shop_wallet_euros() const noexcept { return m_shop_wallet_euros; }
+  const balance& get_shop_wallet_euros() const noexcept { return m_shop_wallet_euros; }
+        balance& get_shop_wallet_euros()       noexcept { return m_shop_wallet_euros; }
 
-  const double& get_balance_euros() const noexcept { return m_balance_euros; }
-        double& get_balance_euros()       noexcept { return m_balance_euros; }
+  const balance& get_balance_euros() const noexcept { return m_balance_euros; }
+        balance& get_balance_euros()       noexcept { return m_balance_euros; }
 
 
   int get_id() const noexcept { return m_id; }
@@ -40,7 +52,10 @@ struct person
 
   ///Give money from MyClickWinners profit
   ///This money is distributed over the BankWallet and ShopWallet
-  void give_income(const double money_euros) noexcept;
+  //void give_income(const double money_euros) noexcept;
+
+  ///Is this balance an account of the person?
+  bool has_account(const balance& an_account) const noexcept;
 
   bool has_click_card() const noexcept { return !m_card.empty(); }
 
@@ -66,8 +81,9 @@ struct person
   constexpr static const int max_n_winners = 100;
   constexpr static const double proportion_of_profit_to_bank_wallet = 0.75;
   constexpr static const double proportion_of_profit_to_shop_wallet = 0.25;
+  constexpr static const double euros_from_full_winner_to_shopwallet = 2.50;
 
-  private:
+private:
 
   ///Will the person automatically buy Winners when
   ///the ShopWallet exceeds the price of a Winner?
@@ -78,11 +94,15 @@ struct person
   ///Before buying something, this is zero
   ///Positive values denote profit
   ///Negative values denote loss
-  double m_balance_euros;
+  balance m_balance_euros;
+
+  bank& m_bank;
 
   ///The amount of money in the person his/her MyClickWinners BankWallet
   ///Cannot be negative
-  double m_bank_wallet_euros;
+  balance m_bank_wallet_euros;
+
+  calendar& m_calendar;
 
   ///A person can have or have not one card
   std::vector<click_card> m_card;
@@ -92,7 +112,7 @@ struct person
 
   ///The amount of money in the person his/her MyClickWinners ShopWallet
   ///Cannot be negative
-  double m_shop_wallet_euros;
+  balance m_shop_wallet_euros;
 
   ///The Winners a customer has
   std::vector<winner> m_winners;
@@ -115,4 +135,7 @@ std::ostream& operator<<(std::ostream& os, const person& p) noexcept;
 
 bool operator==(const person& lhs, const person& rhs) noexcept;
 
-#endif // PERSON_H
+} //~namespace imcw
+} //~namespace ribi
+
+#endif // RIBI_IMCW_PERSON_H

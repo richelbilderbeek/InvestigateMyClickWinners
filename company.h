@@ -1,14 +1,21 @@
-#ifndef COMPANY_H
-#define COMPANY_H
+#ifndef RIBI_IMCW_COMPANY_H
+#define RIBI_IMCW_COMPANY_H
 
 #include <memory>
 #include <vector>
+#include "balance.h"
+#include "bank.h"
 #include "person.h"
+
+namespace ribi {
+namespace imcw {
 
 ///The company MyClickWinners
 struct company
 {
-  company();
+  company(
+    calendar& the_calendar
+  );
 
   ///Add any customer, these persons are setup in the simulation
   void add(person& customer);
@@ -20,41 +27,49 @@ struct company
 
   ///A customer buys Winner
   ///This money is added to the balance of undistributed money
-  void buy_winner(person& customer, double& account_euros);
+  void buy_winner(
+    person& customer,
+    balance& customer_balance,
+    bank& the_bank
+  );
 
   ///A customer buys a WinnerPackage
   ///This money is added to the balance of undistributed money
   void buy_winner_package(
     person& customer,
     const winner_package_name name,
-    double& account_euros
+    balance& customer_balance,
+    bank& the_bank
   );
 
   ///When MyClickWinners makes a profit,
   ///it is distributed over customers and other entities
-  void distribute_net_profit(const double money_euros) noexcept;
+  void distribute_net_profit(
+    balance& source,
+    bank& the_bank
+  ) noexcept;
 
   ///The balance of the compensation plan of MyClickWinners
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
-  double get_balance_compensation_plan_euros() const noexcept { return m_balance_compensation_plan_euros; }
+  const balance& get_balance_compensation_plan_euros() const noexcept { return m_balance_compensation_plan_euros; }
 
   ///The balance of the holding of MyClickWinners
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
-  double get_balance_holding_euros() const noexcept { return m_balance_holding_euros; }
+  const balance& get_balance_holding_euros() const noexcept { return m_balance_holding_euros; }
 
   ///The balance of the reserves of MyClickWinners
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
-  double get_balance_reserves_euros() const noexcept { return m_balance_reserves_euros; }
+  const balance& get_balance_reserves_euros() const noexcept { return m_balance_reserves_euros; }
 
   ///The balance of the money that is not yet distributed,
   ///for example, when a customer has just bought a WinnerPackage,
   ///but before distribution of the net profit
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
-  double get_balance_undistributed_euros() const noexcept { return m_balance_undistributed_euros; }
+  const balance& get_balance_undistributed_euros() const noexcept { return m_balance_undistributed_euros; }
 
   const auto& get_customers() const noexcept { return m_customers; }
         auto& get_customers()       noexcept { return m_customers; }
@@ -75,24 +90,28 @@ struct company
   ///The balance of the compensation plan of MyClickWinners
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
-  double m_balance_compensation_plan_euros;
+  balance m_balance_compensation_plan_euros;
 
   ///The balance of the holding of MyClickWinners
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
-  double m_balance_holding_euros;
+  balance m_balance_holding_euros;
 
   ///The balance of the reserves of MyClickWinners
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
-  double m_balance_reserves_euros;
+  balance m_balance_reserves_euros;
 
   ///The balance of the money that is not yet distributed,
   ///for example, when a customer has just bought a WinnerPackage,
   ///but before distribution of the net profit
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
-  double m_balance_undistributed_euros;
+  balance m_balance_undistributed_euros;
+
+  //bank& m_bank;
+
+  calendar& m_calendar;
 
   ///All customers
   std::vector<std::reference_wrapper<person>> m_customers;
@@ -120,5 +139,7 @@ struct company
 
 std::ostream& operator<<(std::ostream& os, const company& c) noexcept;
 
+} //~namespace imcw
+} //~namespace ribi
 
-#endif // COMPANY_H
+#endif // RIBI_IMCW_COMPANY_H

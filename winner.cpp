@@ -3,7 +3,7 @@
 #include <cassert>
 #include <iostream>
 
-winner::winner()
+ribi::imcw::winner::winner()
   : m_value_euros{0.0}
 {
   #ifndef NDEBUG
@@ -11,14 +11,16 @@ winner::winner()
   #endif
 }
 
-void winner::add_value_euros(const double euros)
+/*
+void ribi::imcw::winner::add_value_euros(const double euros)
 {
   assert(euros >= 0.0 && "Winners can only increase in value");
   m_value_euros += euros;
 }
+*/
 
 #ifndef NDEBUG
-void winner::test() noexcept
+void ribi::imcw::winner::test() noexcept
 {
   {
     static bool is_tested{false};
@@ -27,13 +29,13 @@ void winner::test() noexcept
   }
   {
     winner w;
-    assert(w.get_value_euros() == 0.0);
+    assert(w.get_value() == balance(0.0));
   }
 }
 #endif
 
-std::ostream& operator<<(std::ostream& os, const winner& w) noexcept
+std::ostream& ribi::imcw::operator<<(std::ostream& os, const winner& w) noexcept
 {
-  os << w.get_value_euros() << " euros";
+  os << w.get_value();
   return os;
 }

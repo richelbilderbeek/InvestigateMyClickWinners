@@ -1,10 +1,13 @@
-#ifndef SIMULATION_PARAMETERS_H
-#define SIMULATION_PARAMETERS_H
+#ifndef RIBI_IMCW_SIMULATION_PARAMETERS_H
+#define RIBI_IMCW_SIMULATION_PARAMETERS_H
 
 #include <vector>
 
 #include "person.h"
 #include <boost/date_time/gregorian/gregorian.hpp>
+
+namespace ribi {
+namespace imcw {
 
 struct simulation_parameters
 {
@@ -32,4 +35,7 @@ struct simulation_parameters
   #endif
 };
 
-#endif // SIMULATION_PARAMETERS_H
+} //~namespace imcw
+} //~namespace ribi
+
+#endif // RIBI_IMCW_SIMULATION_PARAMETERS_H

@@ -1,13 +1,13 @@
 #include "calendar.h"
 
-const boost::gregorian::date calendar::sm_distibute_profit_webshop_day
+const boost::gregorian::date ribi::imcw::calendar::sm_distibute_profit_webshop_day
   = boost::gregorian::date(
     boost::gregorian::greg_year(2015),
     boost::gregorian::greg_month(2),
     boost::gregorian::greg_day(28)
   );
 
-calendar::calendar(
+ribi::imcw::calendar::calendar(
   const boost::gregorian::date& today
 ) : m_today{today}
 {
@@ -16,12 +16,12 @@ calendar::calendar(
   #endif
 }
 
-bool calendar::distibute_profit_winners_today() const noexcept
+bool ribi::imcw::calendar::distibute_profit_winners_today() const noexcept
 {
   return m_today == m_today.end_of_month();
 }
 
-bool calendar::distibute_profit_webshop_today() const noexcept
+bool ribi::imcw::calendar::distibute_profit_webshop_today() const noexcept
 {
   return m_today.day() == sm_distibute_profit_webshop_day.day()
     && m_today.month() == sm_distibute_profit_webshop_day.month()
@@ -29,7 +29,7 @@ bool calendar::distibute_profit_webshop_today() const noexcept
 }
 
 #ifndef NDEBUG
-void calendar::test() noexcept
+void ribi::imcw::calendar::test() noexcept
 {
   {
     static bool is_tested{false};

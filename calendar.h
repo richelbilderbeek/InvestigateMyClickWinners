@@ -1,7 +1,10 @@
-#ifndef CALENDAR_H
-#define CALENDAR_H
+#ifndef RIBI_IMCW_CALENDAR_H
+#define RIBI_IMCW_CALENDAR_H
 
 #include <boost/date_time/gregorian/gregorian.hpp>
+
+namespace ribi {
+namespace imcw {
 
 ///The scheduled events
 class calendar
@@ -9,7 +12,7 @@ class calendar
 public:
 
   calendar(
-    const boost::gregorian::date& today
+    const boost::gregorian::date& today = boost::gregorian::day_clock::local_day()
   );
 
   const boost::gregorian::date& get_current_day() const noexcept { return m_today; }
@@ -37,4 +40,7 @@ public:
   #endif
 };
 
-#endif // CALENDAR_H
+} //~namespace imcw
+} //~namespace ribi
+
+#endif // RIBI_IMCW_CALENDAR_H

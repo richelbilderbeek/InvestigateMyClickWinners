@@ -3,20 +3,20 @@
 #include <cassert>
 #include <cmath>
 
-helper::helper()
+ribi::imcw::helper::helper()
 {
   #ifndef NDEBUG
   test();
   #endif
 }
 
-bool helper::is_about_equal(const double a, const double b) const noexcept
+bool ribi::imcw::helper::is_about_equal(const double a, const double b) const noexcept
 {
   return std::abs(a - b) < 0.005;
 }
 
 #ifndef NDEBUG
-void helper::test() noexcept
+void ribi::imcw::helper::test() noexcept
 {
   {
     static bool is_tested{false};

@@ -1,7 +1,10 @@
-#ifndef WINNER_PACKAGE_H
-#define WINNER_PACKAGE_H
+#ifndef RIBI_IMCW_WINNER_PACKAGE_H
+#define RIBI_IMCW_WINNER_PACKAGE_H
 
 #include "winner_package_name.h"
+
+namespace ribi {
+namespace imcw {
 
 struct winner_package
 {
@@ -20,4 +23,7 @@ struct winner_package
 
 constexpr int calculate_n_winners(const winner_package_name name);
 
-#endif // WINNER_PACKAGE_H
+} //~namespace imcw
+} //~namespace ribi
+
+#endif // RIBI_IMCW_WINNER_PACKAGE_H

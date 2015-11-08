@@ -1,5 +1,8 @@
-#ifndef WINNER_PACKAGE_NAME_H
-#define WINNER_PACKAGE_NAME_H
+#ifndef RIBI_IMCW_WINNER_PACKAGE_NAME_H
+#define RIBI_IMCW_WINNER_PACKAGE_NAME_H
+
+namespace ribi {
+namespace imcw {
 
 enum class winner_package_name {
   starter,
@@ -10,4 +13,7 @@ enum class winner_package_name {
   executive
 };
 
-#endif // WINNER_PACKAGE_NAME_H
+} //~namespace imcw
+} //~namespace ribi
+
+#endif // RIBI_IMCW_WINNER_PACKAGE_NAME_H

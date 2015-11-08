@@ -1,8 +1,11 @@
-#ifndef CLICKCARD_H
-#define CLICKCARD_H
+#ifndef RIBI_IMCW_CLICKCARD_H
+#define RIBI_IMCW_CLICKCARD_H
 
 #include <chrono>
-#include "money.h"
+#include "balance.h"
+
+namespace ribi {
+namespace imcw {
 
 struct click_card
 {
@@ -16,4 +19,7 @@ struct click_card
   #endif
 };
 
-#endif // CLICKCARD_H
+} //~namespace imcw
+} //~namespace ribi
+
+#endif // RIBI_IMCW_CLICKCARD_H

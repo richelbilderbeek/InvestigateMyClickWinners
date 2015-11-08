@@ -1,6 +1,8 @@
-#ifndef HELPER_H
-#define HELPER_H
+#ifndef RIBI_IMCW_HELPER_H
+#define RIBI_IMCW_HELPER_H
 
+namespace ribi {
+namespace imcw {
 
 struct helper
 {
@@ -15,4 +17,7 @@ struct helper
   #endif
 };
 
-#endif // HELPER_H
+} //~namespace imcw
+} //~namespace ribi
+
+#endif // RIBI_IMCW_HELPER_H

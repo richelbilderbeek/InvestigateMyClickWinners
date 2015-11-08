@@ -1,9 +1,12 @@
 #include "simulation_parameters.h"
 
+#include "bank.h"
+#include "calendar.h"
+
 #include <stdexcept>
 #include <sstream>
 
-simulation_parameters::simulation_parameters(
+ribi::imcw::simulation_parameters::simulation_parameters(
   const person& focal_person,
   const std::vector<person>& others,
   const boost::gregorian::date& start,
@@ -31,7 +34,7 @@ simulation_parameters::simulation_parameters(
 
 
 #ifndef NDEBUG
-void simulation_parameters::test() noexcept
+void ribi::imcw::simulation_parameters::test() noexcept
 {
   {
     static bool is_tested{false};
@@ -44,9 +47,12 @@ void simulation_parameters::test() noexcept
     boost::gregorian::date today = boost::gregorian::day_clock::local_day();
     boost::gregorian::date yesterday = today - boost::gregorian::days(1);
     boost::gregorian::date tomorrow = today + boost::gregorian::days(1);
-    simulation_parameters(person(),{},today,tomorrow);
+    bank b;
+    calendar c;
+    person p(b,c);
+    simulation_parameters(p,{},today,tomorrow);
     try {
-      simulation_parameters(person(),{},today,yesterday);
+      simulation_parameters(p,{},today,yesterday);
       assert(!"Should not get here");
     }
     catch (std::logic_error&) {

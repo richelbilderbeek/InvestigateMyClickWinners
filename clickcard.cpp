@@ -1,7 +1,7 @@
 #include "clickcard.h"
 
 #ifndef NDEBUG
-void click_card::test() noexcept
+void ribi::imcw::click_card::test() noexcept
 {
   {
     static bool is_tested{false};

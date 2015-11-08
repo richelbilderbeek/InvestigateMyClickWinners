@@ -3,36 +3,48 @@
 #include <algorithm>
 #include <boost/date_time/gregorian/gregorian.hpp>
 
+#include "bank.h"
 #include "calendar.h"
 
-simulation::simulation(const simulation_parameters& parameters)
-  : m_company{},
+ribi::imcw::simulation::simulation(
+  const bank& any_bank,
+  const calendar& any_calendar,
+  const company& any_company,
+  const simulation_parameters& parameters
+)
+  : m_bank{any_bank},
+    m_calendar{any_calendar},
+    m_company{any_company},
     m_parameters{parameters}
 {
 
 }
 
-void simulation::run() noexcept
+void ribi::imcw::simulation::run() noexcept
 {
-  company the_company;
 
   //focal_person buy his/her membership
   person focal_person = m_parameters.get_focal_person();
-  the_company.buy_winner_package(focal_person,winner_package_name::starter,focal_person.get_balance_euros());
+  m_company.buy_winner_package(
+    focal_person,
+    winner_package_name::starter,
+    focal_person.get_balance_euros(),
+    m_bank
+  );
 
   //add others
   std::vector<person> others = m_parameters.get_others();
   std::for_each(
     std::begin(others),
     std::end(others),
-    [&the_company](auto& p) { the_company.add(p); }
+    [this](auto& p) { m_company.add(p); }
   );
 
   //Display initial situation
   std::cout << "*****************" << std::endl;
   std::cout << "Initial situation" << '\n';
   std::cout << "*****************" << std::endl;
-  std::cout << the_company << std::endl;
+  std::cout << m_company << std::endl;
   std::cout << "*****************" << std::endl;
 
   calendar the_calendar(m_parameters.get_start());
@@ -46,21 +58,23 @@ void simulation::run() noexcept
     std::cout << "today: " << the_calendar.get_current_day() << std::endl;
 
     if (the_calendar.distibute_profit_winners_today()) {
-      const double winners_net_profit = 100.0;
+      balance winners_net_profit(100.0);
       std::cout << "***************************" << std::endl;
       std::cout << "Distributing Winners profit of " << winners_net_profit << " euros" << std::endl;
       std::cout << "***************************" << std::endl;
-      the_company.distribute_net_profit(winners_net_profit);
-      std::cout << the_company << std::endl;
+      m_company.distribute_net_profit(winners_net_profit,m_bank);
+      assert(winners_net_profit == balance(0.0));
+      std::cout << m_company << std::endl;
       std::cout << "***************************" << std::endl;
     }
     if (the_calendar.distibute_profit_webshop_today()) {
-      const double webshop_net_profit = 1.0;
+      balance webshop_net_profit(1.0);
       std::cout << "***************************" << std::endl;
       std::cout << "Distributing webshop profit of " << webshop_net_profit << " euros" << std::endl;
       std::cout << "***************************" << std::endl;
-      the_company.distribute_net_profit(webshop_net_profit);
-      std::cout << the_company << std::endl;
+      m_company.distribute_net_profit(webshop_net_profit,m_bank);
+      assert(webshop_net_profit == balance(0.0));
+      std::cout << m_company << std::endl;
       std::cout << "***************************" << std::endl;
     }
 
@@ -70,5 +84,13 @@ void simulation::run() noexcept
   std::cout << "***************" << std::endl;
   std::cout << "Final situation" << '\n';
   std::cout << "***************" << std::endl;
-  std::cout << the_company << std::endl;
+
+  std::cout << "***************" << std::endl;
+  std::cout << "Company" << '\n';
+  std::cout << "***************" << std::endl;
+  std::cout << m_company << std::endl;
+  std::cout << "***************" << std::endl;
+  std::cout << "Bank" << '\n';
+  std::cout << "***************" << std::endl;
+  std::cout << m_bank << std::endl;
 }
