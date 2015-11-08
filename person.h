@@ -19,10 +19,7 @@ struct calendar;
 class person
 {
 public:
-  person(
-    bank& the_bank,
-    calendar& the_calendar
-  ) noexcept;
+  person(const std::string& name) noexcept;
 
   void add_click_card(const click_card& w);
 
@@ -44,6 +41,8 @@ public:
 
   int get_id() const noexcept { return m_id; }
 
+  const std::string& get_name() const noexcept { return m_name; }
+
   int get_n_winners() const noexcept { return static_cast<int>(m_winners.size()); }
 
   ///The winners
@@ -64,7 +63,11 @@ public:
 
   ///After profit of MyClickWinners has been distributed,
   ///Winners my have more than 50 euros
-  void process_winners(company& the_company);
+  void process_winners(
+    bank& the_bank,
+    calendar& the_calendar,
+    company& the_company
+  );
 
   ///Remove the ClickCard, assuming he/she has one
   void remove_card();
@@ -96,19 +99,17 @@ private:
   ///Negative values denote loss
   balance m_balance_euros;
 
-  bank& m_bank;
-
   ///The amount of money in the person his/her MyClickWinners BankWallet
   ///Cannot be negative
   balance m_bank_wallet_euros;
-
-  calendar& m_calendar;
 
   ///A person can have or have not one card
   std::vector<click_card> m_card;
 
   ///Unique ID
   const int m_id;
+
+  std::string m_name;
 
   ///The amount of money in the person his/her MyClickWinners ShopWallet
   ///Cannot be negative

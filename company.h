@@ -13,9 +13,7 @@ namespace imcw {
 ///The company MyClickWinners
 struct company
 {
-  company(
-    calendar& the_calendar
-  );
+  company();
 
   ///Add any customer, these persons are setup in the simulation
   void add(person& customer);
@@ -30,7 +28,8 @@ struct company
   void buy_winner(
     person& customer,
     balance& customer_balance,
-    bank& the_bank
+    bank& the_bank,
+    calendar& the_calendar
   );
 
   ///A customer buys a WinnerPackage
@@ -39,14 +38,16 @@ struct company
     person& customer,
     const winner_package_name name,
     balance& customer_balance,
-    bank& the_bank
+    bank& the_bank,
+    calendar& the_calendar
   );
 
   ///When MyClickWinners makes a profit,
   ///it is distributed over customers and other entities
   void distribute_net_profit(
     balance& source,
-    bank& the_bank
+    bank& the_bank,
+    calendar& the_calendar
   ) noexcept;
 
   ///The balance of the compensation plan of MyClickWinners
@@ -108,10 +109,6 @@ struct company
   ///Positive values denote there is a money available
   ///Negative values denote there is a money shortage
   balance m_balance_undistributed_euros;
-
-  //bank& m_bank;
-
-  calendar& m_calendar;
 
   ///All customers
   std::vector<std::reference_wrapper<person>> m_customers;

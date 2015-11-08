@@ -29,7 +29,8 @@ void ribi::imcw::simulation::run() noexcept
     focal_person,
     winner_package_name::starter,
     focal_person.get_balance_euros(),
-    m_bank
+    m_bank,
+    m_calendar
   );
 
   //add others
@@ -58,22 +59,36 @@ void ribi::imcw::simulation::run() noexcept
     std::cout << "today: " << the_calendar.get_current_day() << std::endl;
 
     if (the_calendar.distibute_profit_winners_today()) {
-      balance winners_net_profit(100.0);
+      balance winners_net_profit(
+        "MCW Winners profit",
+        100.0
+      );
       std::cout << "***************************" << std::endl;
       std::cout << "Distributing Winners profit of " << winners_net_profit << " euros" << std::endl;
       std::cout << "***************************" << std::endl;
-      m_company.distribute_net_profit(winners_net_profit,m_bank);
-      assert(winners_net_profit == balance(0.0));
+      m_company.distribute_net_profit(
+        winners_net_profit,
+        m_bank,
+        m_calendar
+      );
+      assert(winners_net_profit.get_value_euros() == 0.0);
       std::cout << m_company << std::endl;
       std::cout << "***************************" << std::endl;
     }
     if (the_calendar.distibute_profit_webshop_today()) {
-      balance webshop_net_profit(1.0);
+      balance webshop_net_profit(
+        "MCW webshop profit",
+        1.0
+      );
       std::cout << "***************************" << std::endl;
       std::cout << "Distributing webshop profit of " << webshop_net_profit << " euros" << std::endl;
       std::cout << "***************************" << std::endl;
-      m_company.distribute_net_profit(webshop_net_profit,m_bank);
-      assert(webshop_net_profit == balance(0.0));
+      m_company.distribute_net_profit(
+        webshop_net_profit,
+        m_bank,
+        m_calendar
+      );
+      assert(webshop_net_profit.get_value_euros() == 0.0);
       std::cout << m_company << std::endl;
       std::cout << "***************************" << std::endl;
     }

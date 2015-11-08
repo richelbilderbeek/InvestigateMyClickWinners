@@ -17,13 +17,14 @@ int main()
 
   calendar the_calendar(boost::gregorian::day_clock::local_day());
   bank the_bank;
-  company mcw(the_calendar);
+  company mcw;
 
   const simulation_parameters parameters(
-    person(the_bank,the_calendar),
+    person("Mister X"),
     {},
     boost::gregorian::day_clock::local_day(),
-    boost::gregorian::day_clock::local_day() + boost::gregorian::years(1)
+    boost::gregorian::day_clock::local_day()
+      + boost::gregorian::years(10)
   );
   simulation s(
     the_bank,

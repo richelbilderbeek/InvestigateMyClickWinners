@@ -2,6 +2,7 @@
 #define RIBI_IMCW_BALANCE_H
 
 #include <iosfwd>
+#include <string>
 
 namespace ribi {
 namespace imcw {
@@ -12,11 +13,21 @@ namespace imcw {
 class balance
 {
 public:
-  balance(const double value_in_euros = 0.0);
+  balance(
+    const std::string& description,
+    const double value_in_euros = 0.0
+  );
+
+  const std::string& get_description() const noexcept { return m_description; }
 
   double get_value_euros() const noexcept { return m_euros;  }
 
+  void set_value_euros(const double value_euros) noexcept { m_euros = value_euros;  }
+
 private:
+
+  //For example, who owns this money
+  std::string m_description;
 
   //The amount of money in euros
   double m_euros;

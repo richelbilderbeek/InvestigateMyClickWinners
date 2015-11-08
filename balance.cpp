@@ -6,8 +6,11 @@
 #include <cmath>
 #include <iostream>
 
-ribi::imcw::balance::balance(const double value_in_euros)
-  : m_euros{value_in_euros}
+ribi::imcw::balance::balance(
+  const std::string& description,
+  const double value_in_euros)
+  : m_description{description},
+    m_euros{value_in_euros}
 {
   #ifndef NDEBUG
   test();
@@ -25,9 +28,9 @@ void ribi::imcw::balance::test() noexcept
 
   //is_about_equal
   {
-    assert(balance(0.0) == balance(0.0000));
-    assert(balance(0.0) == balance(0.0049));
-    assert(balance(0.0) != balance(0.0051));
+    assert(balance("a",0.0) == balance("a",0.0000));
+    assert(balance("a",0.0) == balance("a",0.0049));
+    assert(balance("a",0.0) != balance("a",0.0051));
   }
 
 }
@@ -61,7 +64,10 @@ bool ribi::imcw::operator>=(const balance& a, const balance& b) noexcept
 
 std::ostream& ribi::imcw::operator<<(std::ostream& os, const balance& b) noexcept
 {
-  os << b.get_value_euros() << " euros";
+  os
+    << b.get_description() << ", value: "
+    << b.get_value_euros() << " euros"
+  ;
   return os;
 }
 

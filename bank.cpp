@@ -30,9 +30,9 @@ void ribi::imcw::bank::test() noexcept
   }
   {
     bank the_bank;
-    balance sender;
+    balance sender("sender",0.0);
     const double amount_euros = 100.0;
-    balance receiver;
+    balance receiver("receiver",0.0);
     assert(sender.get_value_euros() == 0.0);
     assert(receiver.get_value_euros() == 0.0);
     assert(the_bank.get_transfers().empty());
@@ -57,13 +57,15 @@ void ribi::imcw::bank::transfer(
 )
 {
   const auto sum_before = sender.get_value_euros() + receiver.get_value_euros();
-  sender   = balance(sender.get_value_euros() - value_in_euros);
-  receiver = balance(receiver.get_value_euros() + value_in_euros);
+  sender.set_value_euros(sender.get_value_euros() - value_in_euros);
+  receiver.set_value_euros(receiver.get_value_euros() + value_in_euros);
+  //sender   = balance(sender.get_value_euros() - value_in_euros);
+  //receiver = balance(receiver.get_value_euros() + value_in_euros);
 
   std::stringstream msg;
-  msg << day << ": " << sender << " sent "
+  msg << day << ": " << sender.get_description() << " sent "
     << value_in_euros
-    << " to " << receiver
+    << " to " << receiver.get_description()
   ;
   m_transfers.push_back(msg.str());
 
@@ -97,27 +99,29 @@ void ribi::imcw::bank::transfer(
   const double value_in_euros_to_b{
     proportion_to_b * value_in_euros
   };
-  sender   = balance(sender.get_value_euros() - value_in_euros);
-  receiver_a = balance(
+  sender.set_value_euros(
+    sender.get_value_euros() - value_in_euros
+  );
+  receiver_a.set_value_euros(
     receiver_a.get_value_euros() + value_in_euros_to_a
   );
-  receiver_b = balance(
+  receiver_b.set_value_euros(
     receiver_b.get_value_euros() + value_in_euros_to_b
   );
 
   {
     std::stringstream msg;
-    msg << day << ": " << sender << " sent "
+    msg << day << ": " << sender.get_description() << " sent "
       << value_in_euros_to_a
-      << " to " << receiver_a
+      << " to " << receiver_a.get_description()
     ;
     m_transfers.push_back(msg.str());
   }
   {
     std::stringstream msg;
-    msg << day << ": " << sender << " sent "
+    msg << day << ": " << sender.get_description() << " sent "
       << value_in_euros_to_b
-      << " to " << receiver_b
+      << " to " << receiver_b.get_description()
     ;
     m_transfers.push_back(msg.str());
   }

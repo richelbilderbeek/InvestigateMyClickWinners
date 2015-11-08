@@ -15,18 +15,16 @@
 int ribi::imcw::person::sm_current_id = 0;
 
 ribi::imcw::person::person(
-  bank& the_bank,
-  calendar& the_calendar
+  const std::string& name
 ) noexcept
   :
     m_auto_buy{true},
-    m_balance_euros{0.0},
-    m_bank{the_bank},
-    m_bank_wallet_euros{0.0},
-    m_calendar{the_calendar},
+    m_balance_euros{"Personal balance of " + name,0.0},
+    m_bank_wallet_euros{"BankWallet of " + name,0.0},
     m_card{},
     m_id{sm_current_id++},
-    m_shop_wallet_euros{0.0},
+    m_name{name},
+    m_shop_wallet_euros{"ShopWallet of " + name,0.0},
     m_winners{}
 {
   #ifndef NDEBUG
@@ -68,7 +66,11 @@ bool ribi::imcw::person::has_account(const balance& an_account) const noexcept
   ;
 }
 
-void ribi::imcw::person::process_winners(company& the_company)
+void ribi::imcw::person::process_winners(
+  bank& the_bank,
+  calendar& the_calendar,
+  company& the_company
+)
 {
   //Partition is Winners that will remain
   //and Winners that will be converted to BankWallet and ShopWallet
@@ -77,33 +79,33 @@ void ribi::imcw::person::process_winners(company& the_company)
     std::end(m_winners),
     [](const auto& w)
     {
-      return w.get_value() < balance(winner::max_value_euros);
+      return w.get_value() < winner::max_value_euros;
     }
   );
   //Convert the Winners that will be converted to BankWallet and ShopWallet
   std::for_each(
     iter,
     std::end(m_winners),
-    [this](auto& w)
+    [this,&the_bank,the_calendar](auto& w)
     {
-      const balance to_shop_wallet(euros_from_full_winner_to_shopwallet);
-      assert(w.get_value() >= balance(winner::max_value_euros));
-      assert(w.get_value() >= balance(winner::max_value_euros));
+      //const double to_shop_wallet{euros_from_full_winner_to_shopwallet};
+      assert(w.get_value() >= winner::max_value_euros);
+      assert(w.get_value() >= winner::max_value_euros);
       //Transfer euros_from_full_winner_to_shopwallet from Winner to ShopWallet
-      m_bank.transfer(
-        w.get_value(),
+      the_bank.transfer(
+        w.get_balance(),
         euros_from_full_winner_to_shopwallet,
         m_shop_wallet_euros,
-        m_calendar.get_current_day()
+        the_calendar.get_current_day()
       );
-      assert(w.get_value() > balance(0.0));
-      assert(w.get_value() > balance(40.0));
+      assert(w.get_value() > 0.0);
+      assert(w.get_value() > 40.0);
       //Transfer rest from Winner to BankWallet
-      m_bank.transfer(
+      the_bank.transfer(
+        w.get_balance(),
         w.get_value(),
-        w.get_value().get_value_euros(),
         m_bank_wallet_euros,
-        m_calendar.get_current_day()
+        the_calendar.get_current_day()
       );
     }
   );
@@ -123,7 +125,7 @@ void ribi::imcw::person::process_winners(company& the_company)
     while (m_bank_wallet_euros.get_value_euros() >= winner::price_vat_exempt_euros)
     {
       const auto bank_wallet_before = m_bank_wallet_euros;
-      the_company.buy_winner(*this,m_bank_wallet_euros,m_bank);
+      the_company.buy_winner(*this,m_bank_wallet_euros,the_bank,the_calendar);
       const auto bank_wallet_after = m_bank_wallet_euros;
       assert(bank_wallet_after < bank_wallet_before);
     }
@@ -157,39 +159,39 @@ void ribi::imcw::person::test() noexcept
   {
     bank b;
     calendar c;
-    person p(b,c);
-    const balance expected(0.0);
-    const auto observed = p.get_balance_euros();
-    assert(expected == observed);
+    person p("Mrs A");
+    const auto expected_euros{0.0};
+    const auto observed = p.get_balance_euros().get_value_euros();
+    assert(expected_euros == observed);
   }
   //A person buying a starter winner package has to pay 100 euros
   {
     bank b;
     calendar c;
-    person p(b,c);
-    company mcw(c);
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance_euros(),b);
-    const balance expected(-100.0);
-    const auto observed = p.get_balance_euros();
+    person p("Mrs B");
+    company mcw;
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance_euros(),b,c);
+    const auto expected{-100.0};
+    const auto observed = p.get_balance_euros().get_value_euros();
     assert(expected == observed);
   }
   //A person buying an executive winner package has to pay 60+(50*40) euros
   {
     bank b;
     calendar c;
-    person p(b,c);
-    company mwc(c);
-    mwc.buy_winner_package(p,winner_package_name::executive,p.get_balance_euros(),b);
-    const balance expected(-2060.0);
-    const auto observed = p.get_balance_euros();
+    person p("Mrs C");
+    company mwc;
+    mwc.buy_winner_package(p,winner_package_name::executive,p.get_balance_euros(),b,c);
+    const auto expected{-2060.0};
+    const auto observed = p.get_balance_euros().get_value_euros();
     assert(expected == observed);
   }
   //A person his/her profit is distributed over BankWallet and ShopWallet
   {
     bank b;
     calendar c;
-    person p(b,c);
-    balance sender;
+    person p("Mrs D");
+    balance sender("test");
     const double profit_euros(40.0);
     b.transfer(
       sender,
@@ -199,10 +201,10 @@ void ribi::imcw::person::test() noexcept
       p.get_shop_wallet_euros(),
       today
     );
-    const balance expected_bank_wallet(30.0);
-    const balance expected_shop_wallet(10.0);
-    const auto observed_bank_wallet = p.get_bank_wallet_euros();
-    const auto observed_shop_wallet = p.get_shop_wallet_euros();
+    const auto expected_bank_wallet{30.0};
+    const auto expected_shop_wallet{10.0};
+    const auto observed_bank_wallet = p.get_bank_wallet_euros().get_value_euros();
+    const auto observed_shop_wallet = p.get_shop_wallet_euros().get_value_euros();
     assert(expected_bank_wallet == observed_bank_wallet);
     assert(expected_shop_wallet == observed_shop_wallet);
   }
@@ -218,6 +220,7 @@ std::ostream& ribi::imcw::operator<<(std::ostream& os, const person& p) noexcept
 {
   std::stringstream s;
   s
+    << "Name: " << p.m_name << '\n'
     << "ID: " << p.m_id << '\n'
     << "Auto buy: " << p.m_auto_buy << '\n'
     << "Balance: " << p.m_balance_euros << '\n'

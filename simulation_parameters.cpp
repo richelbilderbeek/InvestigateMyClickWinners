@@ -49,7 +49,7 @@ void ribi::imcw::simulation_parameters::test() noexcept
     boost::gregorian::date tomorrow = today + boost::gregorian::days(1);
     bank b;
     calendar c;
-    person p(b,c);
+    person p("Mrs. A");
     simulation_parameters(p,{},today,tomorrow);
     try {
       simulation_parameters(p,{},today,yesterday);
