@@ -11,6 +11,7 @@
 #include "company.h"
 #include "helper.h"
 #include "money.h"
+#include "person.h"
 #include "winner.h"
 #include "winner_package.h"
 
@@ -211,17 +212,19 @@ std::ostream& ribi::imcw::operator<<(std::ostream& os, const person& p) noexcept
 {
   std::stringstream s;
   s
-    << "Name: " << p.m_name << '\n'
-    << "ID: " << p.m_id << '\n'
-    << "Auto buy: " << p.m_auto_buy << '\n'
+    << "Name: " << p.m_name << " (ID: " << p.m_id << ")\n"
+    << "Auto buy: " << (p.m_auto_buy ? "Y" : "N") << '\n'
     << "Balance: " << p.m_balance << '\n'
     << "BankWallet: " << p.m_bank_wallet << '\n'
     << "ShopWallet: " << p.m_shop_wallet << '\n'
     << "ClickCard: " << (p.has_click_card() ? "Y" : "N") << '\n'
     << "#Winners: " << p.m_winners.size() << '\n'
   ;
-  for (const auto w: p.m_winners) s << w << '\n';
+  for (const winner& w: p.m_winners) {
+    s << w << '\n';
+  }
   std::string t{s.str()};
+  assert(!t.empty());
   t.pop_back();
   os << t;
   return os;

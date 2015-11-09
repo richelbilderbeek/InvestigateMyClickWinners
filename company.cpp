@@ -9,6 +9,7 @@
 #include "bank.h"
 #include "calendar.h"
 #include "helper.h"
+#include "person.h"
 #include "money.h"
 #include "winner.h"
 #include "winner_package.h"
@@ -171,12 +172,11 @@ std::vector<std::reference_wrapper<ribi::imcw::winner>> ribi::imcw::company::col
 }
 
 void ribi::imcw::company::distribute_net_profit(
-  balance& source,
   bank& the_bank,
   calendar& the_calendar
   ) noexcept
 {
-
+  balance& source = m_balance_undistributed;
   const auto change_compensation_plan_euros = source.get_value() * proportion_of_profit_to_compensation_plan;
   const auto change_holding_euros           = source.get_value() * proportion_of_profit_to_holding;
   const auto change_reserves_euros          = source.get_value() * proportion_of_profit_to_reserves;
@@ -242,9 +242,9 @@ void ribi::imcw::company::distribute_net_profit(
   if (m_verbose)
   {
     std::clog
-      << "Distributing " << change_winners_euros << " euros over the winners\n"
+      << "Distributing " << change_winners_euros << " over the winners\n"
       << "n_winners: " << n_winners << '\n'
-      << "income_per_winners_euros: " << income_per_winners_euros << " euros\n"
+      << "income_per_winners_euros: " << income_per_winners_euros << " \n"
     ;
   }
 }
@@ -355,9 +355,11 @@ void ribi::imcw::company::test() noexcept
     assert(mcw.get_balance_compensation_plan().get_value() == money(0.0));
     assert(mcw.get_balance_holding ().get_value() == money(0.0));
     assert(mcw.get_balance_reserves().get_value() == money(0.0));
-    //100 euros is distributed, this ends up one the 1 winner of the 1 customer
-    balance net_profit("test net profit",100.0);
-    mcw.distribute_net_profit(net_profit,b,c);
+    assert(mcw.get_balance_undistributed().get_value() == money(100.0));
+    //the 100 euros that was undistibuted
+    //gets distributed, this ends up one the 1 winner of the 1 customer
+    mcw.distribute_net_profit(b,c);
+    //std::cerr << mcw.get_balance_compensation_plan().get_value() << std::endl;
     assert(mcw.get_balance_compensation_plan().get_value() == money(15.0));
     assert(mcw.get_balance_holding ().get_value() == money(10.0));
     assert(mcw.get_balance_reserves().get_value() == money(30.0));
@@ -383,11 +385,13 @@ void ribi::imcw::company::test() noexcept
     assert(mcw.get_balance_compensation_plan().get_value() == money(0.0));
     assert(mcw.get_balance_holding ().get_value() == money(0.0));
     assert(mcw.get_balance_reserves().get_value() == money(0.0));
-    //200 euros is distributed
+    assert(mcw.get_balance_undistributed().get_value() == money(100.0));
+    //200 euros is distributed (100 already from winners, 100 from test net profit)
     //customer will have one Winner with 90 euro on it,
     //that will break down
-    balance net_profit("test net profit",2.0 * 100.0);
-    mcw.distribute_net_profit(net_profit,b,c);
+    balance net_profit("test net profit",100.0);
+    mcw.transfer(net_profit,b,c);
+    mcw.distribute_net_profit(b,c);
     assert(net_profit.get_value() == money(0.0));
     assert(mcw.get_balance_compensation_plan().get_value() == money(2.0 * 15.0));
     assert(mcw.get_balance_holding ().get_value() == money(2.0 * 10.0));
@@ -408,7 +412,7 @@ void ribi::imcw::company::test() noexcept
     assert(mcw.get_balance_compensation_plan().get_value() == money(0.0));
     assert(mcw.get_balance_holding ().get_value() == money(0.0));
     assert(mcw.get_balance_reserves().get_value() == money(0.0));
-    //200 euros is distributed, 90 euros go to customer
+    //200 euros is distributed (100 already from winners, 100 from test net profit)
     //He/she has one empty winner
     // - 90 euros go to customer
     //   - winners: 1x 90.0 euros
@@ -425,8 +429,9 @@ void ribi::imcw::company::test() noexcept
     //
     //customer will have one Winner with 40 euro on it,
     //that will break down
-    balance net_profit("test net profit",2.0 * 100.0);
-    mcw.distribute_net_profit(net_profit,b,c);
+    balance net_profit("test net profit",100.0);
+    mcw.transfer(net_profit,b,c);
+    mcw.distribute_net_profit(b,c);
     assert(net_profit.get_value() == money(0.0));
     assert(mcw.get_balance_compensation_plan().get_value() == money(2.0 * 15.0));
     assert(mcw.get_balance_holding ().get_value() == money(2.0 * 10.0));
@@ -440,18 +445,36 @@ void ribi::imcw::company::test() noexcept
 }
 #endif
 
+void ribi::imcw::company::transfer(
+  balance& source,
+  bank& the_bank,
+  calendar& the_calendar
+) noexcept
+{
+  const money the_money = source.get_value();
+  the_bank.transfer(
+    source,
+    the_money,
+    m_balance_undistributed,
+    the_calendar.get_today()
+  );
+}
+
 std::ostream& ribi::imcw::operator<<(std::ostream& os, const company& c) noexcept
 {
   std::stringstream s;
   s
-    << "Balance compensation plan: " << c.m_balance_compensation_plan << " euros" << '\n'
-    << "Balance holding: " << c.m_balance_holding << " euros" << '\n'
-    << "Balance reserves: " << c.m_balance_reserves << " euros" << '\n'
-    << "Balance undistributed: " << c.m_balance_undistributed << " euros" << '\n'
+    << "Balance compensation plan: " << c.m_balance_compensation_plan << '\n'
+    << "Balance holding: " << c.m_balance_holding << '\n'
+    << "Balance reserves: " << c.m_balance_reserves << '\n'
+    << "Balance undistributed: " << c.m_balance_undistributed << '\n'
     << "#customers: " << c.m_customers.size() << '\n'
   ;
-  for (const auto& d: c.m_customers) { s << d << std::endl; }
+  for (const person& d: c.m_customers) {
+    s << d << std::endl;
+  }
   std::string t{s.str()};
+  assert(!t.empty());
   t.pop_back();
   os << t;
   return os;

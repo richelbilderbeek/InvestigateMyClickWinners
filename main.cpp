@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "bank.h"
 #include "calendar.h"
 #include "company.h"
@@ -9,29 +11,32 @@
 
 int main()
 {
-  using ribi::imcw::bank;
-  using ribi::imcw::calendar;
-  using ribi::imcw::company;
+  //using ribi::imcw::bank;
+  //using ribi::imcw::calendar;
+  //using ribi::imcw::company;
   using ribi::imcw::person;
   using ribi::imcw::simulation;
   using ribi::imcw::simulation_parameters;
 
-  calendar the_calendar(boost::gregorian::day_clock::local_day());
-  bank the_bank;
-  company mcw;
+  person p("Mister X");
+  p.set_auto_buy(false);
 
   const simulation_parameters parameters(
-    person("Mister X"),
+    p,
     {},
     boost::gregorian::day_clock::local_day(),
     boost::gregorian::day_clock::local_day()
-      + boost::gregorian::years(10)
+      + boost::gregorian::months(11)
   );
   simulation s(
-    the_bank,
-    the_calendar,
-    mcw,
     parameters
   );
+
+  //Display initial situation
+  std::cout << "*****************" << std::endl;
+  std::cout << "Initial situation" << '\n';
+  std::cout << "*****************" << std::endl;
+  std::cout << s.get_company() << std::endl;
+  std::cout << "*****************" << std::endl;
   s.run();
 }

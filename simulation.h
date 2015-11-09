@@ -16,21 +16,20 @@ namespace imcw {
 struct simulation
 {
   simulation(
-    const bank& any_bank,
-    const calendar& any_calendar,
-    const company& any_company,
     const simulation_parameters& parameters
   );
+
+  const bank& get_bank() const noexcept { return m_bank; }
+  const calendar& get_calendar() const noexcept { return m_calendar; }
+  const company& get_company() const noexcept { return m_company; }
 
   void run() noexcept;
 
   private:
+
   bank m_bank;
-
   calendar m_calendar;
-
   company m_company;
-
   const simulation_parameters m_parameters;
 
   #ifndef NDEBUG

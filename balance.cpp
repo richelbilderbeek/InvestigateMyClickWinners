@@ -32,7 +32,7 @@ std::ostream& ribi::imcw::operator<<(std::ostream& os, const balance& b) noexcep
 {
   os
     << b.get_description() << ", value: "
-    << b.get_value() << " euros"
+    << b.get_value()
   ;
   return os;
 }

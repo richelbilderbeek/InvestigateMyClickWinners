@@ -7,22 +7,13 @@
 #include "calendar.h"
 
 ribi::imcw::simulation::simulation(
-  const bank& any_bank,
-  const calendar& any_calendar,
-  const company& any_company,
   const simulation_parameters& parameters
 )
-  : m_bank{any_bank},
-    m_calendar{any_calendar},
-    m_company{any_company},
+  : m_bank{},
+    m_calendar(parameters.get_start()),
+    m_company{},
     m_parameters{parameters}
 {
-
-}
-
-void ribi::imcw::simulation::run() noexcept
-{
-
   //focal_person buy his/her membership
   person focal_person = m_parameters.get_focal_person();
   m_company.buy_winner_package(
@@ -41,58 +32,47 @@ void ribi::imcw::simulation::run() noexcept
     [this](auto& p) { m_company.add(p); }
   );
 
-  //Display initial situation
-  std::cout << "*****************" << std::endl;
-  std::cout << "Initial situation" << '\n';
-  std::cout << "*****************" << std::endl;
-  std::cout << m_company << std::endl;
-  std::cout << "*****************" << std::endl;
+}
 
-  calendar the_calendar(m_parameters.get_start());
-
+void ribi::imcw::simulation::run() noexcept
+{
   //Do the sim
   for (
   ;
-    the_calendar.get_today() != m_parameters.get_end();
-    the_calendar.go_to_next_day()
+    m_calendar.get_today() != m_parameters.get_end();
+    m_calendar.go_to_next_day()
   ) {
-    std::cout << "today: " << the_calendar.get_today() << std::endl;
+    std::cout << "today: " << m_calendar.get_today() << std::endl;
 
-    if (the_calendar.distibute_profit_winners_today()) {
-      balance winners_net_profit(
-        "MCW Winners profit",
-        100.0
+    //Website
+    if (m_calendar.transfer_profit_website_today()) {
+      balance website_net_profit(
+        "Monthly website profit",100.0
       );
-      std::cout << "***************************" << std::endl;
-      std::cout << "Distributing Winners profit of " << winners_net_profit << " euros" << std::endl;
-      std::cout << "***************************" << std::endl;
-      m_company.distribute_net_profit(
-        winners_net_profit,
-        m_bank,
-        m_calendar
-      );
-      assert(winners_net_profit.get_value() == money(0.0));
-      std::cout << m_company << std::endl;
-      std::cout << "***************************" << std::endl;
+      m_company.transfer(website_net_profit,m_bank,m_calendar);
     }
-    if (the_calendar.distibute_profit_webshop_today()) {
+    //Webshop
+    if (m_calendar.transfer_profit_webshop_today()) {
       balance webshop_net_profit(
-        "MCW webshop profit",
-        1.0
+        "Yearly webshop profit",100.0
       );
+      m_company.transfer(webshop_net_profit,m_bank,m_calendar);
+    }
+    //Winners
+    //No transfer, all Winner money is already on the undistributed balance
+
+    //Distribute profit
+    if (m_calendar.distribute_profit_today()) {
       std::cout << "***************************" << std::endl;
-      std::cout << "Distributing webshop profit of " << webshop_net_profit << " euros" << std::endl;
+      std::cout << "Distributing profit" << std::endl;
       std::cout << "***************************" << std::endl;
       m_company.distribute_net_profit(
-        webshop_net_profit,
         m_bank,
         m_calendar
       );
-      assert(webshop_net_profit.get_value() == money(0.0));
       std::cout << m_company << std::endl;
       std::cout << "***************************" << std::endl;
     }
-
   }
 
   //Display final situation
@@ -104,8 +84,8 @@ void ribi::imcw::simulation::run() noexcept
   std::cout << "Company" << '\n';
   std::cout << "***************" << std::endl;
   std::cout << m_company << std::endl;
-//  std::cout << "***************" << std::endl;
-//  std::cout << "Bank" << '\n';
-//  std::cout << "***************" << std::endl;
-//  std::cout << m_bank << std::endl;
+  std::cout << "***************" << std::endl;
+  std::cout << "Bank" << '\n';
+  std::cout << "***************" << std::endl;
+  std::cout << m_bank << std::endl;
 }

@@ -48,7 +48,6 @@ struct company
   ///When MyClickWinners makes a profit,
   ///it is distributed over customers and other entities
   void distribute_net_profit(
-    balance& source,
     bank& the_bank,
     calendar& the_calendar
   ) noexcept;
@@ -83,6 +82,13 @@ struct company
 
   ///Is the person already a customer?
   bool is_customer(const person& p) const noexcept;
+
+  ///Move money from source to 'undistributed' balance
+  void transfer(
+    balance& source,
+    bank& the_bank,
+    calendar& the_calendar
+  ) noexcept;
 
   constexpr static const double proportion_of_profit_to_compensation_plan = 0.15;
   constexpr static const double proportion_of_profit_to_holding = 0.10;
