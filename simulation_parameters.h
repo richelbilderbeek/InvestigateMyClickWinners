@@ -24,10 +24,10 @@ struct simulation_parameters
   const boost::gregorian::date& get_start() const noexcept { return m_start; }
 
   private:
-  const boost::gregorian::date& m_end;
+  const boost::gregorian::date m_end;
   const person m_focal_person;
   const std::vector<person> m_others;
-  const boost::gregorian::date& m_start;
+  const boost::gregorian::date m_start;
 
   private:
   #ifndef NDEBUG

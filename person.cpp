@@ -75,7 +75,7 @@ void ribi::imcw::person::process_winners(
   std::for_each(
     iter,
     std::end(m_winners),
-    [this,&the_bank,the_calendar](auto& w)
+    [this,&the_bank,the_calendar](winner& w)
     {
       assert(w.get_value() >= money(winner::max_value_euros));
       const auto money_before = w.get_value();
@@ -108,7 +108,7 @@ void ribi::imcw::person::process_winners(
     std::count_if(
       std::begin(m_winners),
       std::end(m_winners),
-      [](const auto& w) { return w.is_full(); }
+      [](const winner& w) { return w.is_full(); }
     ) == 0
   );
 

@@ -254,7 +254,7 @@ bool ribi::imcw::company::is_customer(const person& p) const noexcept
   const auto iter = std::find_if(
     std::begin(m_customers),
     std::end(m_customers),
-    [p](const auto customer) { return p == customer; }
+    [p](const Customer& customer) { return p == customer; }
   );
   return iter != std::end(m_customers);
 }

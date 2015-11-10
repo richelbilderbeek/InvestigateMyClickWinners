@@ -14,6 +14,9 @@ class bank;
 ///The company MyClickWinners
 struct company
 {
+  using Customer = std::reference_wrapper<person>;
+  using Customers = std::vector<Customer>;
+
   company();
 
   ///Add any customer, these persons are setup in the simulation
@@ -74,8 +77,8 @@ struct company
   ///Negative values denote there is a money shortage
   const balance& get_balance_undistributed() const noexcept { return m_balance_undistributed; }
 
-  const auto& get_customers() const noexcept { return m_customers; }
-        auto& get_customers()       noexcept { return m_customers; }
+  const Customers& get_customers() const noexcept { return m_customers; }
+        Customers& get_customers()       noexcept { return m_customers; }
 
   ///Get the number of Winners distributed
   //int get_n_winners() const noexcept { return static_cast<int>(m_winners.size()); }
@@ -120,7 +123,7 @@ struct company
   balance m_balance_undistributed;
 
   ///All customers
-  std::vector<std::reference_wrapper<person>> m_customers;
+  Customers m_customers;
 
   bool m_verbose;
 

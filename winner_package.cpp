@@ -10,7 +10,7 @@ ribi::imcw::winner_package::winner_package(const winner_package_name name)
   #endif
 }
 
-constexpr int ribi::imcw::calculate_n_winners(const winner_package_name name)
+int ribi::imcw::calculate_n_winners(const winner_package_name name)
 {
   switch (name)
   {

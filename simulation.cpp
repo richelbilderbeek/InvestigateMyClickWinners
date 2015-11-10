@@ -29,7 +29,7 @@ ribi::imcw::simulation::simulation(
   std::for_each(
     std::begin(m_others),
     std::end(m_others),
-    [this](auto& p) { m_company.add(p); }
+    [this](person& p) { m_company.add(p); }
   );
 
 }

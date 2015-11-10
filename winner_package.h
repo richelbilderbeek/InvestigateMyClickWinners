@@ -21,7 +21,7 @@ struct winner_package
   #endif
 };
 
-constexpr int calculate_n_winners(const winner_package_name name);
+int calculate_n_winners(const winner_package_name name);
 
 } //~namespace imcw
 } //~namespace ribi
