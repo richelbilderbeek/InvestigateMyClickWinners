@@ -34,58 +34,38 @@ ribi::imcw::simulation::simulation(
 
 }
 
-void ribi::imcw::simulation::run() noexcept
+void ribi::imcw::simulation::do_timestep() noexcept
 {
-  //Do the sim
-  for (
-  ;
-    m_calendar.get_today() != m_parameters.get_end();
-    m_calendar.go_to_next_day()
-  ) {
-    std::cout << "today: " << m_calendar.get_today() << std::endl;
+  std::cout << "today: " << m_calendar.get_today() << std::endl;
 
-    //Website
-    if (m_calendar.transfer_profit_website_today()) {
-      balance website_net_profit(
-        "Monthly website profit",100.0
-      );
-      m_company.transfer(website_net_profit,m_bank,m_calendar);
-    }
-    //Webshop
-    if (m_calendar.transfer_profit_webshop_today()) {
-      balance webshop_net_profit(
-        "Yearly webshop profit",100.0
-      );
-      m_company.transfer(webshop_net_profit,m_bank,m_calendar);
-    }
-    //Winners
-    //No transfer, all Winner money is already on the undistributed balance
-
-    //Distribute profit
-    if (m_calendar.distribute_profit_today()) {
-      std::cout << "***************************" << std::endl;
-      std::cout << "Distributing profit" << std::endl;
-      std::cout << "***************************" << std::endl;
-      m_company.distribute_net_profit(
-        m_bank,
-        m_calendar
-      );
-      std::cout << m_company << std::endl;
-      std::cout << "***************************" << std::endl;
-    }
+  //Website
+  if (m_calendar.transfer_profit_website_today()) {
+    balance website_net_profit(
+      "Monthly website profit",100.0
+    );
+    m_company.transfer(website_net_profit,m_bank,m_calendar);
   }
+  //Webshop
+  if (m_calendar.transfer_profit_webshop_today()) {
+    balance webshop_net_profit(
+      "Yearly webshop profit",100.0
+    );
+    m_company.transfer(webshop_net_profit,m_bank,m_calendar);
+  }
+  //Winners
+  //No transfer, all Winner money is already on the undistributed balance
 
-  //Display final situation
-  std::cout << "***************" << std::endl;
-  std::cout << "Final situation" << '\n';
-  std::cout << "***************" << std::endl;
-
-  std::cout << "***************" << std::endl;
-  std::cout << "Company" << '\n';
-  std::cout << "***************" << std::endl;
-  std::cout << m_company << std::endl;
-  std::cout << "***************" << std::endl;
-  std::cout << "Bank" << '\n';
-  std::cout << "***************" << std::endl;
-  std::cout << m_bank << std::endl;
+  //Distribute profit
+  if (m_calendar.distribute_profit_today()) {
+    std::cout << "***************************" << std::endl;
+    std::cout << "Distributing profit" << std::endl;
+    std::cout << "***************************" << std::endl;
+    m_company.distribute_net_profit(
+      m_bank,
+      m_calendar
+    );
+    std::cout << m_company << std::endl;
+    std::cout << "***************************" << std::endl;
+  }
+  m_calendar.go_to_next_day();
 }

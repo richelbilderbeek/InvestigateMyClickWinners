@@ -23,7 +23,7 @@ struct simulation
   const calendar& get_calendar() const noexcept { return m_calendar; }
   const company& get_company() const noexcept { return m_company; }
 
-  void run() noexcept;
+  void do_timestep() noexcept;
 
   private:
 

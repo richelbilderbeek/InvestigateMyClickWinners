@@ -38,5 +38,23 @@ int main()
   std::cout << "*****************" << std::endl;
   std::cout << s.get_company() << std::endl;
   std::cout << "*****************" << std::endl;
-  s.run();
+
+  while (s.get_calendar().get_today() != parameters.get_end()) {
+    s.do_timestep();
+  }
+
+
+  //Display final situation
+  std::cout << "***************" << std::endl;
+  std::cout << "Final situation" << '\n';
+  std::cout << "***************" << std::endl;
+
+  std::cout << "***************" << std::endl;
+  std::cout << "Company" << '\n';
+  std::cout << "***************" << std::endl;
+  std::cout << s.get_company() << std::endl;
+  std::cout << "***************" << std::endl;
+  std::cout << "Bank" << '\n';
+  std::cout << "***************" << std::endl;
+  std::cout << s.get_bank() << std::endl;
 }
