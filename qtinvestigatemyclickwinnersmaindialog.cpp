@@ -25,10 +25,20 @@ QtInvestigateMyClickWinnersMainDialog::QtInvestigateMyClickWinnersMainDialog(QWi
   m_curve_winners("Winners")
 {
   ui->setupUi(this);
+  m_curve_balance.setPen(Qt::black);
+  m_curve_bank_wallet.setPen(Qt::red);
+  m_curve_shop_wallet.setPen(Qt::green);
+  m_curve_winners.setPen(Qt::blue);
+
   m_curve_balance.attach(ui->plot);
   m_curve_bank_wallet.attach(ui->plot);
   m_curve_shop_wallet.attach(ui->plot);
   m_curve_winners.attach(ui->plot);
+  {
+    QwtLegend * const legend = new QwtLegend;
+    legend->setFrameStyle(QFrame::Box|QFrame::Sunken);
+    ui->plot->insertLegend(legend, QwtPlot::RightLegend);
+  }
 }
 
 QtInvestigateMyClickWinnersMainDialog::~QtInvestigateMyClickWinnersMainDialog()
