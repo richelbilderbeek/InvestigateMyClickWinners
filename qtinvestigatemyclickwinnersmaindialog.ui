@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>582</width>
-    <height>425</height>
+    <width>639</width>
+    <height>603</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,7 +28,16 @@
     </widget>
    </item>
    <item>
-    <widget class="QwtPlot" name="plot" native="true"/>
+    <widget class="QWidget" name="widget_plots" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QwtPlot" name="plot_focal_person" native="true"/>
+      </item>
+      <item>
+       <widget class="QwtPlot" name="plot_company" native="true"/>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>
