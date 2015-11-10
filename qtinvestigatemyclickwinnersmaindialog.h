@@ -18,6 +18,9 @@ public:
   explicit QtInvestigateMyClickWinnersMainDialog(QWidget *parent = 0);
   ~QtInvestigateMyClickWinnersMainDialog();
 
+private slots:
+  void on_button_run_clicked();
+
 private:
   Ui::QtInvestigateMyClickWinnersMainDialog *ui;
 

@@ -22,6 +22,7 @@ struct simulation
   const bank& get_bank() const noexcept { return m_bank; }
   const calendar& get_calendar() const noexcept { return m_calendar; }
   const company& get_company() const noexcept { return m_company; }
+  const person& get_focal_person() const noexcept { return m_focal_person; }
 
   void do_timestep() noexcept;
 

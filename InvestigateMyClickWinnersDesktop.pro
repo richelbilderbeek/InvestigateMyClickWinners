@@ -5,3 +5,4 @@ include(../RibiLibraries/Qwt.pri)
 include(../InvestigateMyClickWinners/InvestigateMyClickWinnersDesktop.pri)
 
 SOURCES += qtmain.cpp
+#SOURCES += main.cpp
