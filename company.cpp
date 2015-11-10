@@ -209,6 +209,18 @@ void ribi::imcw::company::distribute_net_profit(
   //Distribute the money over the winners
   //const int n_winners{count_winners()};
   const int n_winners{static_cast<int>(winners.size())};
+  if (n_winners == 0) {
+    //Transfer money to reserves
+    const money winners_money = source.get_value();
+    the_bank.transfer(
+      source,
+      winners_money,
+      m_balance_reserves,
+      the_calendar.get_today()
+    );
+    return;
+  }
+
   assert(n_winners > 0);
 
   const money income_per_winners_euros

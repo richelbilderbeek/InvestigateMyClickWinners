@@ -88,14 +88,16 @@ void QtInvestigateMyClickWinnersMainDialog::on_button_run_clicked()
   using ribi::imcw::simulation_parameters;
 
   person p("Mister X");
-  p.set_auto_buy(true);
+  p.set_auto_buy(ui->box_auto_buy->isChecked());
 
   const simulation_parameters parameters(
     p,
     {},
     boost::gregorian::day_clock::local_day(),
     boost::gregorian::day_clock::local_day()
-      + boost::gregorian::months(11)
+      + boost::gregorian::months(
+        ui->box_n_months->value()
+      )
   );
   simulation s(parameters);
 
@@ -146,5 +148,6 @@ void QtInvestigateMyClickWinnersMainDialog::on_button_run_clicked()
   #else
   m_curve.setData(&v_x[0],&v_y[0],v_y.size());
   #endif
+  ui->plot_company->replot();
   ui->plot_focal_person->replot();
 }
