@@ -79,7 +79,9 @@ void QtInvestigateMyClickWinnersMainDialog::on_button_run_clicked()
     balance_values.push_back(s.get_focal_person().get_balance().get_value().get_value_euros());
     bank_wallets_values.push_back(s.get_focal_person().get_bank_wallet().get_value().get_value_euros());
     shop_wallets_values.push_back(s.get_focal_person().get_shop_wallet().get_value().get_value_euros());
-    winners_values.push_back(get_sum_value(s.get_focal_person().get_winners()).get_value_euros());
+    winners_values.push_back(
+      get_sum_value(s.get_focal_person().get_winners()).get_value_euros()
+    );
     ++day;
   }
 
