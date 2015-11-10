@@ -19,7 +19,7 @@ int main()
   using ribi::imcw::simulation_parameters;
 
   person p("Mister X");
-  p.set_auto_buy(false);
+  p.set_auto_buy(true);
 
   const simulation_parameters parameters(
     p,

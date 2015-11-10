@@ -471,7 +471,7 @@ std::ostream& ribi::imcw::operator<<(std::ostream& os, const company& c) noexcep
     << "#customers: " << c.m_customers.size() << '\n'
   ;
   for (const person& d: c.m_customers) {
-    s << d << std::endl;
+    s << d << '\n';
   }
   std::string t{s.str()};
   assert(!t.empty());

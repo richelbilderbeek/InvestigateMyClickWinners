@@ -12,23 +12,23 @@ ribi::imcw::simulation::simulation(
   : m_bank{},
     m_calendar(parameters.get_start()),
     m_company{},
+    m_focal_person{parameters.get_focal_person()},
+    m_others{parameters.get_others()},
     m_parameters{parameters}
 {
   //focal_person buy his/her membership
-  person focal_person = m_parameters.get_focal_person();
   m_company.buy_winner_package(
-    focal_person,
+    m_focal_person,
     winner_package_name::starter,
-    focal_person.get_balance(),
+    m_focal_person.get_balance(),
     m_bank,
     m_calendar
   );
 
   //add others
-  std::vector<person> others = m_parameters.get_others();
   std::for_each(
-    std::begin(others),
-    std::end(others),
+    std::begin(m_others),
+    std::end(m_others),
     [this](auto& p) { m_company.add(p); }
   );
 

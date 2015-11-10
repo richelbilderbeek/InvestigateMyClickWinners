@@ -30,6 +30,8 @@ struct simulation
   bank m_bank;
   calendar m_calendar;
   company m_company;
+  person m_focal_person;
+  std::vector<person> m_others;
   const simulation_parameters m_parameters;
 
   #ifndef NDEBUG
