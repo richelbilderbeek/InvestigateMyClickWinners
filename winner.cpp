@@ -1,5 +1,6 @@
 #include "winner.h"
 
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 
@@ -12,6 +13,18 @@ ribi::imcw::winner::winner(const std::string& owner_name)
   #ifndef NDEBUG
   test();
   #endif
+}
+
+ribi::imcw::money ribi::imcw::get_sum_value(const std::vector<winner>& winners) noexcept
+{
+  return std::accumulate(
+    std::begin(winners),
+    std::end(winners),
+    money(0.0),
+    [](const money& init, const winner& w) {
+      return init + w.get_value();
+    }
+  );
 }
 
 #ifndef NDEBUG

@@ -24,7 +24,10 @@ private slots:
 private:
   Ui::QtInvestigateMyClickWinnersMainDialog *ui;
 
-  QwtPlotCurve m_curve;
+  QwtPlotCurve m_curve_balance;
+  QwtPlotCurve m_curve_bank_wallet;
+  QwtPlotCurve m_curve_shop_wallet;
+  QwtPlotCurve m_curve_winners;
 };
 
 #endif // QTINVESTIGATEMYCLICKWINNERSMAINDIALOG_H

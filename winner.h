@@ -2,6 +2,7 @@
 #define RIBI_IMCW_WINNER_H
 
 #include <iosfwd>
+#include <vector>
 #include "balance.h"
 #include "money.h"
 
@@ -46,6 +47,8 @@ struct winner
 
   friend std::ostream& operator<<(std::ostream& os, const winner& w) noexcept;
 };
+
+money get_sum_value(const std::vector<winner>& winners) noexcept;
 
 std::ostream& operator<<(std::ostream& os, const winner& w) noexcept;
 
