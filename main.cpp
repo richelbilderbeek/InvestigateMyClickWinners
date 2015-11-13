@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "buy_winners_strategy.h"
 #include "bank.h"
 #include "calendar.h"
 #include "company.h"
@@ -19,14 +20,14 @@ int main()
   using ribi::imcw::simulation_parameters;
 
   person p("Mister X");
-  p.set_auto_buy(true);
+  p.set_winner_buy_strategy(ribi::imcw::always_buy());
 
   const simulation_parameters parameters(
     p,
     {},
     boost::gregorian::day_clock::local_day(),
     boost::gregorian::day_clock::local_day()
-      + boost::gregorian::months(11)
+      + boost::gregorian::months(13)
   );
   simulation s(
     parameters

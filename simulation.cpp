@@ -67,5 +67,17 @@ void ribi::imcw::simulation::do_timestep() noexcept
     std::cout << m_company << std::endl;
     std::cout << "***************************" << std::endl;
   }
+
+  //Make persons transfer money from BankWallet to personal
+  //bank account
+  if (m_focal_person.will_tranfer(m_calendar.get_today())) {
+    m_focal_person.transfer(m_bank,m_calendar);
+  }
+  for (auto& p: m_others) {
+    if (p.will_tranfer(m_calendar.get_today())) {
+      p.transfer(m_bank,m_calendar);
+    }
+  }
+
   m_calendar.go_to_next_day();
 }

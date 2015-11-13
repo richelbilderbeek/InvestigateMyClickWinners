@@ -14,7 +14,9 @@ SOURCES +=  \
     ../InvestigateMyClickWinners/winner.cpp \
     ../InvestigateMyClickWinners/winner_package.cpp \
     ../InvestigateMyClickWinners/winner_package_name.cpp \
-    ../InvestigateMyClickWinners/money.cpp
+    ../InvestigateMyClickWinners/money.cpp \
+    $$PWD/transfer_strategy.cpp \
+    $$PWD/buy_winners_strategy.cpp
 
 HEADERS += \
     ../InvestigateMyClickWinners/balance.h \
@@ -29,4 +31,6 @@ HEADERS += \
     ../InvestigateMyClickWinners/winner.h \
     ../InvestigateMyClickWinners/winner_package.h \
     ../InvestigateMyClickWinners/winner_package_name.h \
-    ../InvestigateMyClickWinners/money.h
+    ../InvestigateMyClickWinners/money.h \
+    $$PWD/transfer_strategy.h \
+    $$PWD/buy_winners_strategy.h

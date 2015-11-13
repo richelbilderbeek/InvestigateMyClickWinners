@@ -1,13 +1,17 @@
 #ifndef RIBI_IMCW_PERSON_H
 #define RIBI_IMCW_PERSON_H
 
+#include <functional>
 #include <memory>
 #include <vector>
+
+#include <boost/date_time/gregorian/gregorian.hpp>
 
 #include "balance.h"
 #include "clickcard.h"
 #include "winner.h"
 #include "winner_package_name.h"
+
 
 namespace ribi {
 namespace imcw {
@@ -19,6 +23,8 @@ struct calendar;
 class person
 {
 public:
+  using date = boost::gregorian::date;
+
   person(const std::string& name) noexcept;
 
   void add_click_card(const click_card& w);
@@ -52,7 +58,7 @@ public:
   ///Is this balance an account of the person?
   bool has_account(const balance& an_account) const noexcept;
 
-  bool has_click_card() const noexcept { return !m_card.empty(); }
+  bool has_click_card(const date& d) const noexcept;
 
   ///person pays for a ClickCard
   void pay(const click_card& c);
@@ -68,11 +74,21 @@ public:
   ///Remove the ClickCard, assuming he/she has one
   void remove_card();
 
-  void set_auto_buy(const bool auto_buy) noexcept { m_auto_buy = auto_buy; }
+  ///Functor to determine whether to tranfer the BankWallet to the personal bank account
+  void set_transfer_bank_wallet_strategy(const std::function<bool(const date&)>& tranfer_function) noexcept;
 
-  ///Transfer money from BankWallet to m_balance_euros
+  ///Functor to determine whether to buy Winners on a certain date
+  void set_winner_buy_strategy(const std::function<bool(const date&)>& auto_buy) noexcept;
+
+  ///Transfer all money from BankWallet to m_balance_euros
   ///First transfer costs a fee of tranfer_from_bank_wallet_first_time_fee_euros
-  void transfer(const double money_euros) = delete; //TODO
+  void transfer(bank& b, calendar& c);
+
+  ///Will the person buy Winners?
+  bool will_buy_winners(const date& d) const noexcept;
+
+  ///Will the person transfer his/her ShopWallet to his/her personal bank account?
+  bool will_tranfer(const date& d) const noexcept;
 
   constexpr static const double max_tranfer_from_bank_wallet_euros = 2250.0;
   constexpr static const double min_tranfer_from_bank_wallet_euros = 100.0;
@@ -86,7 +102,7 @@ private:
 
   ///Will the person automatically buy Winners when
   ///the ShopWallet exceeds the price of a Winner?
-  bool m_auto_buy;
+  std::function<bool(const date&)> m_buy_winners_strategy;
 
   ///The amount of money in euros in possession of the person,
   ///that is, on his/her personal bank account
@@ -110,6 +126,8 @@ private:
   ///The amount of money in the person his/her MyClickWinners ShopWallet
   ///Cannot be negative
   balance m_shop_wallet;
+
+  std::function<bool(const person&,const date&)> m_tranfer_strategy;
 
   ///The Winners a customer has
   std::vector<winner> m_winners;

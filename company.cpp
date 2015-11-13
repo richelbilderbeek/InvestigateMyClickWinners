@@ -6,6 +6,7 @@
 #include <sstream>
 #include <iostream>
 
+#include "buy_winners_strategy.h"
 #include "bank.h"
 #include "calendar.h"
 #include "helper.h"
@@ -104,7 +105,7 @@ void ribi::imcw::company::buy_winner_package(
   calendar& the_calendar
 )
 {
-  if (customer.has_click_card())
+  if (customer.has_click_card(the_calendar.get_today()))
   {
     std::stringstream s;
     s << __func__
@@ -130,12 +131,11 @@ void ribi::imcw::company::buy_winner_package(
       m_balance_undistributed,
       the_calendar.get_today()
     );
-    //account_euros                 -= c.cost_inc_vat_euros;
-    //m_balance_undistributed_euros += c.cost_inc_vat_euros;
-    click_card c;
+    click_card c(the_calendar.get_today());
+    assert(c.is_valid(the_calendar.get_today()));
     customer.add_click_card(c);
   }
-  assert(customer.has_click_card());
+  assert(customer.has_click_card(the_calendar.get_today()));
 
   //ClickCard makes person a customer
   m_customers.push_back(customer);
@@ -342,9 +342,9 @@ void ribi::imcw::company::test() noexcept
     person p("Mr F");
     company mcw;
     mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c);
-    assert(p.has_click_card());
+    assert(p.has_click_card(c.get_today()));
     mcw.ban(p);
-    assert(!p.has_click_card());
+    assert(!p.has_click_card(c.get_today()));
   }
   //When a person is banned, his/her Winners are removed
   {
@@ -355,7 +355,7 @@ void ribi::imcw::company::test() noexcept
     mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c);
     assert(!p.get_winners().empty());
     mcw.ban(p);
-    assert( p.get_winners().empty());
+    assert(p.get_winners().empty());
   }
   //When a company distributes profit, it is distributed as expected
   {
@@ -392,7 +392,7 @@ void ribi::imcw::company::test() noexcept
     calendar c;
     person p("Mr I");
     company mcw;
-    p.set_auto_buy(false);
+    p.set_winner_buy_strategy(never_buy());
     mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c);
     assert(mcw.get_balance_compensation_plan().get_value() == money(0.0));
     assert(mcw.get_balance_holding ().get_value() == money(0.0));

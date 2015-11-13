@@ -1,5 +1,6 @@
 #include "qtinvestigatemyclickwinnersmaindialog.h"
 
+#include "buy_winners_strategy.h"
 #include "bank.h"
 #include "calendar.h"
 #include "company.h"
@@ -61,6 +62,11 @@ QtInvestigateMyClickWinnersMainDialog::QtInvestigateMyClickWinnersMainDialog(QWi
     legend->setFrameStyle(QFrame::Box | QFrame::Sunken);
     ui->plot_focal_person->insertLegend(legend, QwtPlot::RightLegend);
   }
+
+  QObject::connect(ui->box_n_months,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
+  QObject::connect(ui->box_autobuy_n_months,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
+
+
   on_button_run_clicked();
 }
 
@@ -86,18 +92,22 @@ void QtInvestigateMyClickWinnersMainDialog::on_button_run_clicked()
   using ribi::imcw::person;
   using ribi::imcw::simulation;
   using ribi::imcw::simulation_parameters;
+  using boost::gregorian::months;
+
+  const auto today = boost::gregorian::day_clock::local_day();
 
   person p("Mister X");
-  p.set_auto_buy(ui->box_auto_buy->isChecked());
+  p.set_winner_buy_strategy(
+    ribi::imcw::buy_until(
+      today + months(ui->box_autobuy_n_months->value())
+    )
+  );
 
   const simulation_parameters parameters(
     p,
     {},
-    boost::gregorian::day_clock::local_day(),
-    boost::gregorian::day_clock::local_day()
-      + boost::gregorian::months(
-        ui->box_n_months->value()
-      )
+    today,
+    today + months(ui->box_n_months->value())
   );
   simulation s(parameters);
 
