@@ -15,7 +15,7 @@ namespace imcw {
 ///compared with other persons
 struct simulation
 {
-  simulation(
+  explicit simulation(
     const simulation_parameters& parameters
   );
 

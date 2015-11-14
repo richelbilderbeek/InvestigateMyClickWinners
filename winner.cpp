@@ -7,7 +7,7 @@
 int ribi::imcw::winner::sm_ids = 0;
 
 ribi::imcw::winner::winner(const std::string& owner_name)
-  : m_balance{balance("Winner of " + owner_name,0.0)},
+  : m_balance{balance("Winner of " + owner_name,money(0.0))},
     m_id{sm_ids++}
 {
   #ifndef NDEBUG

@@ -11,7 +11,7 @@ namespace imcw {
 
 struct winner
 {
-  winner(const std::string& owner_name);
+  explicit winner(const std::string& owner_name);
 
   ///Get value of the Winner in euros
   //void add_value_euros(const double euros);

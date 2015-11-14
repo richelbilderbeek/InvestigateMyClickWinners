@@ -25,13 +25,13 @@ ribi::imcw::person::person(
 ) noexcept
   :
     m_buy_winners_strategy{always_buy()},
-    m_balance{"Personal balance of " + name,0.0},
-    m_bank_wallet{"BankWallet of " + name,0.0},
+    m_balance{"Personal balance of " + name},
+    m_bank_wallet{"BankWallet of " + name},
     m_click_cards{},
     m_end_date{end_date},
     m_id{sm_current_id++},
     m_name{name},
-    m_shop_wallet{"ShopWallet of " + name,0.0},
+    m_shop_wallet{"ShopWallet of " + name},
     m_tranfer_strategy{after_expiration_of_click_card()},
     m_winners{}
 {

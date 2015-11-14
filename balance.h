@@ -15,9 +15,9 @@ namespace imcw {
 class balance
 {
 public:
-  balance(
+  explicit balance(
     const std::string& description,
-    const double value_in_euros = 0.0
+    const money& initial_value_in_euros = money(0.0)
   );
 
   const std::string& get_description() const noexcept { return m_description; }

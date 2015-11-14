@@ -54,14 +54,16 @@ void ribi::imcw::simulation::do_timestep() noexcept
   //Website
   if (m_calendar.transfer_profit_website_today()) {
     balance website_net_profit(
-      "Monthly website profit",100.0
+      "Monthly website profit",
+      m_parameters.get_profit_website_per_month()
     );
     m_company.transfer(website_net_profit,m_bank,m_calendar);
   }
   //Webshop
   if (m_calendar.transfer_profit_webshop_today()) {
     balance webshop_net_profit(
-      "Yearly webshop profit",100.0
+      "Yearly webshop profit",
+      m_parameters.get_profit_webshop_per_year()
     );
     m_company.transfer(webshop_net_profit,m_bank,m_calendar);
   }
@@ -118,7 +120,10 @@ void ribi::imcw::simulation::test() noexcept
     const simulation_parameters parameters(
       person("Mister X",membership_end),
       {},
-      today, simulation_end
+      today,
+      simulation_end,
+      money(100),
+      money(100)
     );
     simulation s(parameters);
     while (!s.is_done()) { s.do_timestep(); }

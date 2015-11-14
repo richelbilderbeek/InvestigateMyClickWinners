@@ -16,10 +16,10 @@
 #include "winner_package.h"
 
 ribi::imcw::company::company()
-  : m_balance_compensation_plan{"CompensationPlan",0.0},
-    m_balance_holding{"Holding",0.0},
-    m_balance_reserves{"Reserves",0.0},
-    m_balance_undistributed{"Undistributed",0.0},
+  : m_balance_compensation_plan{"CompensationPlan"},
+    m_balance_holding{"Holding"},
+    m_balance_reserves{"Reserves"},
+    m_balance_undistributed{"Undistributed"},
     m_customers{},
     m_verbose{false}
 {
@@ -276,7 +276,7 @@ void ribi::imcw::company::distribute_net_profit(
 
     #ifndef NDEBUG
     const auto winner_value_after = w.get().get_value();
-    assert(winner_value_after > winner_value_before);
+    assert(winner_value_after >= winner_value_before);
     #endif
   }
 
@@ -440,7 +440,7 @@ void ribi::imcw::company::test() noexcept
     //200 euros is distributed (100 already from winners, 100 from test net profit)
     //customer will have one Winner with 90 euro on it,
     //that will break down
-    balance net_profit("test net profit",100.0);
+    balance net_profit("test net profit",money(100.0));
     mcw.transfer(net_profit,b,c);
     mcw.distribute_net_profit(b,c);
     assert(net_profit.get_value() == money(0.0));
@@ -480,7 +480,7 @@ void ribi::imcw::company::test() noexcept
     //
     //customer will have one Winner with 40 euro on it,
     //that will break down
-    balance net_profit("test net profit",100.0);
+    balance net_profit("test net profit",money(100.0));
     mcw.transfer(net_profit,b,c);
     mcw.distribute_net_profit(b,c);
     assert(net_profit.get_value() == money(0.0));

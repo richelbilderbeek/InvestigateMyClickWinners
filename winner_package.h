@@ -8,7 +8,7 @@ namespace imcw {
 
 struct winner_package
 {
-  winner_package(const winner_package_name name);
+  explicit winner_package(const winner_package_name name);
 
   int get_n_winners() const noexcept { return m_n_winners; }
 

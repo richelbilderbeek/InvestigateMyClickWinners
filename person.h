@@ -25,7 +25,7 @@ class person
 public:
   using date = boost::gregorian::date;
 
-  person(
+  explicit person(
     const std::string& name,
     const date& end_date = boost::gregorian::day_clock::local_day() + boost::gregorian::years(100)
   ) noexcept;

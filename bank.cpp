@@ -32,9 +32,9 @@ void ribi::imcw::bank::test() noexcept
   }
   {
     bank the_bank;
-    balance sender("sender",0.0);
+    balance sender("sender");
     const money amount_euros(100.0);
-    balance receiver("receiver",0.0);
+    balance receiver("receiver");
     assert(sender.get_value() == money(0.0));
     assert(receiver.get_value() == money(0.0));
     assert(the_bank.get_transfers().empty());

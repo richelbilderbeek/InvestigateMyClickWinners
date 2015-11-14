@@ -64,6 +64,8 @@ QtInvestigateMyClickWinnersMainDialog::QtInvestigateMyClickWinnersMainDialog(QWi
   }
 
   QObject::connect(ui->box_n_membership_years,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
+  QObject::connect(ui->box_profit_webshop_euro_per_year,SIGNAL(valueChanged(double)),this,SLOT(on_button_run_clicked()));
+  QObject::connect(ui->box_profit_website_euro_per_month,SIGNAL(valueChanged(double)),this,SLOT(on_button_run_clicked()));
 
   on_button_run_clicked();
 }
@@ -87,6 +89,7 @@ void QtInvestigateMyClickWinnersMainDialog::on_button_run_clicked()
   std::vector<double> focal_person_shop_wallets_values;
   std::vector<double> focal_person_winners_values;
 
+  using ribi::imcw::money;
   using ribi::imcw::person;
   using ribi::imcw::simulation;
   using ribi::imcw::simulation_parameters;
@@ -103,8 +106,14 @@ void QtInvestigateMyClickWinnersMainDialog::on_button_run_clicked()
     ),
     {},
     today,
-    today + years(1 + ui->box_n_membership_years->value())
+    today + years(1 + ui->box_n_membership_years->value()),
+    money(ui->box_profit_webshop_euro_per_year->value()),
+    money(ui->box_profit_website_euro_per_month->value())
   );
+  assert(parameters.get_profit_webshop_per_year()
+    == money(ui->box_profit_webshop_euro_per_year->value())
+  );
+
   simulation s(parameters);
 
   int day = 0;

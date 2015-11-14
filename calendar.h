@@ -11,7 +11,7 @@ class calendar
 {
 public:
 
-  calendar(
+  explicit calendar(
     const boost::gregorian::date& today = boost::gregorian::day_clock::local_day()
   );
 

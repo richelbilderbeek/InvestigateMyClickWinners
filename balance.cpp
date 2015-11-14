@@ -8,9 +8,9 @@
 
 ribi::imcw::balance::balance(
   const std::string& description,
-  const double value_in_euros)
-  : m_description{description},
-    m_value{value_in_euros}
+  const money& initial_value
+) : m_description{description},
+    m_value{initial_value}
 {
   #ifndef NDEBUG
   test();
