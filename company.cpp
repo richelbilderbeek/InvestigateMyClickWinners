@@ -212,9 +212,9 @@ void ribi::imcw::company::distribute_net_profit(
 {
   balance& source = m_balance_undistributed;
   const auto change_compensation_plan_euros = source.get_value() * proportion_of_profit_to_compensation_plan;
-  const auto change_holding_euros           = source.get_value() * proportion_of_profit_to_holding;
-  const auto change_reserves_euros          = source.get_value() * proportion_of_profit_to_reserves;
-  const auto change_winners_euros           = source.get_value() * proportion_of_profit_to_winners;
+  const auto change_holding_euros = source.get_value() * proportion_of_profit_to_holding;
+  const auto change_reserves_euros = source.get_value() * proportion_of_profit_to_reserves;
+  const auto change_winners_euros = source.get_value() * proportion_of_profit_to_winners;
 
   the_bank.transfer(
     source,

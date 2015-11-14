@@ -5,18 +5,22 @@
 
 #include <qwt_legend.h>
 #include <qwt_plot_curve.h>
+#include "person.h"
 
 namespace Ui {
   class QtInvestigateMyClickWinnersMainDialog;
 }
 
-class QtInvestigateMyClickWinnersMainDialog : public QDialog
+namespace ribi {
+namespace imcw {
+
+class QtMainDialog : public QDialog
 {
   Q_OBJECT
 
 public:
-  explicit QtInvestigateMyClickWinnersMainDialog(QWidget *parent = 0);
-  ~QtInvestigateMyClickWinnersMainDialog();
+  explicit QtMainDialog(QWidget *parent = 0);
+  ~QtMainDialog();
 
 private slots:
   void on_button_run_clicked();
@@ -34,8 +38,11 @@ private:
   QwtPlotCurve m_curve_focal_person_shop_wallet;
   QwtPlotCurve m_curve_focal_person_winners;
 
-
+  std::vector<person> create_other_customers() const noexcept;
 
 };
+
+} //~namespace imcw
+} //~namespace ribi
 
 #endif // QTINVESTIGATEMYCLICKWINNERSMAINDIALOG_H

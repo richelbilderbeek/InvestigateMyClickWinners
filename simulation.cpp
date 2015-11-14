@@ -32,7 +32,20 @@ ribi::imcw::simulation::simulation(
   std::for_each(
     std::begin(m_others),
     std::end(m_others),
-    [this](person& p) { m_company.add(p); }
+    [this](person& p)
+    {
+
+      m_company.add(p);
+      p.add_click_card(
+        click_card(
+          m_calendar.get_today()
+          - boost::gregorian::days(std::rand() % 355)
+        )
+      );
+      p.add_winner(
+        winner(p.get_name())
+      );
+    }
   );
 
 }

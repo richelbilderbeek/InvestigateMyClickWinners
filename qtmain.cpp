@@ -4,7 +4,7 @@
 int main(int argc, char *argv[])
 {
   QApplication a(argc, argv);
-  QtInvestigateMyClickWinnersMainDialog w;
+  ribi::imcw::QtMainDialog w;
   w.show();
   return a.exec();
 }

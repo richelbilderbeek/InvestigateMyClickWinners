@@ -17,7 +17,7 @@
 #include "ui_qtinvestigatemyclickwinnersmaindialog.h"
 
 
-QtInvestigateMyClickWinnersMainDialog::QtInvestigateMyClickWinnersMainDialog(QWidget *parent) :
+ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
   QDialog(parent),
   ui(new Ui::QtInvestigateMyClickWinnersMainDialog),
   m_curve_company_compensation_plan("CompensationPlan"),
@@ -66,16 +66,30 @@ QtInvestigateMyClickWinnersMainDialog::QtInvestigateMyClickWinnersMainDialog(QWi
   QObject::connect(ui->box_n_membership_years,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_profit_webshop_euro_per_year,SIGNAL(valueChanged(double)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_profit_website_euro_per_month,SIGNAL(valueChanged(double)),this,SLOT(on_button_run_clicked()));
+  QObject::connect(ui->box_n_other_customers,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
+
 
   on_button_run_clicked();
 }
 
-QtInvestigateMyClickWinnersMainDialog::~QtInvestigateMyClickWinnersMainDialog()
+ribi::imcw::QtMainDialog::~QtMainDialog()
 {
   delete ui;
 }
 
-void QtInvestigateMyClickWinnersMainDialog::on_button_run_clicked()
+std::vector<ribi::imcw::person> ribi::imcw::QtMainDialog::create_other_customers() const noexcept
+{
+  const int sz = ui->box_n_other_customers->value();
+  assert(sz >= 0);
+  std::vector<person> v;
+  for (int i=0; i!=sz; ++i) {
+    person p("Other customer #" + std::to_string(i));
+    v.push_back(p);
+  }
+  return v;
+}
+
+void ribi::imcw::QtMainDialog::on_button_run_clicked()
 {
   std::vector<double> ts;
 
@@ -104,7 +118,7 @@ void QtInvestigateMyClickWinnersMainDialog::on_button_run_clicked()
       "Mister X",
       today + years(ui->box_n_membership_years->value())
     ),
-    {},
+    create_other_customers(),
     today,
     today + years(1 + ui->box_n_membership_years->value()),
     money(ui->box_profit_webshop_euro_per_year->value()),
