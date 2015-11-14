@@ -94,13 +94,13 @@ void QtInvestigateMyClickWinnersMainDialog::on_button_run_clicked()
 
   const auto today = boost::gregorian::day_clock::local_day();
 
-  person p(
-    "Mister X",
-    ui->box_n_membership_years->value()
-  );
+
 
   const simulation_parameters parameters(
-    p,
+    person(
+      "Mister X",
+      today + years(ui->box_n_membership_years->value())
+    ),
     {},
     today,
     today + years(1 + ui->box_n_membership_years->value())
@@ -109,7 +109,7 @@ void QtInvestigateMyClickWinnersMainDialog::on_button_run_clicked()
 
   int day = 0;
 
-  while (s.get_calendar().get_today() != parameters.get_end()) {
+  while (!s.is_done()) {
 
     s.do_timestep();
 
@@ -141,7 +141,7 @@ void QtInvestigateMyClickWinnersMainDialog::on_button_run_clicked()
     );
     ++day;
   }
-
+  assert(s.is_done());
   #if QWT_VERSION >= 0x060100 || !WIN32
   m_curve_company_compensation_plan.setData(new QwtPointArrayData(&ts[0],&company_balance_compensation_plan[0],company_balance_compensation_plan.size()));
   m_curve_company_holding.setData(new QwtPointArrayData(&ts[0],&company_balance_holding[0],company_balance_holding.size()));

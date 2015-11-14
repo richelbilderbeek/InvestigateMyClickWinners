@@ -26,6 +26,8 @@ struct simulation
 
   void do_timestep() noexcept;
 
+  bool is_done() const noexcept;
+
   private:
 
   bank m_bank;

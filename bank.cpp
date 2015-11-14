@@ -58,8 +58,10 @@ void ribi::imcw::bank::transfer(
   const date& day
 )
 {
+  #ifndef NDEBUG
   assert(sender != receiver);
   const money sum_before = sender.get_value() + receiver.get_value();
+  #endif
   sender.set_value(    sender.get_value() - value_in_euros);
   receiver.set_value(receiver.get_value() + value_in_euros);
 
@@ -70,8 +72,10 @@ void ribi::imcw::bank::transfer(
   ;
   m_transfers.push_back(msg.str());
 
+  #ifndef NDEBUG
   const money sum_after = sender.get_value() + receiver.get_value();
   assert(sum_before == sum_after);
+  #endif
 }
 
 
@@ -84,11 +88,13 @@ void ribi::imcw::bank::transfer(
   const date& day
 )
 {
+  #ifndef NDEBUG
   const auto sum_before
     = sender.get_value()
     + receiver_a.get_value()
     + receiver_b.get_value()
   ;
+  #endif
   const double proportion_to_b{
     1.0 - proportion_to_a
   };
@@ -125,12 +131,14 @@ void ribi::imcw::bank::transfer(
     m_transfers.push_back(msg.str());
   }
 
+  #ifndef NDEBUG
   const auto sum_after
     = sender.get_value()
     + receiver_a.get_value()
     + receiver_b.get_value()
   ;
   assert(sum_before == sum_after);
+  #endif
 }
 
 std::ostream& ribi::imcw::operator<<(std::ostream& os, const bank b) noexcept

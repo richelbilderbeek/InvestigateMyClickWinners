@@ -27,6 +27,15 @@ struct company
   void ban(const person& customer);
   #endif
 
+  ///A customer buys a ClickCard
+  ///This money is added to the balance of undistributed money
+  void buy_click_card(
+    person& customer,
+    balance& customer_balance,
+    bank& the_bank,
+    calendar& the_calendar
+  );
+
   ///A customer buys Winner
   ///This money is added to the balance of undistributed money
   void buy_winner(

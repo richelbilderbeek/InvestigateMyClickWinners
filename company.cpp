@@ -75,7 +75,7 @@ void ribi::imcw::company::ban(const person& customer)
 }
 #endif
 
-void ribi::imcw::company::buy_winner(
+void ribi::imcw::company::buy_click_card(
   person& customer,
   balance& account_euros,
   bank& the_bank,
@@ -83,19 +83,53 @@ void ribi::imcw::company::buy_winner(
 )
 {
   assert(customer.has_account(account_euros));
+  #ifndef NDEBUG
   const auto before = account_euros.get_value();
+  #endif
+  the_bank.transfer(
+    account_euros,
+    money(click_card::cost_inc_vat_euros),
+    m_balance_undistributed,
+    the_calendar.get_today()
+  );
+
+  #ifndef NDEBUG
+  const auto after = account_euros.get_value();
+  assert(after < before);
+  #endif
+
+  click_card c(the_calendar.get_today());
+  customer.add_click_card(c);
+}
+
+void ribi::imcw::company::buy_winner(
+  person& customer,
+  balance& account_euros,
+  bank& the_bank,
+  calendar& the_calendar
+)
+{
+  #ifndef NDEBUG
+  assert(customer.has_account(account_euros));
+  const auto before = account_euros.get_value();
+  #endif
+
   the_bank.transfer(
     account_euros,
     money(winner::price_vat_exempt_euros),
     m_balance_undistributed,
     the_calendar.get_today()
   );
+
+  #ifndef NDEBUG
   const auto after = account_euros.get_value();
   assert(after < before);
+  #endif
 
   winner w(customer.get_name());
   customer.add_winner(w);
 }
+
 
 void ribi::imcw::company::buy_winner_package(
   person& customer,
@@ -229,16 +263,21 @@ void ribi::imcw::company::distribute_net_profit(
   ;
   for (std::reference_wrapper<winner>& w: winners)
   {
+    #ifndef NDEBUG
     const auto winner_value_before = w.get().get_value();
+    #endif
+
     the_bank.transfer(
       source,
       income_per_winners_euros,
       w.get().get_balance(),
       the_calendar.get_today()
     );
-    //winner.get().add_value_euros(income_per_winners_euros);
+
+    #ifndef NDEBUG
     const auto winner_value_after = w.get().get_value();
     assert(winner_value_after > winner_value_before);
+    #endif
   }
 
   if (m_verbose) { std::clog << "Process the Winners" << std::endl; }

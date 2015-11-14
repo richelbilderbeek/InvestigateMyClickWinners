@@ -27,12 +27,18 @@ public:
 
   person(
     const std::string& name,
-    const int n_membership_years = 1
+    const date& end_date = boost::gregorian::day_clock::local_day() + boost::gregorian::years(100)
   ) noexcept;
 
   void add_click_card(const click_card& w);
 
   void add_winner(const winner& w);
+
+  void buy_click_card(
+    bank& the_bank,
+    calendar& the_calendar,
+    company& the_company
+  );
 
   ///The amount of money in the person his/her MyClickWinners BankWallet
   ///Cannot be negative
@@ -67,7 +73,7 @@ public:
   void pay(const click_card& c);
 
   ///After profit of MyClickWinners has been distributed,
-  ///Winners my have more than 50 euros
+  ///Winners may have more than 50 euros
   void process_winners(
     bank& the_bank,
     calendar& the_calendar,
@@ -125,12 +131,14 @@ private:
   ///although at most only one of them is valid
   std::vector<click_card> m_click_cards;
 
+  ///Date from when no new ClickCards will be bought
+  date m_end_date;
+
   ///Unique ID
   const int m_id;
 
   std::string m_name;
 
-  int m_n_membership_years;
 
   ///The amount of money in the person his/her MyClickWinners ShopWallet
   ///Cannot be negative
