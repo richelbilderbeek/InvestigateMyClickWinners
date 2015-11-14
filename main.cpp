@@ -27,7 +27,7 @@ int main()
     {},
     boost::gregorian::day_clock::local_day(),
     boost::gregorian::day_clock::local_day()
-      + boost::gregorian::months(13)
+      + boost::gregorian::months(12)
   );
   simulation s(
     parameters

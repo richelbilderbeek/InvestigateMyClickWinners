@@ -105,7 +105,7 @@ void ribi::imcw::company::buy_winner_package(
   calendar& the_calendar
 )
 {
-  if (customer.has_click_card(the_calendar.get_today()))
+  if (customer.has_valid_click_card(the_calendar.get_today()))
   {
     std::stringstream s;
     s << __func__
@@ -135,7 +135,7 @@ void ribi::imcw::company::buy_winner_package(
     assert(c.is_valid(the_calendar.get_today()));
     customer.add_click_card(c);
   }
-  assert(customer.has_click_card(the_calendar.get_today()));
+  assert(customer.has_valid_click_card(the_calendar.get_today()));
 
   //ClickCard makes person a customer
   m_customers.push_back(customer);
@@ -342,9 +342,9 @@ void ribi::imcw::company::test() noexcept
     person p("Mr F");
     company mcw;
     mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c);
-    assert(p.has_click_card(c.get_today()));
+    assert(p.has_valid_click_card(c.get_today()));
     mcw.ban(p);
-    assert(!p.has_click_card(c.get_today()));
+    assert(!p.has_valid_click_card(c.get_today()));
   }
   //When a person is banned, his/her Winners are removed
   {

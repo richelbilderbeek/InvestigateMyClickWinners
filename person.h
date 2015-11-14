@@ -25,7 +25,10 @@ class person
 public:
   using date = boost::gregorian::date;
 
-  person(const std::string& name) noexcept;
+  person(
+    const std::string& name,
+    const int n_membership_years = 1
+  ) noexcept;
 
   void add_click_card(const click_card& w);
 
@@ -58,7 +61,7 @@ public:
   ///Is this balance an account of the person?
   bool has_account(const balance& an_account) const noexcept;
 
-  bool has_click_card(const date& d) const noexcept;
+  bool has_valid_click_card(const date& d) const noexcept;
 
   ///person pays for a ClickCard
   void pay(const click_card& c);
@@ -83,6 +86,9 @@ public:
   ///Transfer all money from BankWallet to m_balance_euros
   ///First transfer costs a fee of tranfer_from_bank_wallet_first_time_fee_euros
   void transfer(bank& b, calendar& c);
+
+  ///Will the person buy a ClickCard?
+  bool will_buy_click_card(const date& d) const noexcept;
 
   ///Will the person buy Winners?
   bool will_buy_winners(const date& d) const noexcept;
@@ -115,13 +121,16 @@ private:
   ///Cannot be negative
   balance m_bank_wallet;
 
-  ///A person can have or have not one card
-  std::vector<click_card> m_card;
+  ///A person can have none, one or more cards
+  ///although at most only one of them is valid
+  std::vector<click_card> m_click_cards;
 
   ///Unique ID
   const int m_id;
 
   std::string m_name;
+
+  int m_n_membership_years;
 
   ///The amount of money in the person his/her MyClickWinners ShopWallet
   ///Cannot be negative

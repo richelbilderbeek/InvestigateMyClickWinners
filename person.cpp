@@ -20,17 +20,19 @@
 int ribi::imcw::person::sm_current_id = 0;
 
 ribi::imcw::person::person(
-  const std::string& name
+  const std::string& name,
+  const int n_membership_years
 ) noexcept
   :
     m_buy_winners_strategy{always_buy()},
     m_balance{"Personal balance of " + name,0.0},
     m_bank_wallet{"BankWallet of " + name,0.0},
-    m_card{},
+    m_click_cards{},
     m_id{sm_current_id++},
     m_name{name},
+    m_n_membership_years{n_membership_years},
     m_shop_wallet{"ShopWallet of " + name,0.0},
-    m_tranfer_strategy{before_expiration_of_click_card()},
+    m_tranfer_strategy{after_expiration_of_click_card()},
     m_winners{}
 {
   #ifndef NDEBUG
@@ -39,13 +41,12 @@ ribi::imcw::person::person(
   assert(will_buy_winners(boost::gregorian::day_clock::local_day()) == true
       || will_buy_winners(boost::gregorian::day_clock::local_day()) == false
   );
+  assert(m_n_membership_years > 0);
 }
 
 void ribi::imcw::person::add_click_card(const click_card& w)
 {
-  assert(m_card.empty());
-  m_card.push_back(w);
-  assert(!m_card.empty());
+  m_click_cards.push_back(w);
 }
 
 
@@ -63,10 +64,10 @@ bool ribi::imcw::person::has_account(const balance& an_account) const noexcept
   ;
 }
 
-bool ribi::imcw::person::has_click_card(const date& d) const noexcept
+bool ribi::imcw::person::has_valid_click_card(const date& d) const noexcept
 {
-  if (m_card.empty()) return false;
-  return m_card[0].is_valid(d);
+  if (m_click_cards.empty()) return false;
+  return m_click_cards.back().is_valid(d);
 }
 
 void ribi::imcw::person::process_winners(
@@ -138,15 +139,15 @@ void ribi::imcw::person::process_winners(
 
 void ribi::imcw::person::remove_card()
 {
-  if (m_card.empty())
+  if (m_click_cards.empty())
   {
     std::stringstream s;
     s << __func__
       << "Cannot remove a ClickCard when customer has none";
     throw std::logic_error(s.str());
   }
-  assert(m_card.size() == 1);
-  m_card.pop_back();
+  assert(m_click_cards.size() == 1);
+  m_click_cards.pop_back();
 }
 
 void ribi::imcw::person::set_winner_buy_strategy(
@@ -210,16 +211,31 @@ void ribi::imcw::person::test() noexcept
   {
     bank b;
     calendar c;
-    person p("Mrs B");
+    person p("Mrs B",1);
     company mcw;
-    assert(!p.has_click_card(c.get_today()));
+    assert(!p.has_valid_click_card(c.get_today()));
     mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c);
-    assert( p.has_click_card(c.get_today()));
-    assert( p.has_click_card(c.get_today() + boost::gregorian::months(11)));
-    assert(!p.has_click_card(c.get_today() + boost::gregorian::months(13)));
+    assert( p.has_valid_click_card(c.get_today()));
+    assert( p.has_valid_click_card(c.get_today() + boost::gregorian::months(11)));
+    assert(!p.has_valid_click_card(c.get_today() + boost::gregorian::months(13)));
+  }
+  //A person buying any WinnerPackage will obtain a ClickCard that is valid for a year
+  {
+    bank b;
+    calendar c;
+    person p("Mrs B",2);
+    company mcw;
+    assert(!p.has_valid_click_card(c.get_today()));
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c);
+    assert( p.has_valid_click_card(c.get_today()));
+    assert( p.has_valid_click_card(c.get_today() + boost::gregorian::months(11)));
+    assert( p.has_valid_click_card(c.get_today() + boost::gregorian::months(13)));
+    assert( p.has_valid_click_card(c.get_today() + boost::gregorian::months(23)));
+    assert(!p.has_valid_click_card(c.get_today() + boost::gregorian::months(25)));
   }
   //A default person will tranfer his/her money from BankWallet to personal
-  //bank account before the expiration date of the ClickCard
+  //bank account after the expiration date of the ClickCard
+  //and when all Winners are gone
   {
     bank b;
     calendar c;
@@ -228,7 +244,10 @@ void ribi::imcw::person::test() noexcept
     mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c);
     assert(!p.will_tranfer(c.get_today()));
     assert(!p.will_tranfer(c.get_today() + boost::gregorian::years(1)));
-    assert( p.will_tranfer(c.get_today() + boost::gregorian::years(1) - boost::gregorian::days(1)));
+    //Still has winners
+    assert(!p.will_tranfer(c.get_today() + boost::gregorian::years(1) + boost::gregorian::days(1)));
+    p.get_winners().clear();
+    assert(p.will_tranfer(c.get_today() + boost::gregorian::years(1) + boost::gregorian::days(1)));
   }
   //A person buying a starter winner package has to pay 100 euros
   {
@@ -289,8 +308,19 @@ void ribi::imcw::person::transfer(bank& b, calendar& c)
   );
 
   const auto balance_after = m_balance.get_value();
-  assert(balance_after > balance_before);
+  assert(balance_after >= balance_before);
   assert(m_bank_wallet.get_value() == money(0.0));
+}
+
+bool ribi::imcw::person::will_buy_click_card(const date& d) const noexcept
+{
+  if (m_click_cards.back().is_valid(d)) {
+    return false;
+  }
+  if (m_n_membership_years == static_cast<int>(m_click_cards.size())) {
+    return false;
+  }
+  return true;
 }
 
 bool ribi::imcw::person::will_buy_winners(const date& d) const noexcept
@@ -319,11 +349,11 @@ std::ostream& ribi::imcw::operator<<(std::ostream& os, const person& p) noexcept
     << "BankWallet: " << p.m_bank_wallet << '\n'
     << "ShopWallet: " << p.m_shop_wallet << '\n'
   ;
-  if (p.m_card.empty()) {
+  if (p.m_click_cards.empty()) {
     s << "ClickCard: none" << '\n';
   } else {
-    assert(!p.m_card.empty());
-    s << p.m_card[0] << '\n';
+    assert(!p.m_click_cards.empty());
+    s << p.m_click_cards.back() << '\n';
   }
   s
     << "#Winners: " << p.m_winners.size() << '\n'

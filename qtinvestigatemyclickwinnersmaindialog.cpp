@@ -63,9 +63,7 @@ QtInvestigateMyClickWinnersMainDialog::QtInvestigateMyClickWinnersMainDialog(QWi
     ui->plot_focal_person->insertLegend(legend, QwtPlot::RightLegend);
   }
 
-  QObject::connect(ui->box_n_months,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
-  QObject::connect(ui->box_autobuy_n_months,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
-
+  QObject::connect(ui->box_n_membership_years,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
 
   on_button_run_clicked();
 }
@@ -92,22 +90,20 @@ void QtInvestigateMyClickWinnersMainDialog::on_button_run_clicked()
   using ribi::imcw::person;
   using ribi::imcw::simulation;
   using ribi::imcw::simulation_parameters;
-  using boost::gregorian::months;
+  using boost::gregorian::years;
 
   const auto today = boost::gregorian::day_clock::local_day();
 
-  person p("Mister X");
-  p.set_winner_buy_strategy(
-    ribi::imcw::buy_until(
-      today + months(ui->box_autobuy_n_months->value())
-    )
+  person p(
+    "Mister X",
+    ui->box_n_membership_years->value()
   );
 
   const simulation_parameters parameters(
     p,
     {},
     today,
-    today + months(ui->box_n_months->value())
+    today + years(1 + ui->box_n_membership_years->value())
   );
   simulation s(parameters);
 
