@@ -110,6 +110,21 @@ void ribi::imcw::simulation::do_timestep() noexcept
   m_calendar.go_to_next_day();
 }
 
+std::string ribi::imcw::simulation::get_version() const noexcept
+{
+  return "0.4";
+}
+
+std::vector<std::string> ribi::imcw::simulation::get_version_history() const noexcept
+{
+  return {
+    "2015-11-01: Version 0.1: initial version",
+    "2015-11-10: Version 0.2: got simulation and visualization working",
+    "2014-11-14: Version 0.3: correct behavior after ending membership",
+    "2014-11-15: Version 0.4: start of compensation plan implementation"
+  };
+}
+
 bool ribi::imcw::simulation::is_done() const noexcept
 {
   return m_calendar.get_today() >= m_parameters.get_end();
@@ -135,8 +150,8 @@ void ribi::imcw::simulation::test() noexcept
       {},
       today,
       simulation_end,
-      money(100),
-      money(100)
+      money(0.0),
+      money(0.0)
     );
     simulation s(parameters);
     while (!s.is_done()) { s.do_timestep(); }

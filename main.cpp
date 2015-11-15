@@ -12,9 +12,7 @@
 
 int main()
 {
-  //using ribi::imcw::bank;
-  //using ribi::imcw::calendar;
-  //using ribi::imcw::company;
+  using ribi::imcw::money;
   using ribi::imcw::person;
   using ribi::imcw::simulation;
   using ribi::imcw::simulation_parameters;
@@ -27,7 +25,9 @@ int main()
     {},
     boost::gregorian::day_clock::local_day(),
     boost::gregorian::day_clock::local_day()
-      + boost::gregorian::months(12)
+      + boost::gregorian::months(12),
+    money(100.0), //profit webshop (euro per year)
+    money(100.0)  //profit website (euro per month)
   );
   simulation s(
     parameters

@@ -210,55 +210,72 @@ void ribi::imcw::company::distribute_net_profit(
   calendar& the_calendar
   ) noexcept
 {
-  balance& source = m_balance_undistributed;
-  const auto change_compensation_plan_euros = source.get_value() * proportion_of_profit_to_compensation_plan;
-  const auto change_holding_euros = source.get_value() * proportion_of_profit_to_holding;
-  const auto change_reserves_euros = source.get_value() * proportion_of_profit_to_reserves;
-  const auto change_winners_euros = source.get_value() * proportion_of_profit_to_winners;
+  const money profit = m_balance_undistributed.get_value();
+  const money to_compensation_plan = profit * proportion_of_profit_to_compensation_plan;
+  const money to_holding = profit * proportion_of_profit_to_holding;
+  const money to_reserves = profit * proportion_of_profit_to_reserves;
+  const money to_winners = profit * proportion_of_profit_to_winners;
 
   the_bank.transfer(
-    source,
-    change_compensation_plan_euros,
-    m_balance_compensation_plan,
+    m_balance_undistributed, //Sender
+    to_compensation_plan,
+    m_balance_compensation_plan, //Target
     the_calendar.get_today()
   );
 
   the_bank.transfer(
-    source,
-    change_holding_euros,
-    m_balance_holding,
+    m_balance_undistributed, //Sender
+    to_holding,
+    m_balance_holding, //Target
     the_calendar.get_today()
   );
 
   the_bank.transfer(
-    source,
-    change_reserves_euros,
-    m_balance_reserves,
+    m_balance_undistributed, //Sender
+    to_reserves,
+    m_balance_reserves, //Target
     the_calendar.get_today()
   );
 
-  //Collect the Winners from all customers
-  std::vector<std::reference_wrapper<winner>> winners = collect_winners();
+  distribute_net_profit_winners(
+    m_balance_undistributed, //Sender
+    to_winners,
+    the_bank,
+    the_calendar
+  );
 
-  //Distribute the money over the winners
-  //const int n_winners{count_winners()};
-  const int n_winners{static_cast<int>(winners.size())};
-  if (n_winners == 0) {
+  distribute_net_profit_compensation_plan(
+    m_balance_compensation_plan, //Sender
+    to_compensation_plan,
+    the_bank,
+    the_calendar
+  );
+
+}
+
+void ribi::imcw::company::distribute_net_profit_compensation_plan(
+  balance& source,
+  const money& total_money,
+  bank& the_bank,
+  calendar& the_calendar
+) noexcept
+{
+  if (count_active_customers() == 0) {
     //Transfer money to reserves
-    const money winners_money = source.get_value();
     the_bank.transfer(
       source,
-      winners_money,
-      m_balance_reserves,
+      total_money,
+      m_balance_undistributed,
       the_calendar.get_today()
     );
     return;
   }
 
-  assert(n_winners > 0);
-
+  assert(count_active_customers() > 0);
+  assert(!"Not implemented yet");
+  /*
   const money income_per_winners_euros
-    = change_winners_euros
+    = total_money
     / static_cast<double>(n_winners)
   ;
   for (std::reference_wrapper<winner>& w: winners)
@@ -293,7 +310,78 @@ void ribi::imcw::company::distribute_net_profit(
   if (m_verbose)
   {
     std::clog
-      << "Distributing " << change_winners_euros << " over the winners\n"
+      << "Distributing " << total_money << " over the winners\n"
+      << "n_winners: " << n_winners << '\n'
+      << "income_per_winners_euros: " << income_per_winners_euros << " \n"
+    ;
+  }
+  */
+}
+
+
+void ribi::imcw::company::distribute_net_profit_winners(
+  balance& source,
+  const money& total_money,
+  bank& the_bank,
+  calendar& the_calendar
+) noexcept
+{
+  //Collect the Winners from all customers
+  std::vector<std::reference_wrapper<winner>> winners = collect_winners();
+
+  //Distribute the money over the winners
+  //const int n_winners{count_winners()};
+  const int n_winners{static_cast<int>(winners.size())};
+  if (n_winners == 0) {
+    //Transfer money to reserves
+    the_bank.transfer(
+      source,
+      total_money,
+      m_balance_reserves,
+      the_calendar.get_today()
+    );
+    return;
+  }
+
+  assert(n_winners > 0);
+
+  const money income_per_winners_euros
+    = total_money
+    / static_cast<double>(n_winners)
+  ;
+  for (std::reference_wrapper<winner>& w: winners)
+  {
+    #ifndef NDEBUG
+    const auto winner_value_before = w.get().get_value();
+    #endif
+
+    the_bank.transfer(
+      source,
+      income_per_winners_euros,
+      w.get().get_balance(),
+      the_calendar.get_today()
+    );
+
+    #ifndef NDEBUG
+    const auto winner_value_after = w.get().get_value();
+    assert(winner_value_after >= winner_value_before);
+    #endif
+  }
+
+  if (m_verbose) { std::clog << "Process the Winners" << std::endl; }
+  for (person& customer: m_customers)
+  {
+    customer.process_winners(
+      the_bank,
+      the_calendar,
+      *this
+    );
+  }
+
+  if (m_verbose)
+  {
+    std::clog
+      << "Distributing " << total_money << " over the winners\n"
       << "n_winners: " << n_winners << '\n'
       << "income_per_winners_euros: " << income_per_winners_euros << " \n"
     ;
@@ -410,10 +498,22 @@ void ribi::imcw::company::test() noexcept
     //the 100 euros that was undistibuted
     //gets distributed, this ends up one the 1 winner of the 1 customer
     mcw.distribute_net_profit(b,c);
-    //std::cerr << mcw.get_balance_compensation_plan().get_value() << std::endl;
-    assert(mcw.get_balance_compensation_plan().get_value() == money(15.0));
+    // * compensation_plan: 15%
+    // * holding: 10%
+    // * reserves: 30%
+    // * winners: 45%
+    // Thus in this context:
+    // * compensation_plan: 15% of 100 euros = 15 euros.
+    //     Because no active customers, these 15 euros get transferred to undistributed
+    // * holding: 10% of 100 euros = 10 euros
+    // * reserves: 30% of 100 euros = 30 euros
+    // * winners: 45% of 100 euros = 45 euros.
+    //     Because there is one customer with one Winners, this Winner will become 45 euros
+    //  * undistributed: 15 euros from compensation plan
+    assert(mcw.get_balance_compensation_plan().get_value() == money(0.0));
     assert(mcw.get_balance_holding ().get_value() == money(10.0));
     assert(mcw.get_balance_reserves().get_value() == money(30.0));
+    assert(mcw.get_balance_undistributed().get_value() == money(15.0));
     assert(p.get_winners().size() == 1);
     assert(mcw.get_customers().size() == 1);
     assert(mcw.get_customers()[0].get().get_winners().size() == 1);
@@ -443,10 +543,24 @@ void ribi::imcw::company::test() noexcept
     balance net_profit("test net profit",money(100.0));
     mcw.transfer(net_profit,b,c);
     mcw.distribute_net_profit(b,c);
+    // * compensation_plan: 15%
+    // * holding: 10%
+    // * reserves: 30%
+    // * winners: 45%
+    // Thus in this context:
+    // * compensation_plan: 15% of 200 euros = 30 euros.
+    //     Because no active customers, these 30 euros get transferred to undistributed
+    // * holding: 10% of 200 euros = 20 euros
+    // * reserves: 30% of 200 euros = 60 euros
+    // * winners: 45% of 200 euros = 90 euros.
+    //     Then customer will have one Winner with 90 euro on it, that will expire,
+    //     resulting in 2.50 euros in the ShopWallet and 87.50 in the BankWallet
+    //  * undistributed: 30 euros from compensation plan
     assert(net_profit.get_value() == money(0.0));
-    assert(mcw.get_balance_compensation_plan().get_value() == money(2.0 * 15.0));
-    assert(mcw.get_balance_holding ().get_value() == money(2.0 * 10.0));
-    assert(mcw.get_balance_reserves().get_value() == money(2.0 * 30.0));
+    assert(mcw.get_balance_compensation_plan().get_value() == money(0.0));
+    assert(mcw.get_balance_holding ().get_value() == money(20.0));
+    assert(mcw.get_balance_reserves().get_value() == money(60.0));
+    assert(mcw.get_balance_undistributed().get_value() == money(30.0));
     assert(p.get_winners().size() == 0);
     assert(p.get_bank_wallet().get_value() == money(87.50));
     assert(p.get_shop_wallet().get_value() ==  money(2.50));
@@ -465,28 +579,34 @@ void ribi::imcw::company::test() noexcept
     assert(mcw.get_balance_reserves().get_value() == money(0.0));
     //200 euros is distributed (100 already from winners, 100 from test net profit)
     //He/she has one empty winner
-    // - 90 euros go to customer
-    //   - winners: 1x 90.0 euros
-    //   - ShopWallet: 0.0 euros
-    //   - BankWallet: 0.0 euros
-    // - full winner will be destroyed:
-    //   - winners: 0x 0.0 euros
-    //   - ShopWallet: 2.50 euros
-    //   - BankWallet: 87.50 euros
-    // - automatically, two winners will be bought:
-    //   - winners: 2x 0.0 euros
-    //   - ShopWallet: 2.50 euros
-    //   - BankWallet: 7.50 euros
-    //
-    //customer will have one Winner with 40 euro on it,
-    //that will break down
     balance net_profit("test net profit",money(100.0));
     mcw.transfer(net_profit,b,c);
     mcw.distribute_net_profit(b,c);
+    // * compensation_plan: 15%
+    // * holding: 10%
+    // * reserves: 30%
+    // * winners: 45%
+    // Thus in this context:
+    // * compensation_plan: 15% of 200 euros = 30 euros.
+    //     Because no active customers, these 30 euros get transferred to undistributed
+    // * holding: 10% of 200 euros = 20 euros
+    // * reserves: 30% of 200 euros = 60 euros
+    // * winners: 45% of 200 euros = 90 euros.
+    //     Then customer will have one Winner with 90 euro on it, that will expire,
+    //     resulting in 2.50 euros in the ShopWallet and 87.50 in the BankWallet.
+    //     Because auto_buy is on, the customer will buy two Winners at 40 euros each,
+    //     resulting in:
+    //     * ShopWallet of 2.50 euros
+    //     * BankWallet of 7.50 euros
+    //     * 2x Winner of 40 euros
+    //  * undistributed:
+    //     * 30 euros from compensation plan
+    //     * 2x Winner of 40 euros
     assert(net_profit.get_value() == money(0.0));
-    assert(mcw.get_balance_compensation_plan().get_value() == money(2.0 * 15.0));
-    assert(mcw.get_balance_holding ().get_value() == money(2.0 * 10.0));
-    assert(mcw.get_balance_reserves().get_value() == money(2.0 * 30.0));
+    assert(mcw.get_balance_compensation_plan().get_value() == money(0.0));
+    assert(mcw.get_balance_holding ().get_value() == money(20.0));
+    assert(mcw.get_balance_reserves().get_value() == money(60.0));
+    assert(mcw.get_balance_undistributed().get_value() == money(110.0));
     assert(p.get_winners().size() == 2);
     assert(p.get_winners()[0].get_value() == money(0.0));
     assert(p.get_winners()[1].get_value() == money(0.0));

@@ -56,9 +56,14 @@ struct company
   );
 
   //int count_winners() noexcept;
+  int count_active_customers() const noexcept { return 0; }
 
   ///When MyClickWinners makes a profit,
   ///it is distributed over customers and other entities
+  /// * compensation_plan: 15%
+  /// * holding: 10%
+  /// * reserves: 30%
+  /// * winners: 45%
   void distribute_net_profit(
     bank& the_bank,
     calendar& the_calendar
@@ -138,6 +143,22 @@ struct company
 
   ///Collect all Winners from all customers
   std::vector<std::reference_wrapper<winner>> collect_winners() noexcept;
+
+  ///Distribute the net profit of the Winners
+  void distribute_net_profit_winners(
+    balance& source,
+    const money& total_money,
+    bank& the_bank,
+    calendar& the_calendar
+  ) noexcept;
+
+  ///Distribute the net profit of the Winners
+  void distribute_net_profit_compensation_plan(
+    balance& source,
+    const money& total_money,
+    bank& the_bank,
+    calendar& the_calendar
+  ) noexcept;
 
   #ifndef NDEBUG
   static void test() noexcept;

@@ -1,6 +1,7 @@
 #ifndef RIBI_IMCW_SIMULATION_H
 #define RIBI_IMCW_SIMULATION_H
 
+#include <string>
 #include <vector>
 #include "bank.h"
 #include "company.h"
@@ -25,6 +26,9 @@ struct simulation
   const person& get_focal_person() const noexcept { return m_focal_person; }
 
   void do_timestep() noexcept;
+
+  std::string get_version() const noexcept;
+  std::vector<std::string> get_version_history() const noexcept;
 
   bool is_done() const noexcept;
 
