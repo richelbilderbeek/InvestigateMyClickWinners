@@ -68,8 +68,8 @@ void ribi::imcw::company::ban(const person& customer)
 
   (*iter).get().remove_card();
   (*iter).get().get_winners().clear();
-  std::swap(*iter,m_customers.back());
   assert(!m_customers.empty());
+  std::swap(*iter,m_customers.back());
   m_customers.pop_back();
 
   assert(!is_customer(customer));
@@ -99,7 +99,10 @@ void ribi::imcw::company::buy_click_card(
   assert(after < before);
   #endif
 
-  click_card c(the_calendar.get_today());
+  //ClickCard will be valid the first day of the next month
+  click_card c(
+    the_calendar.get_today() + boost::gregorian::months(1)
+  );
   customer.add_click_card(c);
 }
 

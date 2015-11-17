@@ -12,7 +12,12 @@ std::function<bool(const ribi::imcw::person& p, const boost::gregorian::date&)>
     {
       //Tranfer if today the person has a ClickCard
       //and it is expired the next day
-      return !p.has_valid_click_card(d) && p.get_winners().empty();
+      return !p.has_valid_click_card(d)
+        && p.get_winners().empty()
+        #ifdef FIX_ISSUE_12
+        && p.get_bank_wallet().get_value() > money(0.0)
+        #endif //FIX_ISSUE_12
+      ;
     }
   ;
   return f;
@@ -28,7 +33,11 @@ std::function<bool(const ribi::imcw::person& p, const boost::gregorian::date&)>
       //Tranfer if today the person has a ClickCard
       //and it is expired the next day
       return p.has_valid_click_card(d)
-        && !p.has_valid_click_card(d + boost::gregorian::days(1));
+        && !p.has_valid_click_card(d + boost::gregorian::days(1))
+        #ifdef FIX_ISSUE_12
+        && p.get_bank_wallet().get_value() > money(0.0)
+        #endif // FIX_ISSUE_12
+      ;
     }
   ;
   return f;

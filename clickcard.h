@@ -13,7 +13,7 @@ struct click_card
 {
   using date = boost::gregorian::date;
 
-  explicit click_card(const date& acquisition_date) noexcept;
+  explicit click_card(const date& starting_date) noexcept;
 
   bool is_valid(const date& the_date) const noexcept;
 

@@ -38,6 +38,11 @@ private:
   QwtPlotCurve m_curve_focal_person_shop_wallet;
   QwtPlotCurve m_curve_focal_person_winners;
 
+  QwtPlotCurve m_curve_other_person_balance;
+  QwtPlotCurve m_curve_other_person_bank_wallet;
+  QwtPlotCurve m_curve_other_person_shop_wallet;
+  QwtPlotCurve m_curve_other_person_winners;
+
   std::vector<person> create_other_customers() const noexcept;
 
 };

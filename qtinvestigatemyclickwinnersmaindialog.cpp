@@ -1,5 +1,12 @@
 #include "qtinvestigatemyclickwinnersmaindialog.h"
 
+#include <sstream>
+
+#include <qwt_legend.h>
+#include <qwt_point_data.h>
+#include <qwt_plot_curve.h>
+#include <qwt_legend_data.h>
+
 #include "buy_winners_strategy.h"
 #include "bank.h"
 #include "calendar.h"
@@ -10,10 +17,6 @@
 #include "simulation.h"
 #include "simulation_parameters.h"
 
-#include <qwt_legend.h>
-#include <qwt_point_data.h>
-#include <qwt_plot_curve.h>
-#include <qwt_legend_data.h>
 #include "ui_qtinvestigatemyclickwinnersmaindialog.h"
 
 
@@ -27,10 +30,15 @@ ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
   m_curve_focal_person_balance("Personal bank account"),
   m_curve_focal_person_bank_wallet("BankWallet"),
   m_curve_focal_person_shop_wallet("ShopWallet"),
-  m_curve_focal_person_winners("Winners")
+  m_curve_focal_person_winners("Winners"),
+  m_curve_other_person_balance("Personal bank account"),
+  m_curve_other_person_bank_wallet("BankWallet"),
+  m_curve_other_person_shop_wallet("ShopWallet"),
+  m_curve_other_person_winners("Winners")
 {
   ui->setupUi(this);
   ui->plot_focal_person->setTitle("Focal person");
+  ui->plot_other_person->setTitle("Other person");
   ui->plot_company->setTitle("Company");
 
   m_curve_company_compensation_plan.setPen(Qt::red);
@@ -43,6 +51,11 @@ ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
   m_curve_focal_person_shop_wallet.setPen(Qt::green);
   m_curve_focal_person_winners.setPen(Qt::blue);
 
+  m_curve_other_person_balance.setPen(Qt::black);
+  m_curve_other_person_bank_wallet.setPen(Qt::red);
+  m_curve_other_person_shop_wallet.setPen(Qt::green);
+  m_curve_other_person_winners.setPen(Qt::blue);
+
   m_curve_company_compensation_plan.attach(ui->plot_company);
   m_curve_company_holding.attach(ui->plot_company);
   m_curve_company_reserves.attach(ui->plot_company);
@@ -52,6 +65,12 @@ ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
   m_curve_focal_person_bank_wallet.attach(ui->plot_focal_person);
   m_curve_focal_person_shop_wallet.attach(ui->plot_focal_person);
   m_curve_focal_person_winners.attach(ui->plot_focal_person);
+
+  m_curve_other_person_balance.attach(ui->plot_other_person);
+  m_curve_other_person_bank_wallet.attach(ui->plot_other_person);
+  m_curve_other_person_shop_wallet.attach(ui->plot_other_person);
+  m_curve_other_person_winners.attach(ui->plot_other_person);
+
   {
     QwtLegend * const legend = new QwtLegend;
     legend->setFrameStyle(QFrame::Box | QFrame::Sunken);
@@ -61,6 +80,11 @@ ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
     QwtLegend * const legend = new QwtLegend;
     legend->setFrameStyle(QFrame::Box | QFrame::Sunken);
     ui->plot_focal_person->insertLegend(legend, QwtPlot::RightLegend);
+  }
+  {
+    QwtLegend * const legend = new QwtLegend;
+    legend->setFrameStyle(QFrame::Box | QFrame::Sunken);
+    ui->plot_other_person->insertLegend(legend, QwtPlot::RightLegend);
   }
 
   QObject::connect(ui->box_n_membership_years,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
@@ -103,6 +127,11 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked()
   std::vector<double> focal_person_shop_wallets_values;
   std::vector<double> focal_person_winners_values;
 
+  std::vector<double> other_person_balance_values;
+  std::vector<double> other_person_bank_wallets_values;
+  std::vector<double> other_person_shop_wallets_values;
+  std::vector<double> other_person_winners_values;
+
   using ribi::imcw::money;
   using ribi::imcw::person;
   using ribi::imcw::simulation;
@@ -130,6 +159,8 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked()
 
   simulation s(parameters);
 
+  const int other_person_index = ui->box_inspect_customer_index->value();
+
   int day = 0;
 
   while (!s.is_done()) {
@@ -150,6 +181,24 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked()
     focal_person_winners_values.push_back(
       get_sum_value(s.get_focal_person().get_winners()).get_value_euros()
     );
+
+    if (other_person_index < static_cast<int>(s.get_other_persons().size()))
+    {
+      assert(other_person_index >= 0);
+      other_person_balance_values.push_back(
+        s.get_other_persons()[other_person_index].get_balance().get_value().get_value_euros()
+      );
+      other_person_bank_wallets_values.push_back(
+        s.get_other_persons()[other_person_index].get_bank_wallet().get_value().get_value_euros()
+      );
+      other_person_shop_wallets_values.push_back(
+        s.get_other_persons()[other_person_index].get_shop_wallet().get_value().get_value_euros()
+      );
+      other_person_winners_values.push_back(
+        get_sum_value(s.get_other_persons()[other_person_index].get_winners()).get_value_euros()
+      );
+    }
+
     company_balance_compensation_plan.push_back(
       s.get_company().get_balance_compensation_plan().get_value().get_value_euros()
     );
@@ -164,14 +213,9 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked()
     );
     ++day;
   }
-  std::cout << "***************" << std::endl;
-  std::cout << "Company" << '\n';
-  std::cout << "***************" << std::endl;
-  std::cout << s.get_company() << std::endl;
-  std::cout << "***************" << std::endl;
-  std::cout << "Bank" << '\n';
-  std::cout << "***************" << std::endl;
-  std::cout << s.get_bank() << std::endl;
+  std::stringstream text;
+  text << s.get_bank();
+  ui->text_transactions->setPlainText(text.str().c_str());
 
 
   assert(s.is_done());
@@ -184,9 +228,14 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked()
   m_curve_focal_person_bank_wallet.setData(new QwtPointArrayData(&ts[0],&focal_person_bank_wallets_values[0],focal_person_bank_wallets_values.size()));
   m_curve_focal_person_shop_wallet.setData(new QwtPointArrayData(&ts[0],&focal_person_shop_wallets_values[0],focal_person_shop_wallets_values.size()));
   m_curve_focal_person_winners.setData(new QwtPointArrayData(&ts[0],&focal_person_winners_values[0],focal_person_winners_values.size()));
+  m_curve_other_person_balance.setData(new QwtPointArrayData(&ts[0],&other_person_balance_values[0],other_person_balance_values.size()));
+  m_curve_other_person_bank_wallet.setData(new QwtPointArrayData(&ts[0],&other_person_bank_wallets_values[0],other_person_bank_wallets_values.size()));
+  m_curve_other_person_shop_wallet.setData(new QwtPointArrayData(&ts[0],&other_person_shop_wallets_values[0],other_person_shop_wallets_values.size()));
+  m_curve_other_person_winners.setData(new QwtPointArrayData(&ts[0],&other_person_winners_values[0],other_person_winners_values.size()));
   #else
   m_curve.setData(&v_x[0],&v_y[0],v_y.size());
   #endif
   ui->plot_company->replot();
   ui->plot_focal_person->replot();
+  ui->plot_other_person->replot();
 }

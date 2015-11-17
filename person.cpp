@@ -69,7 +69,12 @@ void ribi::imcw::person::buy_click_card(
     the_bank,
     the_calendar
   );
-  assert(has_valid_click_card(the_calendar.get_today()));
+  //The ClickCard will be valid next month
+  assert(!has_valid_click_card(the_calendar.get_today()));
+  assert(has_valid_click_card(
+      the_calendar.get_today() + boost::gregorian::months(1)
+    )
+  );
 }
 
 bool ribi::imcw::person::has_account(const balance& an_account) const noexcept
@@ -276,7 +281,9 @@ void ribi::imcw::person::test() noexcept
     //Still has winners
     assert(!p.will_tranfer(c.get_today() + boost::gregorian::years(1) + boost::gregorian::days(1)));
     p.get_winners().clear();
-    assert(p.will_tranfer(c.get_today() + boost::gregorian::years(1) + boost::gregorian::days(1)));
+    #ifdef FIX_ISSUE_12
+    assert(!p.will_tranfer(c.get_today() + boost::gregorian::years(1) + boost::gregorian::days(1)));
+    #endif // FIX_ISSUE_12
   }
   //A person buying a starter winner package has to pay 100 euros
   {

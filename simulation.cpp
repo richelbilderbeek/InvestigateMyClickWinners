@@ -110,6 +110,7 @@ void ribi::imcw::simulation::do_timestep() noexcept
   m_calendar.go_to_next_day();
 }
 
+
 std::string ribi::imcw::simulation::get_version() const noexcept
 {
   return "0.4";

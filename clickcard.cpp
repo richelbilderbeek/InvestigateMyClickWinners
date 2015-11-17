@@ -4,9 +4,9 @@
 #include <iostream>
 #include "calendar.h"
 
-ribi::imcw::click_card::click_card(const date& acquisition_date) noexcept
-  : m_date_start{acquisition_date},
-    m_date_end{acquisition_date + boost::gregorian::years(1)}
+ribi::imcw::click_card::click_card(const date& starting_date) noexcept
+  : m_date_start{starting_date},
+    m_date_end{starting_date + boost::gregorian::years(1)}
 {
   #ifndef NDEBUG
   test();

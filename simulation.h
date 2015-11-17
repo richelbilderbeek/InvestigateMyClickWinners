@@ -24,6 +24,7 @@ struct simulation
   const calendar& get_calendar() const noexcept { return m_calendar; }
   const company& get_company() const noexcept { return m_company; }
   const person& get_focal_person() const noexcept { return m_focal_person; }
+  const std::vector<person>& get_other_persons() const noexcept { return m_others; }
 
   void do_timestep() noexcept;
 
