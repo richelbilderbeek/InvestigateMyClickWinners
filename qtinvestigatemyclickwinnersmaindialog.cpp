@@ -164,6 +164,16 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked()
     );
     ++day;
   }
+  std::cout << "***************" << std::endl;
+  std::cout << "Company" << '\n';
+  std::cout << "***************" << std::endl;
+  std::cout << s.get_company() << std::endl;
+  std::cout << "***************" << std::endl;
+  std::cout << "Bank" << '\n';
+  std::cout << "***************" << std::endl;
+  std::cout << s.get_bank() << std::endl;
+
+
   assert(s.is_done());
   #if QWT_VERSION >= 0x060100 || !WIN32
   m_curve_company_compensation_plan.setData(new QwtPointArrayData(&ts[0],&company_balance_compensation_plan[0],company_balance_compensation_plan.size()));

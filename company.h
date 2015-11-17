@@ -136,6 +136,17 @@ struct company
   ///Negative values denote there is a money shortage
   balance m_balance_undistributed;
 
+  ///The balance of the money that will be distributed
+  ///to the Winners. This balance only exists for insight
+  ///in the distribution of undistributed money:
+  ///'proportion_of_profit_to_winners' of the undistributed
+  ///money goes to this balance, before it is tranferred
+  ///either over the Winners, or, if there are no Winners,
+  ///to the reserves.
+  ///Positive values denote there is a money available
+  ///Negative values denote there is a money shortage
+  balance m_balance_winners;
+
   ///All customers
   Customers m_customers;
 

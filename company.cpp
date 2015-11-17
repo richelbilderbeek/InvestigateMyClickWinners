@@ -20,6 +20,7 @@ ribi::imcw::company::company()
     m_balance_holding{"Holding"},
     m_balance_reserves{"Reserves"},
     m_balance_undistributed{"Undistributed"},
+    m_balance_winners{"Winners"},
     m_customers{},
     m_verbose{false}
 {
@@ -237,12 +238,21 @@ void ribi::imcw::company::distribute_net_profit(
     the_calendar.get_today()
   );
 
-  distribute_net_profit_winners(
+  //Shortly transfer it to the Winners balance...
+  the_bank.transfer(
     m_balance_undistributed, //Sender
+    to_winners,
+    m_balance_winners, //Target
+    the_calendar.get_today()
+  );
+  //then distribute all over the customers
+  distribute_net_profit_winners(
+    m_balance_winners, //Sender
     to_winners,
     the_bank,
     the_calendar
   );
+
 
   distribute_net_profit_compensation_plan(
     m_balance_compensation_plan, //Sender
