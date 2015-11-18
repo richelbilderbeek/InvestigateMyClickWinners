@@ -29,18 +29,19 @@ ribi::imcw::simulation::simulation(
     m_calendar
   );
 
+  std::uniform_int_distribution<int> random_day(0,363);
+
   //add others
   std::for_each(
     std::begin(m_others),
     std::end(m_others),
-    [this](person& p)
+    [this,&random_day](person& p)
     {
-
       m_company.add(p);
       p.add_click_card(
         click_card(
           m_calendar.get_today()
-          - boost::gregorian::days(std::rand() % 355)
+          - boost::gregorian::days(random_day(m_rng_engine))
         )
       );
       p.add_winner(
