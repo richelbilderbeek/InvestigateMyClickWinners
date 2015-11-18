@@ -27,7 +27,8 @@ int main()
     boost::gregorian::day_clock::local_day()
       + boost::gregorian::months(12),
     money(100.0), //profit webshop (euro per year)
-    money(100.0)  //profit website (euro per month)
+    money(100.0), //profit website (euro per month)
+    42 //RNG seed
   );
   simulation s(
     parameters
