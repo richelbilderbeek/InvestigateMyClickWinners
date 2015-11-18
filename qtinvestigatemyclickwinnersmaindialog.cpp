@@ -91,8 +91,12 @@ ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
   QObject::connect(ui->box_profit_webshop_euro_per_year,SIGNAL(valueChanged(double)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_profit_website_euro_per_month,SIGNAL(valueChanged(double)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_n_other_customers,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
+  QObject::connect(ui->box_inspect_customer_index,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
+
+  QObject::connect(ui->box_n_other_customers,SIGNAL(valueChanged(int)),this,SLOT(update_max_inspect_customer_index()));
 
 
+  update_max_inspect_customer_index();
   on_button_run_clicked();
 }
 
@@ -238,4 +242,11 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked()
   ui->plot_company->replot();
   ui->plot_focal_person->replot();
   ui->plot_other_person->replot();
+}
+
+void ribi::imcw::QtMainDialog::update_max_inspect_customer_index()
+{
+  ui->box_inspect_customer_index->setMaximum(
+    ui->box_n_other_customers->value() - 1
+  );
 }

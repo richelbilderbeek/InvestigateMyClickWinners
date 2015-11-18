@@ -24,7 +24,7 @@ public:
 
 private slots:
   void on_button_run_clicked();
-
+  void update_max_inspect_customer_index();
 private:
   Ui::QtInvestigateMyClickWinnersMainDialog *ui;
 

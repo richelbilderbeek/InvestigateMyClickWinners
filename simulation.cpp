@@ -145,7 +145,7 @@ void ribi::imcw::simulation::test() noexcept
   //and the balance will be -100 euro
   {
     const auto membership_end = today + boost::gregorian::years(1);
-    const auto simulation_end = today + boost::gregorian::months(13);
+    const auto simulation_end = today + boost::gregorian::months(15);
     const simulation_parameters parameters(
       person("Mister X",membership_end),
       {},

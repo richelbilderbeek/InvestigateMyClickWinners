@@ -355,8 +355,12 @@ void ribi::imcw::person::transfer(bank& b, calendar& c)
 
 bool ribi::imcw::person::will_buy_click_card(const date& d) const noexcept
 {
+  using boost::gregorian::months;
   if (has_valid_click_card(d)) { return false; }
-  if (!m_click_cards.empty() && m_click_cards.back().is_valid(d)) {
+  if (m_click_cards.empty()) { return true; }
+  if (m_click_cards.back().is_valid(
+    d + boost::gregorian::months(2))
+  ) {
     return false;
   }
   return d < m_end_date;
