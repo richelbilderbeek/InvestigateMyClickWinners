@@ -14,7 +14,8 @@ ribi::imcw::simulation::simulation(
     m_company{},
     m_focal_person{parameters.get_focal_person()},
     m_others{parameters.get_others()},
-    m_parameters{parameters}
+    m_parameters{parameters},
+    m_rng_engine(parameters.get_rng_seed())
 {
   #ifndef NDEBUG
   test();
@@ -152,7 +153,8 @@ void ribi::imcw::simulation::test() noexcept
       today,
       simulation_end,
       money(0.0),
-      money(0.0)
+      money(0.0),
+      42
     );
     simulation s(parameters);
     while (!s.is_done()) { s.do_timestep(); }

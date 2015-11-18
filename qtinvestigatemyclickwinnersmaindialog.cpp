@@ -92,6 +92,7 @@ ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
   QObject::connect(ui->box_profit_website_euro_per_month,SIGNAL(valueChanged(double)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_n_other_customers,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_inspect_customer_index,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
+  QObject::connect(ui->box_rng_seed,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
 
   QObject::connect(ui->box_n_other_customers,SIGNAL(valueChanged(int)),this,SLOT(update_max_inspect_customer_index()));
 
@@ -155,7 +156,8 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked()
     today,
     today + years(1 + ui->box_n_membership_years->value()),
     money(ui->box_profit_webshop_euro_per_year->value()),
-    money(ui->box_profit_website_euro_per_month->value())
+    money(ui->box_profit_website_euro_per_month->value()),
+    ui->box_rng_seed->value()
   );
   assert(parameters.get_profit_webshop_per_year()
     == money(ui->box_profit_webshop_euro_per_year->value())

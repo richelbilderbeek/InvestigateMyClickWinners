@@ -28,3 +28,11 @@
 *.app
 *.pro.user
 *.cpp.autosave
+Makefile
+Makefile*
+_plugin_import.cpp
+*_plugin_import.cpp
+object_script*
+ui_*
+release/
+debug/

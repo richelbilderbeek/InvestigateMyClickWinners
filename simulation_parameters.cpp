@@ -12,12 +12,14 @@ ribi::imcw::simulation_parameters::simulation_parameters(
   const boost::gregorian::date& start,
   const boost::gregorian::date& end,
   const money& profit_webshop_per_year,
-  const money& profit_website_per_month
+  const money& profit_website_per_month,
+  const int rng_seed
 ) : m_end{end},
     m_focal_person{focal_person},
     m_others{others},
     m_profit_webshop_per_year{profit_webshop_per_year},
     m_profit_website_per_month{profit_website_per_month},
+    m_rng_seed{rng_seed},
     m_start{start}
 {
   #ifndef NDEBUG
@@ -54,9 +56,9 @@ void ribi::imcw::simulation_parameters::test() noexcept
     bank b;
     calendar c;
     person p("Mrs. A");
-    simulation_parameters(p,{},today,tomorrow,money(0.0),money(0.0));
+    simulation_parameters(p,{},today,tomorrow,money(0.0),money(0.0),0);
     try {
-      simulation_parameters(p,{},today,yesterday,money(0.0),money(0.0));
+      simulation_parameters(p,{},today,yesterday,money(0.0),money(0.0),0);
       assert(!"Should not get here");
     }
     catch (std::logic_error&) {

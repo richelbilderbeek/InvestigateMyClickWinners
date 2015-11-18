@@ -17,7 +17,8 @@ struct simulation_parameters
     const boost::gregorian::date& start,
     const boost::gregorian::date& end,
     const money& profit_webshop_per_year,
-    const money& profit_website_per_month
+    const money& profit_website_per_month,
+    const int rng_seed
   );
 
   const boost::gregorian::date& get_end() const noexcept { return m_end; }
@@ -26,6 +27,8 @@ struct simulation_parameters
 
   const money& get_profit_webshop_per_year() const noexcept { return m_profit_webshop_per_year; }
   const money& get_profit_website_per_month() const noexcept { return m_profit_website_per_month; }
+
+  int get_rng_seed() const noexcept { return m_rng_seed; }
 
   const boost::gregorian::date& get_start() const noexcept { return m_start; }
 
@@ -36,6 +39,8 @@ struct simulation_parameters
 
   const money m_profit_webshop_per_year;
   const money m_profit_website_per_month;
+
+  const int m_rng_seed;
 
   const boost::gregorian::date m_start;
 
