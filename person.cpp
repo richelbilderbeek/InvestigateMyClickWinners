@@ -98,6 +98,8 @@ void ribi::imcw::person::process_winners(
   company& the_company
 )
 {
+  const boost::gregorian::date the_day = the_calendar.get_today();
+
   //Partition is Winners that will remain
   //and Winners that will be converted to BankWallet and ShopWallet
   const auto iter = std::partition(
@@ -160,7 +162,7 @@ void ribi::imcw::person::process_winners(
       const auto bank_wallet_before = m_bank_wallet.get_value();
       #endif
 
-      the_company.buy_winner(*this,m_bank_wallet,the_bank,the_calendar);
+      the_company.buy_winner(*this,m_bank_wallet,the_bank,the_day);
 
       #ifndef NDEBUG
       const auto bank_wallet_after = m_bank_wallet.get_value();
@@ -261,7 +263,7 @@ void ribi::imcw::person::test() noexcept
     person p("Mrs B");
     company mcw;
     assert(!p.has_valid_click_card(c.get_today()));
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c);
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,today);
     assert( p.has_valid_click_card(c.get_today()));
     assert( p.has_valid_click_card(c.get_today() + boost::gregorian::months(11)));
     assert(!p.has_valid_click_card(c.get_today() + boost::gregorian::months(13)));

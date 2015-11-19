@@ -42,7 +42,7 @@ struct company
     person& customer,
     balance& customer_balance,
     bank& the_bank,
-    calendar& the_calendar
+    const boost::gregorian::date& the_day
   );
 
   ///A customer buys a WinnerPackage
@@ -52,7 +52,7 @@ struct company
     const winner_package_name name,
     balance& customer_balance,
     bank& the_bank,
-    calendar& the_calendar
+    const boost::gregorian::date& the_day
   );
 
   //int count_winners() noexcept;

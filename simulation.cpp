@@ -20,6 +20,8 @@ ribi::imcw::simulation::simulation(
   #ifndef NDEBUG
   test();
   #endif
+  using boost::gregorian::days;
+
   //focal_person buy his/her membership
   m_company.buy_winner_package(
     m_focal_person,
@@ -37,15 +39,13 @@ ribi::imcw::simulation::simulation(
     std::end(m_others),
     [this,&random_day](person& p)
     {
-      m_company.add(p);
-      p.add_click_card(
-        click_card(
-          m_calendar.get_today()
-          - boost::gregorian::days(random_day(m_rng_engine))
-        )
-      );
-      p.add_winner(
-        winner(p.get_name())
+      m_company.buy_winner_package(
+        p,
+        winner_package_name::starter,
+        p.get_balance(),
+        m_bank,
+        m_calendar.get_today() - days(random_day(m_rng_engine))
+
       );
     }
   );
