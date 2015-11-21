@@ -5,6 +5,8 @@
 #include <qwt_legend.h>
 #include <qwt_point_data.h>
 #include <qwt_plot_curve.h>
+#include <qwt_plot_grid.h>
+#include <qwt_plot_zoomer.h>
 #include <qwt_legend_data.h>
 
 #include "buy_winners_strategy.h"
@@ -71,20 +73,23 @@ ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
   m_curve_other_person_shop_wallet.attach(ui->plot_other_person);
   m_curve_other_person_winners.attach(ui->plot_other_person);
 
-  {
+
+  //Legends
+  for (const auto& plot: { ui->plot_company, ui->plot_focal_person, ui->plot_other_person } ) {
     QwtLegend * const legend = new QwtLegend;
     legend->setFrameStyle(QFrame::Box | QFrame::Sunken);
-    ui->plot_company->insertLegend(legend, QwtPlot::RightLegend);
+    plot->insertLegend(legend, QwtPlot::RightLegend);
   }
-  {
-    QwtLegend * const legend = new QwtLegend;
-    legend->setFrameStyle(QFrame::Box | QFrame::Sunken);
-    ui->plot_focal_person->insertLegend(legend, QwtPlot::RightLegend);
+
+  //Add grids
+  for (const auto& plot: { ui->plot_company, ui->plot_focal_person, ui->plot_other_person } ) {
+    QwtPlotGrid * const grid = new QwtPlotGrid;
+    grid->setPen(QPen(QColor(128,128,128)));
+    grid->attach(plot);
   }
-  {
-    QwtLegend * const legend = new QwtLegend;
-    legend->setFrameStyle(QFrame::Box | QFrame::Sunken);
-    ui->plot_other_person->insertLegend(legend, QwtPlot::RightLegend);
+  //Add zoomers
+  for (const auto& plot: { ui->plot_company, ui->plot_focal_person, ui->plot_other_person } ) {
+    new QwtPlotZoomer(plot->canvas());
   }
 
   QObject::connect(ui->box_n_membership_years,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));

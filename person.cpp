@@ -277,7 +277,7 @@ void ribi::imcw::person::test() noexcept
     calendar c;
     person p("Mrs B");
     company mcw;
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c);
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c.get_today());
     assert(!p.will_tranfer(c.get_today()));
     assert(!p.will_tranfer(c.get_today() + boost::gregorian::years(1)));
     //Still has winners
@@ -293,7 +293,7 @@ void ribi::imcw::person::test() noexcept
     calendar c;
     person p("Mrs B");
     company mcw;
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c);
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,c.get_today());
     const money expected{-100.0};
     const auto observed = p.get_balance().get_value();
     assert(expected == observed);
@@ -304,7 +304,7 @@ void ribi::imcw::person::test() noexcept
     calendar c;
     person p("Mrs C");
     company mwc;
-    mwc.buy_winner_package(p,winner_package_name::executive,p.get_balance(),b,c);
+    mwc.buy_winner_package(p,winner_package_name::executive,p.get_balance(),b,c.get_today());
     const money expected{-2060.0};
     const auto observed = p.get_balance().get_value();
     assert(expected == observed);

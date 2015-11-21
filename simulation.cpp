@@ -28,7 +28,7 @@ ribi::imcw::simulation::simulation(
     winner_package_name::starter,
     m_focal_person.get_balance(),
     m_bank,
-    m_calendar
+    m_calendar.get_today()
   );
 
   std::uniform_int_distribution<int> random_day(0,363);
