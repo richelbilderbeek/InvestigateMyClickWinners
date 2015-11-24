@@ -18,7 +18,7 @@
 #include "winner_package.h"
 #include "simulation.h"
 #include "simulation_parameters.h"
-
+#include "qtinvestigatemyclickwinneraxisdatedrawer.h"
 #include "ui_qtinvestigatemyclickwinnersmaindialog.h"
 
 
@@ -42,6 +42,7 @@ ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
   ui->plot_focal_person->setTitle("Focal person");
   ui->plot_other_person->setTitle("Other person");
   ui->plot_company->setTitle("Company");
+
 
   m_curve_company_compensation_plan.setPen(Qt::red);
   m_curve_company_holding.setPen(Qt::green);
@@ -73,6 +74,8 @@ ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
   m_curve_other_person_shop_wallet.attach(ui->plot_other_person);
   m_curve_other_person_winners.attach(ui->plot_other_person);
 
+  const auto today = boost::gregorian::day_clock::local_day();
+
 
   //Legends
   for (const auto& plot: { ui->plot_company, ui->plot_focal_person, ui->plot_other_person } ) {
@@ -91,6 +94,17 @@ ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
   for (const auto& plot: { ui->plot_company, ui->plot_focal_person, ui->plot_other_person } ) {
     new QwtPlotZoomer(plot->canvas());
   }
+
+  for (const auto& plot: { ui->plot_company, ui->plot_focal_person, ui->plot_other_person } ) {
+    //Show dates
+    plot->setAxisScaleDraw(QwtPlot::xBottom,new QtAxisDateDrawer(today));
+    //Rotate labels 90%
+    plot->setAxisLabelRotation(QwtPlot::xBottom, -90.0);
+    //Set label alignments
+    plot->setAxisLabelAlignment( QwtPlot::xBottom, Qt::AlignLeft | Qt::AlignBottom );
+  }
+
+
 
   QObject::connect(ui->box_n_membership_years,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_profit_webshop_euro_per_year,SIGNAL(valueChanged(double)),this,SLOT(on_button_run_clicked()));
@@ -167,6 +181,7 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked()
   assert(parameters.get_profit_webshop_per_year()
     == money(ui->box_profit_webshop_euro_per_year->value())
   );
+
 
   simulation s(parameters);
 

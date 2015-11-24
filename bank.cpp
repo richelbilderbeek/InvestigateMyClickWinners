@@ -69,6 +69,7 @@ void ribi::imcw::bank::transfer(
   msg << day << ": " << sender.get_description() << " sent "
     << value_in_euros
     << " to " << receiver.get_description()
+    << " (new total: " << receiver.get_value() << ")"
   ;
   m_transfers.push_back(msg.str());
 
@@ -119,6 +120,7 @@ void ribi::imcw::bank::transfer(
     msg << day << ": " << sender.get_description() << " sent "
       << value_in_euros_to_a
       << " to " << receiver_a.get_description()
+      << " (new total: " << receiver_a.get_value() << ")"
     ;
     m_transfers.push_back(msg.str());
   }
@@ -127,6 +129,7 @@ void ribi::imcw::bank::transfer(
     msg << day << ": " << sender.get_description() << " sent "
       << value_in_euros_to_b
       << " to " << receiver_b.get_description()
+      << " (new total: " << receiver_b.get_value() << ")"
     ;
     m_transfers.push_back(msg.str());
   }

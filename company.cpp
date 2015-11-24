@@ -16,11 +16,11 @@
 #include "winner_package.h"
 
 ribi::imcw::company::company()
-  : m_balance_compensation_plan{"CompensationPlan"},
-    m_balance_holding{"Holding"},
-    m_balance_reserves{"Reserves"},
-    m_balance_undistributed{"Undistributed"},
-    m_balance_winners{"Winners"},
+  : m_balance_compensation_plan{"MCW CompensationPlan"},
+    m_balance_holding{"MCW holding"},
+    m_balance_reserves{"MCW reserves"},
+    m_balance_undistributed{"MCW undistributed profit"},
+    m_balance_winners{"MCW Winners"},
     m_customers{},
     m_verbose{false}
 {

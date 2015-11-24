@@ -22,18 +22,10 @@ ribi::imcw::simulation::simulation(
   #endif
   using boost::gregorian::days;
 
-  //focal_person buy his/her membership
-  m_company.buy_winner_package(
-    m_focal_person,
-    winner_package_name::starter,
-    m_focal_person.get_balance(),
-    m_bank,
-    m_calendar.get_today()
-  );
-
   std::uniform_int_distribution<int> random_day(0,363);
 
-  //add others
+  //add others first (as these will chronologically go
+  //before the focal customer
   std::for_each(
     std::begin(m_others),
     std::end(m_others),
@@ -49,6 +41,16 @@ ribi::imcw::simulation::simulation(
       );
     }
   );
+
+  //focal_person buy his/her membership
+  m_company.buy_winner_package(
+    m_focal_person,
+    winner_package_name::starter,
+    m_focal_person.get_balance(),
+    m_bank,
+    m_calendar.get_today()
+  );
+
 
 }
 
