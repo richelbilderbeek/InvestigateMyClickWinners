@@ -2,7 +2,7 @@
 
 Tool to investigate the flow of money of MyClickWinners.
 
- * [Download the Windows executable](richelbilderbeek.nl/InvestigateMyClickWinners.zip)
+ * [Download the Windows executable](http://richelbilderbeek.nl/InvestigateMyClickWinners.zip)
 
 ## Example
 
