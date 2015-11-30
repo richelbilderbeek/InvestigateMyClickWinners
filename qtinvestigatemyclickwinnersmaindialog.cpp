@@ -112,6 +112,7 @@ ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
   QObject::connect(ui->box_n_other_customers,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_inspect_customer_index,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_rng_seed,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
+  QObject::connect(ui->box_winner_package,SIGNAL(currentTextChanged(QString)),this,SLOT(on_button_run_clicked()));
 
   QObject::connect(ui->box_n_other_customers,SIGNAL(valueChanged(int)),this,SLOT(update_max_inspect_customer_index()));
 
@@ -135,6 +136,13 @@ std::vector<ribi::imcw::person> ribi::imcw::QtMainDialog::create_other_customers
     v.push_back(p);
   }
   return v;
+}
+
+ribi::imcw::winner_package_name ribi::imcw::QtMainDialog::get_winner_package_name() const noexcept
+{
+  return to_winner_package_name(
+    ui->box_winner_package->currentText().toStdString()
+  );
 }
 
 void ribi::imcw::QtMainDialog::on_button_run_clicked()
@@ -169,7 +177,8 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked()
   const simulation_parameters parameters(
     person(
       "Mister X",
-      today + years(ui->box_n_membership_years->value())
+      today + years(ui->box_n_membership_years->value()),
+      get_winner_package_name()
     ),
     create_other_customers(),
     today,
@@ -268,7 +277,16 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked()
 
 void ribi::imcw::QtMainDialog::update_max_inspect_customer_index()
 {
-  ui->box_inspect_customer_index->setMaximum(
-    ui->box_n_other_customers->value() - 1
-  );
+  const int n_other_customers{ui->box_n_other_customers->value()};
+  if (n_other_customers > 0) {
+    ui->box_inspect_customer_index->setEnabled(true);
+    ui->box_inspect_customer_index->setMaximum(
+      n_other_customers - 1
+    );
+  }
+  else
+  {
+    ui->box_inspect_customer_index->setEnabled(false);
+    ui->box_inspect_customer_index->setMaximum(0);
+  }
 }

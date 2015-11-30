@@ -25,9 +25,11 @@ class person
 public:
   using date = boost::gregorian::date;
 
+  ///A person buys a Starter WinnerPackage
   explicit person(
     const std::string& name,
-    const date& end_date = boost::gregorian::day_clock::local_day() + boost::gregorian::years(100)
+    const date& end_date = boost::gregorian::day_clock::local_day() + boost::gregorian::years(100),
+    const winner_package_name package = winner_package_name::starter
   ) noexcept;
 
   void add_click_card(const click_card& w);
@@ -57,6 +59,9 @@ public:
   int get_id() const noexcept { return m_id; }
 
   const std::string& get_name() const noexcept { return m_name; }
+
+  ///The WinnerPackage the person will buy
+  winner_package_name get_package() const noexcept { return m_package; }
 
   int get_n_winners() const noexcept { return static_cast<int>(m_winners.size()); }
 
@@ -139,12 +144,15 @@ private:
 
   std::string m_name;
 
+  ///The WinnerPackage the person will buy
+  winner_package_name m_package;
 
   ///The amount of money in the person his/her MyClickWinners ShopWallet
   ///Cannot be negative
   balance m_shop_wallet;
 
   std::function<bool(const person&,const date&)> m_tranfer_strategy;
+
 
   ///The Winners a customer has
   std::vector<winner> m_winners;

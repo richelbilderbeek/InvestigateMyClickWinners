@@ -21,7 +21,8 @@ int ribi::imcw::person::sm_current_id = 0;
 
 ribi::imcw::person::person(
   const std::string& name,
-  const date& end_date
+  const date& end_date,
+  const winner_package_name package
 ) noexcept
   :
     m_buy_winners_strategy{always_buy()},
@@ -31,6 +32,7 @@ ribi::imcw::person::person(
     m_end_date{end_date},
     m_id{sm_current_id++},
     m_name{name},
+    m_package{package},
     m_shop_wallet{"ShopWallet of " + name},
     m_tranfer_strategy{after_expiration_of_click_card()},
     m_winners{}

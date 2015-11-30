@@ -6,6 +6,7 @@
 #include <qwt_legend.h>
 #include <qwt_plot_curve.h>
 #include "person.h"
+#include "winner_package.h"
 
 namespace Ui {
   class QtInvestigateMyClickWinnersMainDialog;
@@ -21,6 +22,8 @@ class QtMainDialog : public QDialog
 public:
   explicit QtMainDialog(QWidget *parent = 0);
   ~QtMainDialog();
+
+  winner_package_name get_winner_package_name() const noexcept;
 
 private slots:
   void on_button_run_clicked();

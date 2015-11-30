@@ -33,7 +33,7 @@ ribi::imcw::simulation::simulation(
     {
       m_company.buy_winner_package(
         p,
-        winner_package_name::starter,
+        winner_package_name::basic, //The most bought package
         p.get_balance(),
         m_bank,
         m_calendar.get_today() - days(random_day(m_rng_engine))
@@ -45,7 +45,7 @@ ribi::imcw::simulation::simulation(
   //focal_person buy his/her membership
   m_company.buy_winner_package(
     m_focal_person,
-    winner_package_name::starter,
+    m_focal_person.get_package(),
     m_focal_person.get_balance(),
     m_bank,
     m_calendar.get_today()
