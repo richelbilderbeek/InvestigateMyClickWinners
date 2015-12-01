@@ -6,6 +6,7 @@
 #include <qwt_legend.h>
 #include <qwt_plot_curve.h>
 #include "person.h"
+#include "simulation_parameters.h"
 #include "winner_package.h"
 
 namespace Ui {
@@ -25,9 +26,20 @@ public:
 
   winner_package_name get_winner_package_name() const noexcept;
 
+  boost::gregorian::date get_ending_date() const noexcept;
+
+  ///Will throw if the parameters are invalid
+  simulation_parameters get_parameters() const;
+
+  boost::gregorian::date get_starting_date() const noexcept;
+
+
 private slots:
   void on_button_run_clicked();
   void update_max_inspect_customer_index();
+  void on_calendar_start_clicked(const QDate &date);
+  void on_calendar_end_clicked(const QDate &date);
+
 private:
   Ui::QtInvestigateMyClickWinnersMainDialog *ui;
 

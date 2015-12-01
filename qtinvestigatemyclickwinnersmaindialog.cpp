@@ -112,9 +112,10 @@ ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
   QObject::connect(ui->box_n_other_customers,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_inspect_customer_index,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_rng_seed,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
-  QObject::connect(ui->box_winner_package,SIGNAL(currentTextChanged(QString)),this,SLOT(on_button_run_clicked()));
+  QObject::connect(ui->box_winner_package,SIGNAL(currentIndexChanged(int)),this,SLOT(on_button_run_clicked()));
 
   QObject::connect(ui->box_n_other_customers,SIGNAL(valueChanged(int)),this,SLOT(update_max_inspect_customer_index()));
+
 
 
   update_max_inspect_customer_index();
@@ -138,6 +139,50 @@ std::vector<ribi::imcw::person> ribi::imcw::QtMainDialog::create_other_customers
   return v;
 }
 
+boost::gregorian::date ribi::imcw::QtMainDialog::get_ending_date() const noexcept
+{
+  const QDate qdate{ui->calendar_end->selectedDate()};
+  boost::gregorian::date d(
+    qdate.year(),
+    qdate.month(),
+    qdate.day()
+  );
+  return d;
+}
+
+ribi::imcw::simulation_parameters ribi::imcw::QtMainDialog::get_parameters() const
+{
+  using boost::gregorian::years;
+  simulation_parameters parameters(
+    person(
+      "Mister X",
+      get_starting_date() + years(ui->box_n_membership_years->value()),
+      get_winner_package_name()
+    ),
+    create_other_customers(),
+    get_starting_date(),
+    get_ending_date(),
+    money(ui->box_profit_webshop_euro_per_year->value()),
+    money(ui->box_profit_website_euro_per_month->value()),
+    ui->box_rng_seed->value()
+  );
+  assert(parameters.get_profit_webshop_per_year()
+    == money(ui->box_profit_webshop_euro_per_year->value())
+  );
+  return parameters;
+}
+
+boost::gregorian::date ribi::imcw::QtMainDialog::get_starting_date() const noexcept
+{
+  const QDate qdate{ui->calendar_start->selectedDate()};
+  boost::gregorian::date d(
+    qdate.year(),
+    qdate.month(),
+    qdate.day()
+  );
+  return d;
+}
+
 ribi::imcw::winner_package_name ribi::imcw::QtMainDialog::get_winner_package_name() const noexcept
 {
   return to_winner_package_name(
@@ -147,6 +192,17 @@ ribi::imcw::winner_package_name ribi::imcw::QtMainDialog::get_winner_package_nam
 
 void ribi::imcw::QtMainDialog::on_button_run_clicked()
 {
+  try {
+    const simulation_parameters parameters{get_parameters()};
+  }
+  catch (std::logic_error& e) {
+    std::stringstream msg;
+    msg << "Error: " << e.what();
+    ui->label_error->setText(msg.str().c_str());
+    return;
+  }
+
+  ui->label_error->setText("Error: none");
   std::vector<double> ts;
 
   std::vector<double> company_balance_compensation_plan;
@@ -168,29 +224,9 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked()
   using ribi::imcw::person;
   using ribi::imcw::simulation;
   using ribi::imcw::simulation_parameters;
-  using boost::gregorian::years;
-
-  const auto today = boost::gregorian::day_clock::local_day();
 
 
-
-  const simulation_parameters parameters(
-    person(
-      "Mister X",
-      today + years(ui->box_n_membership_years->value()),
-      get_winner_package_name()
-    ),
-    create_other_customers(),
-    today,
-    today + years(1 + ui->box_n_membership_years->value()),
-    money(ui->box_profit_webshop_euro_per_year->value()),
-    money(ui->box_profit_website_euro_per_month->value()),
-    ui->box_rng_seed->value()
-  );
-  assert(parameters.get_profit_webshop_per_year()
-    == money(ui->box_profit_webshop_euro_per_year->value())
-  );
-
+  const simulation_parameters parameters{get_parameters()};
 
   simulation s(parameters);
 
@@ -289,4 +325,21 @@ void ribi::imcw::QtMainDialog::update_max_inspect_customer_index()
     ui->box_inspect_customer_index->setEnabled(false);
     ui->box_inspect_customer_index->setMaximum(0);
   }
+}
+
+void ribi::imcw::QtMainDialog::on_calendar_start_clicked(const QDate& date)
+{
+  std::stringstream s;
+  s << "Starting date: " << date.toString().toStdString();
+  ui->label_starting_date->setText(s.str().c_str());
+  on_button_run_clicked();
+
+}
+
+void ribi::imcw::QtMainDialog::on_calendar_end_clicked(const QDate& date)
+{
+  std::stringstream s;
+  s << "Ending date: " << date.toString().toStdString();
+  ui->label_ending_date->setText(s.str().c_str());
+  on_button_run_clicked();
 }
