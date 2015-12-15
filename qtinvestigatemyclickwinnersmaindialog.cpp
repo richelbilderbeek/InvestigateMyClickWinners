@@ -236,14 +236,10 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked()
 
   const int other_person_index = ui->box_inspect_customer_index->value();
 
-  //int day = 0;
-
-
   const int n_days {
     ui->calendar_start->selectedDate().daysTo(ui->calendar_end->selectedDate())
   };
 
-  //while (!s.is_done()) {
   for (int day=0; day!=n_days; ++day) {
 
     s.do_timestep();
@@ -292,7 +288,6 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked()
     company_balance_undistributed.push_back(
       s.get_company().get_balance_undistributed().get_value().get_value_euros()
     );
-    //++day;
   }
   std::stringstream text;
   text << s.get_bank();
