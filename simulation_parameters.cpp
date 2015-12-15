@@ -14,14 +14,14 @@ ribi::imcw::simulation_parameters::simulation_parameters(
   const std::vector<person>& others,
   const boost::gregorian::date& start,
   const boost::gregorian::date& end,
-  const money& profit_webshop_per_year,
-  const money& profit_website_per_month,
+  const std::string& profit_webshop_per_year_in_euros_equation,
+  const std::string& profit_website_per_month_in_euros_equation,
   const int rng_seed
 ) : m_end{end},
     m_focal_person{focal_person},
     m_others{others},
-    m_profit_webshop_per_year{profit_webshop_per_year},
-    m_profit_website_per_month{profit_website_per_month},
+    m_profit_webshop_per_year{create_parser(profit_webshop_per_year_in_euros_equation)},
+    m_profit_website_per_month{create_parser(profit_website_per_month_in_euros_equation)},
     m_rng_seed{rng_seed},
     m_start{start}
 {
@@ -37,6 +37,30 @@ ribi::imcw::simulation_parameters::simulation_parameters(
     ;
     throw std::logic_error(msg.str());
   }
+  assert(m_profit_webshop_per_year.GetParseErrorType() == FunctionParser::FP_NO_ERROR);
+  assert(m_profit_website_per_month.GetParseErrorType() == FunctionParser::FP_NO_ERROR);
+}
+
+bool ribi::imcw::can_parse_equation(const std::string& equation) noexcept
+{
+  FunctionParser f;
+  f.Parse(equation.c_str(),"t,n");
+  return f.GetParseErrorType() == FunctionParser::FP_NO_ERROR;
+}
+
+FunctionParser ribi::imcw::create_parser(const std::string& equation)
+{
+  if (!can_parse_equation(equation)) {
+    std::stringstream msg;
+    msg
+      << __func__ << ": cannot create parser from equation '"
+      << equation << "' with variables 't' and 'n'"
+    ;
+    throw std::logic_error(msg.str());
+  }
+  FunctionParser f;
+  f.Parse(equation.c_str(),"t,n");
+  return f;
 }
 
 
@@ -45,8 +69,6 @@ ribi::imcw::money ribi::imcw::simulation_parameters::get_profit_webshop_per_year
   const int n_customers
 ) const noexcept
 {
-  FunctionParser f;
-
   const double t{
     static_cast<double>(day.day_number())
   };
@@ -54,29 +76,23 @@ ribi::imcw::money ribi::imcw::simulation_parameters::get_profit_webshop_per_year
     static_cast<double>(n_customers)
   };
 
-  //Parse the formula
-  std::stringstream my_function;
-  my_function
-    << m_profit_webshop_per_year.get_value_euros()
-    << "+(0.0 * t)"
-    << "+(0.0 * n)"
-  ;
-
-  f.Parse(my_function.str().c_str(),"t,n");
-
-  assert(f.GetParseErrorType() == FunctionParser::FP_NO_ERROR);
+  assert(m_profit_webshop_per_year.GetParseErrorType() == FunctionParser::FP_NO_ERROR);
 
   //Evaluate the parsed formula
   const double xs[2] = {t, n};
-  const double y = f.Eval(xs);
 
-  if (f.EvalError())
+  //FunctionParser::Eval is not const correct, grumble, grumble...
+  const double profit_in_euros{
+    const_cast<FunctionParser&>(m_profit_webshop_per_year).Eval(xs)
+  };
+
+  if (m_profit_webshop_per_year.EvalError())
   {
-    std::clog << "Function could not be evaluated" << std::endl;
+    std::clog << __func__ << ": function could not be evaluated" << std::endl;
     return money(0.0);
   }
 
-  return money(y);
+  return money(profit_in_euros);
 }
 
 ribi::imcw::money ribi::imcw::simulation_parameters::get_profit_website_per_month(
@@ -84,41 +100,31 @@ ribi::imcw::money ribi::imcw::simulation_parameters::get_profit_website_per_mont
   const int n_customers
 ) const noexcept
 {
-  FunctionParser f;
-
-  const double d{
+  const double t{
     static_cast<double>(day.day_number())
   };
   const double n{
     static_cast<double>(n_customers)
   };
 
-  //Parse the formula
-  std::stringstream my_function;
-  my_function
-    << m_profit_website_per_month.get_value_euros()
-    << "+ (0.0 * t)"
-    << "+ (0.0 * n)"
-  ;
-
-  f.Parse(my_function.str().c_str(),"t,n");
-
-  assert(f.GetParseErrorType() == FunctionParser::FP_NO_ERROR);
+  assert(m_profit_website_per_month.GetParseErrorType() == FunctionParser::FP_NO_ERROR);
 
   //Evaluate the parsed formula
-  const double xs[2] = {d, n};
-  const double y = f.Eval(xs);
+  const double xs[2] = {t, n};
 
-  if (f.EvalError())
+  //FunctionParser::Eval is not const correct, grumble, grumble...
+  const double profit_in_euros{
+    const_cast<FunctionParser&>(m_profit_website_per_month).Eval(xs)
+  };
+
+  if (m_profit_website_per_month.EvalError())
   {
-    std::clog << "Function could not be evaluated" << std::endl;
+    std::clog << __func__ << ": function could not be evaluated" << std::endl;
     return money(0.0);
   }
 
-  return money(y);
+  return money(profit_in_euros);
 }
-
-
 
 #ifndef NDEBUG
 void ribi::imcw::simulation_parameters::test() noexcept
@@ -137,9 +143,9 @@ void ribi::imcw::simulation_parameters::test() noexcept
     bank b;
     calendar c;
     person p("Mrs. A");
-    simulation_parameters(p,{},today,tomorrow,money(0.0),money(0.0),0);
+    simulation_parameters(p,{},today,tomorrow,"0.0","0.0",0);
     try {
-      simulation_parameters(p,{},today,yesterday,money(0.0),money(0.0),0);
+      simulation_parameters(p,{},today,yesterday,"0.0","0.0",0);
       assert(!"Should not get here");
     }
     catch (std::logic_error&) {
@@ -177,10 +183,16 @@ void ribi::imcw::simulation_parameters::test() noexcept
     calendar c;
     person p("Mrs. A");
     simulation_parameters parameters{
-      p,{},today,end,money(0.0),money(0.0),0
+      p,{},today,end,"0.0","0.0",0
     };
     assert(parameters.get_profit_webshop_per_year() >= money(0.0));
     assert(parameters.get_profit_website_per_month() >= money(0.0));
+  }
+  {
+    assert(can_parse_equation("3.14"));
+    assert(can_parse_equation("3.14 * t"));
+    assert(can_parse_equation("3.14 * t * n"));
+    assert(!can_parse_equation("3.14 * x"));
   }
 }
 #endif

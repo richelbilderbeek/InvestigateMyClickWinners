@@ -2,7 +2,7 @@
 #define RIBI_IMCW_SIMULATION_PARAMETERS_H
 
 #include <vector>
-
+#include "fparser.hh"
 #include "person.h"
 #include <boost/date_time/gregorian/gregorian.hpp>
 
@@ -16,8 +16,8 @@ struct simulation_parameters
     const std::vector<person>& others,
     const boost::gregorian::date& start,
     const boost::gregorian::date& end,
-    const money& profit_webshop_per_year,
-    const money& profit_website_per_month,
+    const std::string& profit_webshop_per_year_in_euros_equation,
+    const std::string& profit_website_per_month_in_euros_equation,
     const int rng_seed
   );
 
@@ -46,8 +46,8 @@ struct simulation_parameters
   const person m_focal_person;
   const std::vector<person> m_others;
 
-  const money m_profit_webshop_per_year;
-  const money m_profit_website_per_month;
+  const FunctionParser m_profit_webshop_per_year;
+  const FunctionParser m_profit_website_per_month;
 
   const int m_rng_seed;
 
@@ -58,6 +58,13 @@ struct simulation_parameters
   static void test() noexcept;
   #endif
 };
+
+///Check if an equation depending on 't' and 'n' can be parsed
+bool can_parse_equation(const std::string& equation) noexcept;
+
+///Creates a parser, iff can_parse_equation is true
+///throws otherwise
+FunctionParser create_parser(const std::string& equation);
 
 } //~namespace imcw
 } //~namespace ribi

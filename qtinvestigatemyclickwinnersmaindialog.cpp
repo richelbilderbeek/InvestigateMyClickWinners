@@ -22,21 +22,21 @@
 #include "ui_qtinvestigatemyclickwinnersmaindialog.h"
 
 
-ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
-  QDialog(parent),
-  ui(new Ui::QtInvestigateMyClickWinnersMainDialog),
-  m_curve_company_compensation_plan("CompensationPlan"),
-  m_curve_company_holding("Holding"),
-  m_curve_company_reserves("Reserves"),
-  m_curve_company_undistributed("Undistributed"),
-  m_curve_focal_person_balance("Personal bank account"),
-  m_curve_focal_person_bank_wallet("BankWallet"),
-  m_curve_focal_person_shop_wallet("ShopWallet"),
-  m_curve_focal_person_winners("Winners"),
-  m_curve_other_person_balance("Personal bank account"),
-  m_curve_other_person_bank_wallet("BankWallet"),
-  m_curve_other_person_shop_wallet("ShopWallet"),
-  m_curve_other_person_winners("Winners")
+ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) noexcept
+  : QDialog(parent),
+    ui(new Ui::QtInvestigateMyClickWinnersMainDialog),
+    m_curve_company_compensation_plan("CompensationPlan"),
+    m_curve_company_holding("Holding"),
+    m_curve_company_reserves("Reserves"),
+    m_curve_company_undistributed("Undistributed"),
+    m_curve_focal_person_balance("Personal bank account"),
+    m_curve_focal_person_bank_wallet("BankWallet"),
+    m_curve_focal_person_shop_wallet("ShopWallet"),
+    m_curve_focal_person_winners("Winners"),
+    m_curve_other_person_balance("Personal bank account"),
+    m_curve_other_person_bank_wallet("BankWallet"),
+    m_curve_other_person_shop_wallet("ShopWallet"),
+    m_curve_other_person_winners("Winners")
 {
   ui->setupUi(this);
   ui->plot_focal_person->setTitle("Focal person");
@@ -110,14 +110,16 @@ ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
 
   //Everything should cause the simulation to run
   QObject::connect(ui->box_n_membership_years,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
-  QObject::connect(ui->box_profit_webshop_euro_per_year,SIGNAL(valueChanged(double)),this,SLOT(on_button_run_clicked()));
-  QObject::connect(ui->box_profit_website_euro_per_month,SIGNAL(valueChanged(double)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_n_other_customers,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_inspect_customer_index,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_rng_seed,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_winner_package,SIGNAL(currentIndexChanged(int)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->calendar_end,SIGNAL(selectionChanged()),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->calendar_start,SIGNAL(selectionChanged()),this,SLOT(on_button_run_clicked()));
+
+  //If a formula changed, respond indirectly
+  QObject::connect(ui->edit_profit_webshop_euro_per_year ,SIGNAL(textChanged(QString)),this,SLOT(on_profit_webshop_formula_changed()));
+  QObject::connect(ui->edit_profit_website_euro_per_month,SIGNAL(textChanged(QString)),this,SLOT(on_profit_website_formula_changed()));
 
   //If there are x customers, one cannot inspect the x-th customer anymore
   QObject::connect(ui->box_n_other_customers,SIGNAL(valueChanged(int)),this,SLOT(update_max_inspect_customer_index()));
@@ -126,7 +128,7 @@ ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
   on_button_run_clicked();
 }
 
-ribi::imcw::QtMainDialog::~QtMainDialog()
+ribi::imcw::QtMainDialog::~QtMainDialog() noexcept
 {
   delete ui;
 }
@@ -166,12 +168,9 @@ ribi::imcw::simulation_parameters ribi::imcw::QtMainDialog::get_parameters() con
     create_other_customers(),
     get_starting_date(),
     get_ending_date(),
-    money(ui->box_profit_webshop_euro_per_year->value()),
-    money(ui->box_profit_website_euro_per_month->value()),
+    ui->edit_profit_webshop_euro_per_year->text().toStdString(),
+    ui->edit_profit_website_euro_per_month->text().toStdString(),
     ui->box_rng_seed->value()
-  );
-  assert(parameters.get_profit_webshop_per_year()
-    == money(ui->box_profit_webshop_euro_per_year->value())
   );
   return parameters;
 }
@@ -194,7 +193,7 @@ ribi::imcw::winner_package_name ribi::imcw::QtMainDialog::get_winner_package_nam
   );
 }
 
-void ribi::imcw::QtMainDialog::on_button_run_clicked()
+void ribi::imcw::QtMainDialog::on_button_run_clicked() noexcept
 {
   try {
     const simulation_parameters parameters{get_parameters()};
@@ -316,7 +315,7 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked()
   ui->plot_other_person->replot();
 }
 
-void ribi::imcw::QtMainDialog::update_max_inspect_customer_index()
+void ribi::imcw::QtMainDialog::update_max_inspect_customer_index() noexcept
 {
   const int n_other_customers{ui->box_n_other_customers->value()};
   if (n_other_customers > 0) {
@@ -332,7 +331,7 @@ void ribi::imcw::QtMainDialog::update_max_inspect_customer_index()
   }
 }
 
-void ribi::imcw::QtMainDialog::on_calendar_start_clicked(const QDate& date)
+void ribi::imcw::QtMainDialog::on_calendar_start_clicked(const QDate& date) noexcept
 {
   std::stringstream s;
   s << "Starting date: " << date.toString().toStdString();
@@ -341,10 +340,29 @@ void ribi::imcw::QtMainDialog::on_calendar_start_clicked(const QDate& date)
 
 }
 
-void ribi::imcw::QtMainDialog::on_calendar_end_clicked(const QDate& date)
+void ribi::imcw::QtMainDialog::on_calendar_end_clicked(const QDate& date) noexcept
 {
   std::stringstream s;
   s << "Ending date: " << date.toString().toStdString();
   ui->label_ending_date->setText(s.str().c_str());
+  on_button_run_clicked();
+}
+
+void ribi::imcw::QtMainDialog::on_profit_webshop_formula_changed() noexcept
+{
+  ui->check_profit_webshop->setText(
+    can_parse_equation(
+      ui->edit_profit_webshop_euro_per_year->text().toStdString()
+    ) ? ":-)" : ":-("
+  );
+  on_button_run_clicked();
+}
+
+void ribi::imcw::QtMainDialog::on_profit_website_formula_changed() noexcept
+{
+  ui->check_profit_website->setText(
+      can_parse_equation(ui->edit_profit_website_euro_per_month->text().toStdString()
+    ) ? ":-)" : ":-("
+  );
   on_button_run_clicked();
 }

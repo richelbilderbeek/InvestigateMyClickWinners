@@ -21,8 +21,8 @@ class QtMainDialog : public QDialog
   Q_OBJECT
 
 public:
-  explicit QtMainDialog(QWidget *parent = 0);
-  ~QtMainDialog();
+  explicit QtMainDialog(QWidget *parent = 0) noexcept;
+  ~QtMainDialog() noexcept;
 
   winner_package_name get_winner_package_name() const noexcept;
 
@@ -35,10 +35,12 @@ public:
 
 
 private slots:
-  void on_button_run_clicked();
-  void update_max_inspect_customer_index();
-  void on_calendar_start_clicked(const QDate &date);
-  void on_calendar_end_clicked(const QDate &date);
+  void on_button_run_clicked() noexcept;
+  void on_calendar_start_clicked(const QDate &date) noexcept;
+  void on_calendar_end_clicked(const QDate &date) noexcept;
+  void on_profit_webshop_formula_changed() noexcept;
+  void on_profit_website_formula_changed() noexcept;
+  void update_max_inspect_customer_index() noexcept;
 
 private:
   Ui::QtInvestigateMyClickWinnersMainDialog *ui;

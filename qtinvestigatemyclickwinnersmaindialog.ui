@@ -17,78 +17,14 @@
    <item>
     <widget class="QWidget" name="widget" native="true">
      <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="box_profit_website_euro_per_month">
-        <property name="decimals">
-         <number>2</number>
-        </property>
-        <property name="maximum">
-         <double>1000000.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>100.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0" colspan="2">
-       <widget class="QLabel" name="label_other_customer">
-        <property name="text">
-         <string>Other customers</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="1">
-       <widget class="QSpinBox" name="box_n_other_customers">
-        <property name="maximum">
-         <number>1000000</number>
-        </property>
-        <property name="value">
-         <number>1</number>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="0" colspan="2">
-       <widget class="QLabel" name="label_starting_date">
-        <property name="text">
-         <string>Starting date</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="16" column="0" colspan="2">
-       <widget class="QPushButton" name="button_run">
-        <property name="text">
-         <string>Run</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" colspan="2">
-       <widget class="QLabel" name="label_company">
-        <property name="text">
-         <string>Company</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
+      <item row="6" column="0">
        <widget class="QLabel" name="label_n_membership_years">
         <property name="text">
          <string>#membership years</string>
         </property>
        </widget>
       </item>
-      <item row="15" column="0">
-       <widget class="QLabel" name="label_rng_seed">
-        <property name="toolTip">
-         <string>Determines all random events</string>
-        </property>
-        <property name="text">
-         <string>RNG seed</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
+      <item row="6" column="2">
        <widget class="QSpinBox" name="box_n_membership_years">
         <property name="minimum">
          <number>1</number>
@@ -98,28 +34,41 @@
         </property>
        </widget>
       </item>
-      <item row="8" column="0">
-       <widget class="QLabel" name="label_n_other_customers">
+      <item row="3" column="3">
+       <widget class="QLabel" name="check_profit_webshop">
         <property name="text">
-         <string>#other customers</string>
+         <string>:-)</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_profit_website">
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_winner_package">
         <property name="text">
-         <string>Profit website (euro per month)</string>
+         <string>WinnerPackage</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0" colspan="2">
+      <item row="10" column="2">
+       <widget class="QSpinBox" name="box_inspect_customer_index"/>
+      </item>
+      <item row="4" column="0" colspan="3">
        <widget class="QLabel" name="label_focal_customer">
         <property name="text">
          <string>Focal customer</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
+      <item row="16" column="2">
+       <widget class="QSpinBox" name="box_rng_seed"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_profit_website">
+        <property name="text">
+         <string>Profit website (euro per month)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
        <widget class="QComboBox" name="box_winner_package">
         <item>
          <property name="text">
@@ -153,14 +102,17 @@
         </item>
        </widget>
       </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_winner_package">
-        <property name="text">
-         <string>WinnerPackage</string>
+      <item row="9" column="2">
+       <widget class="QSpinBox" name="box_n_other_customers">
+        <property name="maximum">
+         <number>1000000</number>
+        </property>
+        <property name="value">
+         <number>1</number>
         </property>
        </widget>
       </item>
-      <item row="14" column="0">
+      <item row="15" column="0">
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -173,17 +125,7 @@
         </property>
        </spacer>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_profit_webshop">
-        <property name="text">
-         <string>Profit webshop (euro per year)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="13" column="0" colspan="2">
-       <widget class="QCalendarWidget" name="calendar_end"/>
-      </item>
-      <item row="12" column="0" colspan="2">
+      <item row="13" column="0" colspan="3">
        <widget class="QLabel" name="label_ending_date">
         <property name="text">
          <string>Ending date</string>
@@ -193,36 +135,99 @@
         </property>
        </widget>
       </item>
-      <item row="11" column="0" colspan="2">
+      <item row="7" column="0" colspan="3">
+       <widget class="QLabel" name="label_other_customer">
+        <property name="text">
+         <string>Other customers</string>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="0" colspan="3">
+       <widget class="QCalendarWidget" name="calendar_end"/>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLabel" name="label_n_other_customers">
+        <property name="text">
+         <string>#other customers</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QLineEdit" name="edit_profit_webshop_euro_per_year">
+        <property name="text">
+         <string>100</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="0">
+       <widget class="QLabel" name="label_inspect_customer_index">
+        <property name="text">
+         <string>Inspect customer #</string>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="0" colspan="3">
        <widget class="QCalendarWidget" name="calendar_start"/>
       </item>
-      <item row="17" column="0" colspan="2">
+      <item row="16" column="0">
+       <widget class="QLabel" name="label_rng_seed">
+        <property name="toolTip">
+         <string>Determines all random events</string>
+        </property>
+        <property name="text">
+         <string>RNG seed</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_profit_webshop">
+        <property name="text">
+         <string>Profit webshop (euro per year)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLineEdit" name="edit_profit_website_euro_per_month">
+        <property name="text">
+         <string>100</string>
+        </property>
+       </widget>
+      </item>
+      <item row="18" column="0" colspan="3">
        <widget class="QLabel" name="label_error">
         <property name="text">
          <string>Error: none</string>
         </property>
        </widget>
       </item>
-      <item row="9" column="1">
-       <widget class="QSpinBox" name="box_inspect_customer_index"/>
-      </item>
-      <item row="15" column="1">
-       <widget class="QSpinBox" name="box_rng_seed"/>
-      </item>
-      <item row="2" column="1">
-       <widget class="QDoubleSpinBox" name="box_profit_webshop_euro_per_year">
-        <property name="maximum">
-         <double>1000000.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>100.000000000000000</double>
+      <item row="2" column="3">
+       <widget class="QLabel" name="check_profit_website">
+        <property name="text">
+         <string>:-)</string>
         </property>
        </widget>
       </item>
-      <item row="9" column="0">
-       <widget class="QLabel" name="label_inspect_customer_index">
+      <item row="11" column="0" colspan="3">
+       <widget class="QLabel" name="label_starting_date">
         <property name="text">
-         <string>Inspect customer #</string>
+         <string>Starting date</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="17" column="0" colspan="3">
+       <widget class="QPushButton" name="button_run">
+        <property name="text">
+         <string>Run</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="3">
+       <widget class="QLabel" name="label_company">
+        <property name="text">
+         <string>Company</string>
         </property>
        </widget>
       </item>
@@ -317,8 +322,6 @@
  </customwidgets>
  <tabstops>
   <tabstop>button_run</tabstop>
-  <tabstop>box_profit_website_euro_per_month</tabstop>
-  <tabstop>box_profit_webshop_euro_per_year</tabstop>
   <tabstop>box_n_membership_years</tabstop>
  </tabstops>
  <resources/>

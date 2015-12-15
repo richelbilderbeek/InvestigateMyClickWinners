@@ -156,8 +156,8 @@ void ribi::imcw::simulation::test() noexcept
       {},
       d,
       simulation_end,
-      money(0.0),
-      money(0.0),
+      "0.0",
+      "0.0",
       42
     );
     simulation s(parameters);
