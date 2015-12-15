@@ -104,8 +104,11 @@ ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
     plot->setAxisLabelAlignment( QwtPlot::xBottom, Qt::AlignLeft | Qt::AlignBottom );
   }
 
+  //Set calendars
+  ui->calendar_start->setSelectedDate(QDate(today.year(),today.month(),today.day()));
+  ui->calendar_end->setSelectedDate(QDate(today.year() + 1,today.month(),today.day()));
 
-
+  //Everything should cause the simulation to run
   QObject::connect(ui->box_n_membership_years,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_profit_webshop_euro_per_year,SIGNAL(valueChanged(double)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_profit_website_euro_per_month,SIGNAL(valueChanged(double)),this,SLOT(on_button_run_clicked()));
@@ -113,10 +116,11 @@ ribi::imcw::QtMainDialog::QtMainDialog(QWidget *parent) :
   QObject::connect(ui->box_inspect_customer_index,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_rng_seed,SIGNAL(valueChanged(int)),this,SLOT(on_button_run_clicked()));
   QObject::connect(ui->box_winner_package,SIGNAL(currentIndexChanged(int)),this,SLOT(on_button_run_clicked()));
+  QObject::connect(ui->calendar_end,SIGNAL(selectionChanged()),this,SLOT(on_button_run_clicked()));
+  QObject::connect(ui->calendar_start,SIGNAL(selectionChanged()),this,SLOT(on_button_run_clicked()));
 
+  //If there are x customers, one cannot inspect the x-th customer anymore
   QObject::connect(ui->box_n_other_customers,SIGNAL(valueChanged(int)),this,SLOT(update_max_inspect_customer_index()));
-
-
 
   update_max_inspect_customer_index();
   on_button_run_clicked();
@@ -232,9 +236,15 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked()
 
   const int other_person_index = ui->box_inspect_customer_index->value();
 
-  int day = 0;
+  //int day = 0;
 
-  while (!s.is_done()) {
+
+  const int n_days {
+    ui->calendar_start->selectedDate().daysTo(ui->calendar_end->selectedDate())
+  };
+
+  //while (!s.is_done()) {
+  for (int day=0; day!=n_days; ++day) {
 
     s.do_timestep();
 
@@ -282,7 +292,7 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked()
     company_balance_undistributed.push_back(
       s.get_company().get_balance_undistributed().get_value().get_value_euros()
     );
-    ++day;
+    //++day;
   }
   std::stringstream text;
   text << s.get_bank();
