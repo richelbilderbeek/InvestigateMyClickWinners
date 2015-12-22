@@ -72,6 +72,10 @@ public:
   ///Is this balance an account of the person?
   bool has_account(const balance& an_account) const noexcept;
 
+  ///Winners get active the first day of the next month after
+  ///the purchase of a ClickCard
+  bool has_active_winners(const date& d) const noexcept;
+
   bool has_valid_click_card(const date& d) const noexcept;
 
   ///person pays for a ClickCard

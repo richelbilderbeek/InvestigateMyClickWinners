@@ -101,7 +101,7 @@ void ribi::imcw::company::buy_click_card(
 
   //ClickCard will be valid the first day of the next month
   click_card c(
-    the_calendar.get_today() + boost::gregorian::months(1)
+    the_calendar.get_today() //Purchase date
   );
   customer.add_click_card(c);
 }
@@ -170,10 +170,10 @@ void ribi::imcw::company::buy_winner_package(
       the_day
     );
     click_card c(the_day);
-    assert(c.is_valid(the_day));
+    assert(!c.is_valid(the_day)); //Not valid yet
     customer.add_click_card(c);
   }
-  assert(customer.has_valid_click_card(the_day));
+  assert(!customer.has_valid_click_card(the_day)); //Not valid yet
 
   //ClickCard makes person a customer
   m_customers.push_back(customer);
@@ -199,6 +199,8 @@ std::vector<std::reference_wrapper<ribi::imcw::winner>> ribi::imcw::company::col
   std::vector<std::reference_wrapper<winner>> v;
   for (auto& p: m_customers)
   {
+    //Don't use Winners directly after first puchase
+    if (!p.has_active_winners()) continue;
     std::vector<winner>& winners = p.get().get_winners();
     std::copy(
       std::begin(winners),
@@ -420,7 +422,7 @@ void ribi::imcw::company::test() noexcept
     is_tested = true;
   }
   const helper h;
-  const boost::gregorian::date today = boost::gregorian::day_clock::local_day();
+  using boost::gregorian::date;
   //When a company is started, all balances are zero
   {
     bank b;
@@ -438,7 +440,7 @@ void ribi::imcw::company::test() noexcept
     calendar c;
     person p("Mr B");
     company mcw;
-    mcw.buy_winner_package(p,winner_package_name::basic,p.get_balance(),b,today);
+    mcw.buy_winner_package(p,winner_package_name::basic,p.get_balance(),b,date(2015,6,15));
     assert(mcw.get_balance_compensation_plan().get_value() == money(0.0));
     assert(mcw.get_balance_holding ().get_value() == money(0.0));
     assert(mcw.get_balance_reserves().get_value() == money(0.0));
@@ -451,7 +453,7 @@ void ribi::imcw::company::test() noexcept
     person p("Mr C");
     company mcw;
     assert(mcw.get_customers().empty());
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,today);
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,date(2015,6,15));
     assert(mcw.get_customers().size() == 1);
   }
   //A person buying a starter winner package results in 100 euros in the undistributed money balance
@@ -460,7 +462,7 @@ void ribi::imcw::company::test() noexcept
     calendar c;
     person p("Mr D");
     company mcw;
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,today);
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,date(2015,6,15));
     const money expected(100.0);
     const auto observed = mcw.get_balance_undistributed().get_value();
     assert(expected == observed);
@@ -471,7 +473,7 @@ void ribi::imcw::company::test() noexcept
     calendar c;
     person p("Mr E");
     company mcw;
-    mcw.buy_winner_package(p,winner_package_name::executive,p.get_balance(),b,today);
+    mcw.buy_winner_package(p,winner_package_name::executive,p.get_balance(),b,date(2015,6,15));
     const money expected{2060.0};
     const auto observed = mcw.get_balance_undistributed().get_value();
     assert(expected == observed);
@@ -482,10 +484,17 @@ void ribi::imcw::company::test() noexcept
     calendar c;
     person p("Mr F");
     company mcw;
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,today);
-    assert(p.has_valid_click_card(c.get_today()));
+    mcw.buy_winner_package(
+      p,
+      winner_package_name::starter,
+      p.get_balance(),
+      b,
+      date(2015,6,15)
+    );
+    assert(!p.has_valid_click_card(date(2015,6,15)));
+    assert( p.has_valid_click_card(date(2015,7,1)));
     mcw.ban(p);
-    assert(!p.has_valid_click_card(c.get_today()));
+    assert(!p.has_valid_click_card(date(2015,7,1)));
   }
   //When a person is banned, his/her Winners are removed
   {
@@ -493,7 +502,7 @@ void ribi::imcw::company::test() noexcept
     calendar c;
     person p("Mr G");
     company mcw;
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,today);
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,date(2015,6,15));
     assert(!p.get_winners().empty());
     mcw.ban(p);
     assert(p.get_winners().empty());
@@ -504,7 +513,7 @@ void ribi::imcw::company::test() noexcept
     calendar c;
     person p("Mr H");
     company mcw;
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,today);
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,date(2015,6,15));
     assert(mcw.get_balance_compensation_plan().get_value() == money(0.0));
     assert(mcw.get_balance_holding ().get_value() == money(0.0));
     assert(mcw.get_balance_reserves().get_value() == money(0.0));
@@ -546,7 +555,7 @@ void ribi::imcw::company::test() noexcept
     person p("Mr I");
     company mcw;
     p.set_winner_buy_strategy(never_buy());
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,today);
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,date(2015,6,15));
     assert(mcw.get_balance_compensation_plan().get_value() == money(0.0));
     assert(mcw.get_balance_holding ().get_value() == money(0.0));
     assert(mcw.get_balance_reserves().get_value() == money(0.0));
@@ -587,7 +596,8 @@ void ribi::imcw::company::test() noexcept
     calendar c;
     person p("Mr J");
     company mcw;
-    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,today);
+    date start_date(2015,6,15);
+    mcw.buy_winner_package(p,winner_package_name::starter,p.get_balance(),b,start_date);
     assert(mcw.get_balance_compensation_plan().get_value() == money(0.0));
     assert(mcw.get_balance_holding ().get_value() == money(0.0));
     assert(mcw.get_balance_reserves().get_value() == money(0.0));

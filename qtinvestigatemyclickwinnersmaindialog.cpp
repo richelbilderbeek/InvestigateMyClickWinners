@@ -204,8 +204,9 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked() noexcept
     ui->label_error->setText(msg.str().c_str());
     return;
   }
-
   ui->label_error->setText("Error: none");
+
+
   std::vector<double> ts;
 
   std::vector<double> company_balance_compensation_plan;
@@ -232,6 +233,15 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked() noexcept
   const simulation_parameters parameters{get_parameters()};
 
   simulation s(parameters);
+
+  for (const auto& plot: { ui->plot_company, ui->plot_focal_person, ui->plot_other_person } ) {
+    //Show dates
+    plot->setAxisScaleDraw(QwtPlot::xBottom,new QtAxisDateDrawer(parameters.get_start()));
+    //Rotate labels 90%
+    plot->setAxisLabelRotation(QwtPlot::xBottom, -90.0);
+    //Set label alignments
+    plot->setAxisLabelAlignment( QwtPlot::xBottom, Qt::AlignLeft | Qt::AlignBottom );
+  }
 
   const int other_person_index = ui->box_inspect_customer_index->value();
 

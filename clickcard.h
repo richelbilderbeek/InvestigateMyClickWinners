@@ -13,7 +13,11 @@ struct click_card
 {
   using date = boost::gregorian::date;
 
-  explicit click_card(const date& starting_date) noexcept;
+  ///The day a ClickCard is bought, it is not valid yet
+  ///It will become valid the first day of the next month.
+  ///From that moment on, the customer must do the clicking
+  ///and will have his/her profit the end of that month
+  explicit click_card(const date& purchase_date) noexcept;
 
   bool is_valid(const date& the_date) const noexcept;
 
@@ -29,12 +33,16 @@ struct click_card
   ///Expiration date
   boost::gregorian::date m_date_end;
 
+
   #ifndef NDEBUG
   static void test() noexcept;
   #endif
 
   friend std::ostream& operator<<(std::ostream& os, const click_card& c) noexcept;
 };
+
+///The start date is the first day of the next month after the purchase date
+boost::gregorian::date calculate_start_date(boost::gregorian::date d) noexcept;
 
 std::ostream& operator<<(std::ostream& os, const click_card& c) noexcept;
 
