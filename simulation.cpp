@@ -72,7 +72,10 @@ void ribi::imcw::simulation::do_timestep() noexcept
   if (m_calendar.transfer_profit_website_today()) {
     balance website_net_profit(
       "Monthly website profit",
-      m_parameters.get_profit_website_per_month()
+      m_parameters.get_profit_website_per_month(
+        m_calendar.get_today(),
+        m_others.size() + 1
+      )
     );
     m_company.transfer(website_net_profit,m_bank,m_calendar);
   }
@@ -80,7 +83,10 @@ void ribi::imcw::simulation::do_timestep() noexcept
   if (m_calendar.transfer_profit_webshop_today()) {
     balance webshop_net_profit(
       "Yearly webshop profit",
-      m_parameters.get_profit_webshop_per_year()
+      m_parameters.get_profit_webshop_per_year(
+        m_calendar.get_today(),
+        m_others.size() + 1
+      )
     );
     m_company.transfer(webshop_net_profit,m_bank,m_calendar);
   }

@@ -70,7 +70,7 @@ ribi::imcw::money ribi::imcw::simulation_parameters::get_profit_webshop_per_year
 ) const noexcept
 {
   const double t{
-    static_cast<double>(day.day_number())
+    static_cast<double>(day.day_number() - m_start.day_number())
   };
   const double n{
     static_cast<double>(n_customers)
@@ -101,7 +101,7 @@ ribi::imcw::money ribi::imcw::simulation_parameters::get_profit_website_per_mont
 ) const noexcept
 {
   const double t{
-    static_cast<double>(day.day_number())
+    static_cast<double>(day.day_number() - m_start.day_number())
   };
   const double n{
     static_cast<double>(n_customers)
@@ -177,22 +177,30 @@ void ribi::imcw::simulation_parameters::test() noexcept
     assert(std::abs(y - 6.0) < 0.001);
   }
   {
+    assert(can_parse_equation("3.14"));
+    assert(can_parse_equation("3.14 * t"));
+    assert(can_parse_equation("3.14 * t * n"));
+    assert(!can_parse_equation("3.14 * x"));
+  }
+  //Parameters with more complex function parser arguments
+  {
     boost::gregorian::date today = boost::gregorian::day_clock::local_day();
     boost::gregorian::date end = today + boost::gregorian::years(1);
     bank b;
     calendar c;
     person p("Mrs. A");
     simulation_parameters parameters{
-      p,{},today,end,"0.0","0.0",0
+      p,
+      {},
+      today,
+      end,
+      "1.0 + (1.0 * n) + (1.0 * t)",
+      "1.0 + (1.0 * n) + (1.0 * t)",
+      42 //RNG
     };
-    assert(parameters.get_profit_webshop_per_year() >= money(0.0));
-    assert(parameters.get_profit_website_per_month() >= money(0.0));
-  }
-  {
-    assert(can_parse_equation("3.14"));
-    assert(can_parse_equation("3.14 * t"));
-    assert(can_parse_equation("3.14 * t * n"));
-    assert(!can_parse_equation("3.14 * x"));
+    const int n_others{0};
+    assert(parameters.get_profit_webshop_per_year(end,n_others + 1) >= money(0.0));
+    assert(parameters.get_profit_website_per_month(end,n_others + 1) >= money(0.0));
   }
 }
 #endif

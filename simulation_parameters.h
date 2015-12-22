@@ -27,14 +27,14 @@ struct simulation_parameters
 
   ///Get the year webshop profit
   money get_profit_webshop_per_year(
-    const boost::gregorian::date& day = boost::gregorian::date(),
-    const int n_customers = 0
+    const boost::gregorian::date& day,
+    const int n_customers
   ) const noexcept;
 
   ///Get the monthly website profit
   money get_profit_website_per_month(
-    const boost::gregorian::date& day = boost::gregorian::date(),
-    const int n_customers = 0
+    const boost::gregorian::date& day,
+    const int n_customers
   ) const noexcept;
 
   int get_rng_seed() const noexcept { return m_rng_seed; }
