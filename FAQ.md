@@ -333,16 +333,16 @@ List from Bosley & McKeage, 2015:
  * Complex commision structure: Agree, the Winners are complex, the Compensation plan is well
  * Required inventory purchases: Undecided: money will be sent to your ShopWallet, but you do not need to buy things
  * Mandatory purchases (beyond want or need) to stay in good standing: Disagree
- * No clear refund policy (in writing): Agree, it is absent in the FAQ (note: it is in this document)
+ * No clear refund policy (in writing): Undecided, it is stated in the 'Terms And Conditions', but see FAQ `What happens to your Winners when the ClickCard expires?`
  * Past legal action against the company: Unknown
  * Rapid decline in participation: Unknown
  * Growth in participation despite recession: Unknown
  * High participation in economically depressed regions: Unknown
 
 This brings the list to:
- * Agree: 8x
+ * Agree: 7x
  * Disagree: 2x
- * Undescided: 2x
+ * Undescided: 3x
  * Unknown: 8x
 
 ## References
