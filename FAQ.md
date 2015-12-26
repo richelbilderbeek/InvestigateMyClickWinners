@@ -12,6 +12,13 @@ But it cannot be guaranteed I did not modify these answers beyond this :-)
 
 
 
+## Where is the income coming from?
+
+ * New members
+ * Viewing ads does not generate revenue (yet). When a customer buys something, however, there is a margin on the profit that goes to MCW
+ * The banners on the MCW website
+
+
 
 
 ## What happens to your Winners when the ClickCard expires? [1,3]
