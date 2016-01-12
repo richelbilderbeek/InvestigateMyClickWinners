@@ -91,7 +91,15 @@ bool ribi::imcw::person::has_account(const balance& an_account) const noexcept
 bool ribi::imcw::person::has_active_winners(const date& d) const noexcept
 {
   if (m_click_cards.empty()) return false;
-  m_click_cards[0].
+  const click_card& first_card = m_click_cards[0];
+  ///Winners get active the first day of the next month after
+  ///the purchase of a ClickCard
+  if (d < first_card.get_start_date() + boost::gregorian::months(1)) { return false; }
+  const auto cnt = std::count_if(
+    std::begin(m_click_cards), std::end(m_click_cards),
+    [d](const click_card& c) { return c.is_valid(d); }
+  );
+  return cnt > 0;
 }
 
 bool ribi::imcw::person::has_valid_click_card(const date& d) const noexcept

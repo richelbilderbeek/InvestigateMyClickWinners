@@ -175,7 +175,7 @@ void ribi::imcw::simulation::test() noexcept
     );
     assert(p.get_balance().get_value() == money(-100.0));
   }
-  #define FIX_ISSUE_16
+  //#define FIX_ISSUE_16
   #ifdef FIX_ISSUE_16
   //When you buy a ClickCard, first income will be at
   //the end of the next month

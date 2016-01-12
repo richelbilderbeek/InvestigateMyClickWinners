@@ -199,8 +199,6 @@ std::vector<std::reference_wrapper<ribi::imcw::winner>> ribi::imcw::company::col
   std::vector<std::reference_wrapper<winner>> v;
   for (auto& p: m_customers)
   {
-    //Don't use Winners directly after first puchase
-    if (!p.has_active_winners()) continue;
     std::vector<winner>& winners = p.get().get_winners();
     std::copy(
       std::begin(winners),
@@ -209,6 +207,37 @@ std::vector<std::reference_wrapper<ribi::imcw::winner>> ribi::imcw::company::col
     );
   }
   return v;
+}
+
+std::vector<std::reference_wrapper<ribi::imcw::winner>> ribi::imcw::company::collect_active_winners(
+  const boost::gregorian::date& d
+) noexcept
+{
+  std::vector<std::reference_wrapper<winner>> v;
+  for (auto& p: m_customers)
+  {
+    if (p.get().has_active_winners(d)) {
+      std::vector<winner>& winners = p.get().get_winners();
+      std::copy(
+        std::begin(winners),
+        std::end(winners),
+        std::back_inserter(v)
+      );
+    }
+  }
+  return v;
+}
+
+int ribi::imcw::company::count_active_customers(
+  const boost::gregorian::date& d
+) const noexcept
+{
+  return std::count_if(
+    std::begin(m_customers), std::end(m_customers),
+    [d](const Customer& p) {
+      return p.get().has_active_winners(d);
+    }
+  );
 }
 
 void ribi::imcw::company::distribute_net_profit(
@@ -275,7 +304,7 @@ void ribi::imcw::company::distribute_net_profit_compensation_plan(
   calendar& the_calendar
 ) noexcept
 {
-  if (count_active_customers() == 0) {
+  if (count_active_customers(the_calendar.get_today()) == 0) {
     //Transfer money to reserves
     the_bank.transfer(
       source,
@@ -286,8 +315,19 @@ void ribi::imcw::company::distribute_net_profit_compensation_plan(
     return;
   }
 
-  assert(count_active_customers() > 0);
+  assert(count_active_customers(the_calendar.get_today()) > 0);
+  #ifdef FIX_ISSUE_5
   assert(!"Not implemented yet");
+  #else
+  //STUB: Transfer money to reserves
+  the_bank.transfer(
+    source,
+    total_money,
+    m_balance_undistributed,
+    the_calendar.get_today()
+  );
+  return;
+  #endif
   /*
   const money income_per_winners_euros
     = total_money

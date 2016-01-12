@@ -55,8 +55,9 @@ struct company
     const boost::gregorian::date& the_day
   );
 
-  //int count_winners() noexcept;
-  int count_active_customers() const noexcept { return 0; }
+  int count_active_customers(
+    const boost::gregorian::date& d
+  ) const noexcept;
 
   ///When MyClickWinners makes a profit,
   ///it is distributed over customers and other entities
@@ -154,6 +155,11 @@ struct company
 
   ///Collect all Winners from all customers
   std::vector<std::reference_wrapper<winner>> collect_winners() noexcept;
+
+  ///Collect all Winners that are active from all customers
+  std::vector<std::reference_wrapper<winner>> collect_active_winners(
+    const boost::gregorian::date& d
+  ) noexcept;
 
   ///Distribute the net profit of the Winners
   void distribute_net_profit_winners(

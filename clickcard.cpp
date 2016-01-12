@@ -5,7 +5,8 @@
 #include "calendar.h"
 
 ribi::imcw::click_card::click_card(const date& purchase_date) noexcept
-  : m_date_start{calculate_start_date(purchase_date)},
+  : m_date_purchase{purchase_date},
+    m_date_start{calculate_start_date(purchase_date)},
     m_date_end{calculate_start_date(purchase_date) + boost::gregorian::years(1)}
 {
   #ifndef NDEBUG

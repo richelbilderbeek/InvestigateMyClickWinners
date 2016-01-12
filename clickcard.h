@@ -19,6 +19,10 @@ struct click_card
   ///and will have his/her profit the end of that month
   explicit click_card(const date& purchase_date) noexcept;
 
+  const date& get_end_date() const noexcept { return m_date_end; }
+  const date& get_purchase_date() const noexcept { return m_date_purchase; }
+  const date& get_start_date() const noexcept { return m_date_start; }
+
   bool is_valid(const date& the_date) const noexcept;
 
   ///The card costs 60 euros (inc VAT) to buy
@@ -28,6 +32,9 @@ struct click_card
 
   private:
   ///Buying date
+  boost::gregorian::date m_date_purchase;
+
+  ///The date it becomes active
   boost::gregorian::date m_date_start;
 
   ///Expiration date
