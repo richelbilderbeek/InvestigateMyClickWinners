@@ -140,7 +140,7 @@ De winst wordt als volgt verdeeld:
  * holding: 10%
  * reserves: 30%
  * winners: 45%
-
+```
 
 [2] Answer by Support Team MyClickWinners, sent at December 1st 2015 18:22:
 
