@@ -36,3 +36,6 @@ object_script*
 ui_*
 release/
 debug/
+moc_*
+InvestigateMyClickWinnersConsole
+InvestigateMyClickWinnersDesktop
