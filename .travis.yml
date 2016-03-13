@@ -14,15 +14,7 @@ before_install:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
 
 script: 
- - cd ..
- - git clone https://github.com/richelbilderbeek/RibiClasses
- - git clone https://github.com/richelbilderbeek/RibiLibraries
- - ls
- - cd InvestigateMyClickWinners
- - qmake InvestigateMyClickWinnersConsole.pro
- - make
- - qmake InvestigateMyClickWinnersDesktop.pro
- - make
+  - ./build.sh
 
 after_success:
   - codecov
