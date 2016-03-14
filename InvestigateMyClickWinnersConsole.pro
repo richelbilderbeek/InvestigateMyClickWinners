@@ -5,7 +5,3 @@ include(../RibiLibraries/Fparser.pri)
 include(../InvestigateMyClickWinners/InvestigateMyClickWinnersConsole.pri)
 
 SOURCES += main.cpp
-
-CONFIG(release, debug|release) {
-  DEFINES += NDEBUG
-}
