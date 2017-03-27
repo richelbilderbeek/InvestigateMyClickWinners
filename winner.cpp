@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <numeric>
 
 int ribi::imcw::winner::sm_ids = 0;
 
