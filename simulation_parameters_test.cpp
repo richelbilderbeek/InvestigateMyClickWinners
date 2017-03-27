@@ -1,6 +1,14 @@
 #include "simulation_parameters.h"
 
-void ribi::imcw::simulation_parameters::test() noexcept
+
+#include <boost/test/unit_test.hpp>
+
+#include "bank.h"
+#include "calendar.h"
+
+using namespace ribi::imcw;
+
+BOOST_AUTO_TEST_CASE(imcw_simulation_parameters)
 {
   //Correct date range
   {
@@ -13,7 +21,7 @@ void ribi::imcw::simulation_parameters::test() noexcept
     simulation_parameters(p,{},today,tomorrow,"0.0","0.0",0);
     try {
       simulation_parameters(p,{},today,yesterday,"0.0","0.0",0);
-      assert(!"Should not get here");
+      BOOST_CHECK(!"Should not get here");
     }
     catch (std::logic_error&) {
       //OK
@@ -35,19 +43,19 @@ void ribi::imcw::simulation_parameters::test() noexcept
     ;
     f.Parse(my_function.str().c_str(),"t,n");
 
-    assert(f.GetParseErrorType() == FunctionParser::FP_NO_ERROR);
+    BOOST_CHECK(f.GetParseErrorType() == FunctionParser::FP_NO_ERROR);
 
     //Evaluate the parsed formula
     const double xs[2] = {t, n};
     const double y = f.Eval(xs);
-    assert(!f.EvalError());
-    assert(std::abs(y - 6.0) < 0.001);
+    BOOST_CHECK(!f.EvalError());
+    BOOST_CHECK(std::abs(y - 6.0) < 0.001);
   }
   {
-    assert(can_parse_equation("3.14"));
-    assert(can_parse_equation("3.14 * t"));
-    assert(can_parse_equation("3.14 * t * n"));
-    assert(!can_parse_equation("3.14 * x"));
+    BOOST_CHECK(can_parse_equation("3.14"));
+    BOOST_CHECK(can_parse_equation("3.14 * t"));
+    BOOST_CHECK(can_parse_equation("3.14 * t * n"));
+    BOOST_CHECK(!can_parse_equation("3.14 * x"));
   }
   //Parameters with more complex function parser arguments
   {
@@ -66,8 +74,8 @@ void ribi::imcw::simulation_parameters::test() noexcept
       42 //RNG
     };
     const int n_others{0};
-    assert(parameters.get_profit_webshop_per_year(end,n_others + 1) >= money(0.0));
-    assert(parameters.get_profit_website_per_month(end,n_others + 1) >= money(0.0));
+    BOOST_CHECK(parameters.get_profit_webshop_per_year(end,n_others + 1) >= money(0.0));
+    BOOST_CHECK(parameters.get_profit_website_per_month(end,n_others + 1) >= money(0.0));
   }
 }
 

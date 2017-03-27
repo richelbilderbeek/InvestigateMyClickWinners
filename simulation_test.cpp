@@ -1,6 +1,10 @@
 #include "simulation.h"
 
-void ribi::imcw::simulation::test() noexcept
+#include <boost/test/unit_test.hpp>
+
+using namespace ribi::imcw;
+
+BOOST_AUTO_TEST_CASE(imcw_simulation)
 {
   //const boost::gregorian::date today = boost::gregorian::day_clock::local_day();
   //If a member wants to be member for a year,
@@ -22,11 +26,11 @@ void ribi::imcw::simulation::test() noexcept
     simulation s(parameters);
     while (!s.is_done()) { s.do_timestep(); }
     const auto p = s.get_focal_person();
-    assert(!p.has_valid_click_card(
+    BOOST_CHECK(!p.has_valid_click_card(
       s.get_calendar().get_today()
       )
     );
-    assert(p.get_balance().get_value() == money(-100.0));
+    BOOST_CHECK(p.get_balance().get_value() == money(-100.0));
   }
   //#define FIX_ISSUE_16
   #ifdef FIX_ISSUE_16
@@ -48,14 +52,14 @@ void ribi::imcw::simulation::test() noexcept
     simulation s(parameters);
     {
       const auto p = s.get_focal_person();
-      assert(!p.has_valid_click_card(s.get_calendar().get_today()));
+      BOOST_CHECK(!p.has_valid_click_card(s.get_calendar().get_today()));
     }
     for (int i=0; i!=31; ++i) { s.do_timestep(); }
     const auto p = s.get_focal_person();
-    assert(p.has_valid_click_card(s.get_calendar().get_today()));
-    assert(p.get_bank_wallet().get_value() == money(0.0));
-    assert(p.get_shop_wallet().get_value() == money(0.0));
-    assert(!"Fixed #16");
+    BOOST_CHECK(p.has_valid_click_card(s.get_calendar().get_today()));
+    BOOST_CHECK(p.get_bank_wallet().get_value() == money(0.0));
+    BOOST_CHECK(p.get_shop_wallet().get_value() == money(0.0));
+    BOOST_CHECK(!"Fixed #16");
   }
   #endif // FIX_ISSUE_16
 }

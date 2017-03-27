@@ -1,6 +1,10 @@
 #include "calendar.h"
 
-void ribi_imcw_calendar_test() noexcept
+#include <boost/test/unit_test.hpp>
+
+using namespace ribi::imcw;
+
+BOOST_AUTO_TEST_CASE(imcw_calendar)
 {
   const bool verbose{false};
   //Distribute Winners money at the end of the month
@@ -19,7 +23,7 @@ void ribi_imcw_calendar_test() noexcept
           has_distributed_winners = true;
         }
       }
-      assert(has_distributed_winners);
+      BOOST_CHECK(has_distributed_winners);
       today = next_month;
     }
   }
@@ -37,7 +41,7 @@ void ribi_imcw_calendar_test() noexcept
         ++n_profit_of_webshop_distributed;
       }
     }
-    assert(n_profit_of_webshop_distributed == 1);
+    BOOST_CHECK(n_profit_of_webshop_distributed == 1);
   }
 }
 
