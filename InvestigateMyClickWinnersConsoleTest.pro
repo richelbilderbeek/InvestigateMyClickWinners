@@ -10,7 +10,7 @@ CONFIG += c++14
 QMAKE_CXXFLAGS += -std=c++14
 
 # High warning levels
-QMAKE_CXXFLAGS += -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic -Werror
+QMAKE_CXXFLAGS += -Wall -Wextra -Wnon-virtual-dtor -pedantic -Werror
 
 # Debug and release mode
 CONFIG += debug_and_release
@@ -60,3 +60,11 @@ QMAKE_CXXFLAGS += -fext-numeric-literals
 
 # Boost.Test
 LIBS += -lboost_unit_test_framework
+
+message(Host name: $$QMAKE_HOST.name)
+contains(QMAKE_HOST.name,fwn-biol-132-102) {
+  message("Host is university computer in my office")
+  QMAKE_CXX = g++-5
+  QMAKE_LINK = g++-5
+  QMAKE_CC = gcc-5
+}
