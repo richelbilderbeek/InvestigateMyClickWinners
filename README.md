@@ -1,13 +1,9 @@
 # InvestigateMyClickWinners
 
-[![Travis CI logo](TravisCI.png)](https://travis-ci.org)
-![Whitespace](Whitespace.png)
-[![Codecov logo](Codecov.png)](https://www.codecov.io)
-[![gplv3](http://www.gnu.org/graphics/gplv3-88x31.png)](http://www.gnu.org/licenses/gpl.html)
-
-[![Build Status](https://travis-ci.org/richelbilderbeek/InvestigateMyClickWinners.svg?branch=master)](https://travis-ci.org/richelbilderbeek/InvestigateMyClickWinners)
-[![codecov.io](https://codecov.io/github/richelbilderbeek/InvestigateMyClickWinners/coverage.svg?branch=master)](https://codecov.io/github/richelbilderbeek/InvestigateMyClickWinners?branch=master)
-
+Branch|[![Travis CI logo](TravisCI.png)](https://travis-ci.org)|[![Codecov logo](Codecov.png)](https://www.codecov.io)
+---|---|---
+master|[![Build Status](https://travis-ci.org/richelbilderbeek/InvestigateMyClickWinners.svg?branch=master)](https://travis-ci.org/richelbilderbeek/InvestigateMyClickWinners)|[![codecov.io](https://codecov.io/github/richelbilderbeek/InvestigateMyClickWinners/coverage.svg?branch=master)](https://codecov.io/github/richelbilderbeek/InvestigateMyClickWinners/branch/master)
+develop|[![Build Status](https://travis-ci.org/richelbilderbeek/InvestigateMyClickWinners.svg?branch=develop)](https://travis-ci.org/richelbilderbeek/InvestigateMyClickWinners)|[![codecov.io](https://codecov.io/github/richelbilderbeek/InvestigateMyClickWinners/coverage.svg?branch=develop)](https://codecov.io/github/richelbilderbeek/InvestigateMyClickWinners/branch/develop)
 
 Tool to investigate the flow of money of MyClickWinners.
 
@@ -28,4 +24,18 @@ The parameters of this simulation are:
 
 It can be observed that under these parameters the focal person will acquire money:
 
+## Version 0.4
+
+![Version 0.4](Screenshots/InvestigateMyClickWinners_0_4.png)
+
+## Version 0.3
+
 ![Version 0.3](Screenshots/InvestigateMyClickWinners_0_3.png)
+
+## Version 0.2
+
+![Version 0.2](Screenshots/InvestigateMyClickWinners_0_2.png)
+
+## Version 0.1
+
+![Version 0.1](Screenshots/InvestigateMyClickWinners_0_1.png)
