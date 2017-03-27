@@ -1,6 +1,7 @@
 #ifndef RIBI_IMCW_SIMULATION_H
 #define RIBI_IMCW_SIMULATION_H
 
+#include <random>
 #include <string>
 #include <vector>
 #include "bank.h"
