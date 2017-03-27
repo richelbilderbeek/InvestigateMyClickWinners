@@ -41,10 +41,6 @@ struct winner
 
   static int sm_ids;
 
-  #ifndef NDEBUG
-  static void test() noexcept;
-  #endif
-
   friend std::ostream& operator<<(std::ostream& os, const winner& w) noexcept;
 };
 

@@ -9,12 +9,6 @@ struct helper
   helper();
 
   bool is_about_equal(const double a, const double b) const noexcept;
-
-  private:
-
-  #ifndef NDEBUG
-  static void test() noexcept;
-  #endif
 };
 
 } //~namespace imcw

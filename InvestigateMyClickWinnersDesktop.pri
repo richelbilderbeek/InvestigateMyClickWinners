@@ -1,12 +1,12 @@
-include(../InvestigateMyClickWinners/InvestigateMyClickWinnersConsole.pri)
+include(InvestigateMyClickWinnersConsole.pri)
 
 SOURCES += \
-    qtinvestigatemyclickwinnersmaindialog.cpp \
-    qtinvestigatemyclickwinneraxisdatedrawer.cpp
+    $$PWD/qtinvestigatemyclickwinnersmaindialog.cpp \
+    $$PWD/qtinvestigatemyclickwinneraxisdatedrawer.cpp
 
 FORMS += \
-    qtinvestigatemyclickwinnersmaindialog.ui
+    $$PWD/qtinvestigatemyclickwinnersmaindialog.ui
 
 HEADERS += \
-    qtinvestigatemyclickwinnersmaindialog.h \
-    qtinvestigatemyclickwinneraxisdatedrawer.h
+    $$PWD/qtinvestigatemyclickwinnersmaindialog.h \
+    $$PWD/qtinvestigatemyclickwinneraxisdatedrawer.h

@@ -40,11 +40,6 @@ struct click_card
   ///Expiration date
   boost::gregorian::date m_date_end;
 
-
-  #ifndef NDEBUG
-  static void test() noexcept;
-  #endif
-
   friend std::ostream& operator<<(std::ostream& os, const click_card& c) noexcept;
 };
 

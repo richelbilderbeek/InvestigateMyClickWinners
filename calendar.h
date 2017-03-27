@@ -33,10 +33,6 @@ public:
   boost::gregorian::date m_today;
 
   static const boost::gregorian::date sm_distibute_profit_webshop_day;
-
-  #ifndef NDEBUG
-  static void test() noexcept;
-  #endif
 };
 
 } //~namespace imcw

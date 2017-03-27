@@ -52,11 +52,6 @@ struct simulation_parameters
   const int m_rng_seed;
 
   const boost::gregorian::date m_start;
-
-  private:
-  #ifndef NDEBUG
-  static void test() noexcept;
-  #endif
 };
 
 ///Check if an equation depending on 't' and 'n' can be parsed

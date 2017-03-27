@@ -34,10 +34,6 @@ private:
   //The amount of money in euros
   money m_value;
 
-  #ifndef NDEBUG
-  static void test() noexcept;
-  #endif
-
   friend bool operator==(const balance& a, const balance& b) noexcept;
 };
 

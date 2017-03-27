@@ -15,10 +15,6 @@ public:
 
 private:
   double m_value_euros;
-
-  #ifndef NDEBUG
-  static void test() noexcept;
-  #endif
 };
 
 std::ostream& operator<<(std::ostream& os, const money& m) noexcept;

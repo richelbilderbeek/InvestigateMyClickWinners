@@ -38,9 +38,6 @@ public:
 private:
 
   std::vector<std::string> m_transfers;
-  #ifndef NDEBUG
-  static void test() noexcept;
-  #endif
 
   friend std::ostream& operator<<(std::ostream& os, const bank b) noexcept;
 };

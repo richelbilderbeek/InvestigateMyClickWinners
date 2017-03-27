@@ -5,9 +5,7 @@
 ribi::imcw::winner_package::winner_package(const winner_package_name name)
   : m_n_winners{calculate_n_winners(name)}
 {
-  #ifndef NDEBUG
-  test();
-  #endif
+
 }
 
 int ribi::imcw::calculate_n_winners(const winner_package_name name)
@@ -23,20 +21,3 @@ int ribi::imcw::calculate_n_winners(const winner_package_name name)
   }
   return 0;
 }
-
-#ifndef NDEBUG
-void ribi::imcw::winner_package::test() noexcept
-{
-  {
-    static bool is_tested{false};
-    if (is_tested) return;
-    is_tested = true;
-  }
-  assert(calculate_n_winners(winner_package_name::starter  ) ==  1);
-  assert(calculate_n_winners(winner_package_name::basic    ) ==  3);
-  assert(calculate_n_winners(winner_package_name::junior   ) ==  5);
-  assert(calculate_n_winners(winner_package_name::senior   ) == 10);
-  assert(calculate_n_winners(winner_package_name::master   ) == 25);
-  assert(calculate_n_winners(winner_package_name::executive) == 50);
-}
-#endif

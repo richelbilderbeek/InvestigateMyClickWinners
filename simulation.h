@@ -43,10 +43,6 @@ struct simulation
   std::vector<person> m_others;
   const simulation_parameters m_parameters;
   std::mt19937 m_rng_engine;
-
-  #ifndef NDEBUG
-  static void test() noexcept;
-  #endif
 };
 
 } //~namespace imcw

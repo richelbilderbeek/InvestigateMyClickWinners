@@ -164,10 +164,6 @@ private:
   ///The new ID to be assigned
   static int sm_current_id;
 
-  #ifndef NDEBUG
-  static void test() noexcept;
-  #endif
-
   static_assert(proportion_of_profit_to_bank_wallet + proportion_of_profit_to_shop_wallet == 1.0,"");
 
   friend std::ostream& operator<<(std::ostream& os, const person& p) noexcept;

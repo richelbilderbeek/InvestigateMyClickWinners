@@ -47,6 +47,11 @@ script:
   - ./InvestigateMyClickWinnersDesktop &
   - sleep 10
   - sudo killall InvestigateMyClickWinnersDesktop
+  # Codecov
+  - ./get_code_cov
+  - codecov
+  # OCLint
+  - ./do_oclint
 
 after_success:
-  - codecov
+  - bash <(curl -s https://codecov.io/bash)

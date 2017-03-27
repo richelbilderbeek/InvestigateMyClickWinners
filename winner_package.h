@@ -15,10 +15,6 @@ struct winner_package
   private:
 
   const int m_n_winners;
-
-  #ifndef NDEBUG
-  static void test() noexcept;
-  #endif
 };
 
 int calculate_n_winners(const winner_package_name name);

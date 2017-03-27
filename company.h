@@ -177,10 +177,6 @@ struct company
     calendar& the_calendar
   ) noexcept;
 
-  #ifndef NDEBUG
-  static void test() noexcept;
-  #endif
-
   static_assert(
     proportion_of_profit_to_compensation_plan
     + proportion_of_profit_to_holding

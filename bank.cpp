@@ -10,46 +10,8 @@
 ribi::imcw::bank::bank()
   : m_transfers{}
 {
-  #ifndef NDEBUG
-  test();
-  #endif
+
 }
-
-
-#ifndef NDEBUG
-void ribi::imcw::bank::test() noexcept
-{
-  {
-    static bool is_tested{false};
-    if (is_tested) return;
-    is_tested = true;
-  }
-  //const bool verbose{false};
-  const boost::gregorian::date today = boost::gregorian::day_clock::local_day();
-
-  {
-    bank b;
-  }
-  {
-    bank the_bank;
-    balance sender("sender");
-    const money amount_euros(100.0);
-    balance receiver("receiver");
-    assert(sender.get_value() == money(0.0));
-    assert(receiver.get_value() == money(0.0));
-    assert(the_bank.get_transfers().empty());
-    the_bank.transfer(
-      sender,
-      amount_euros,
-      receiver,
-      today
-    );
-    assert(sender.get_value()   == -amount_euros);
-    assert(receiver.get_value() ==  amount_euros);
-    assert(!the_bank.get_transfers().empty());
-  }
-}
-#endif
 
 void ribi::imcw::bank::transfer(
   balance& sender,
