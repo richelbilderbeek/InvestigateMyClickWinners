@@ -37,6 +37,10 @@ before_script:
   - sleep 3 # give xvfb some time to start
 
 script: 
+  # Console test
+  - qmake -qt=qt5 InvestigateMyClickWinnersConsoleTest.pro
+  - make debug
+  - ./InvestigateMyClickWinnersConsoleTest
   # Console
   - qmake -qt=qt5 InvestigateMyClickWinnersConsole.pro
   - make debug

@@ -246,7 +246,9 @@ void ribi::imcw::QtMainDialog::on_button_run_clicked() noexcept
   const int other_person_index = ui->box_inspect_customer_index->value();
 
   const int n_days {
-    ui->calendar_start->selectedDate().daysTo(ui->calendar_end->selectedDate())
+    static_cast<int>(
+      ui->calendar_start->selectedDate().daysTo(ui->calendar_end->selectedDate())
+    )
   };
 
   for (int day=0; day!=n_days; ++day) {
