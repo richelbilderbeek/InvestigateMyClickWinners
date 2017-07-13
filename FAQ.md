@@ -267,8 +267,6 @@ Dit voelt juist een *geen* openheid uitstralen. Hoe kan dit er dan toch =
 onder staan?
 ```
 
-```
-
 [2] Answer by Support Team MyClickWinners, sent at Dec 3rd 2015 9:14
 
 ```
@@ -337,7 +335,7 @@ List from Bosley & McKeage, 2015:
  * High turnover of past participants: Unknown
  * Exponential growth in participation: Unknown
  * Messages of easy money or passive income: Agree, passive money is earned from the Compensation Plan
- * Complex commision structure: Agree, the Winners are complex, the Compensation plan is well
+ * Complex commission structure: Agree, the Winners are complex, the Compensation plan is well
  * Required inventory purchases: Undecided: money will be sent to your ShopWallet, but you do not need to buy things
  * Mandatory purchases (beyond want or need) to stay in good standing: Disagree
  * No clear refund policy (in writing): Undecided, it is stated in the 'Terms And Conditions', but see FAQ `What happens to your Winners when the ClickCard expires?`
