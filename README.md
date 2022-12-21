@@ -1,10 +1,5 @@
 # InvestigateMyClickWinners
 
-Branch|[![Travis CI logo](TravisCI.png)](https://travis-ci.org)|[![Codecov logo](Codecov.png)](https://www.codecov.io)
----|---|---
-master|[![Build Status](https://travis-ci.org/richelbilderbeek/InvestigateMyClickWinners.svg?branch=master)](https://travis-ci.org/richelbilderbeek/InvestigateMyClickWinners)|[![codecov.io](https://codecov.io/github/richelbilderbeek/InvestigateMyClickWinners/coverage.svg?branch=master)](https://codecov.io/github/richelbilderbeek/InvestigateMyClickWinners/branch/master)
-develop|[![Build Status](https://travis-ci.org/richelbilderbeek/InvestigateMyClickWinners.svg?branch=develop)](https://travis-ci.org/richelbilderbeek/InvestigateMyClickWinners)|[![codecov.io](https://codecov.io/github/richelbilderbeek/InvestigateMyClickWinners/coverage.svg?branch=develop)](https://codecov.io/github/richelbilderbeek/InvestigateMyClickWinners/branch/develop)
-
 Tool to investigate the flow of money of MyClickWinners.
 
  * [Download the Windows executable](http://richelbilderbeek.nl/InvestigateMyClickWinners.zip)
