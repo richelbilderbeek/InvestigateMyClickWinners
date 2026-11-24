@@ -40,3 +40,5 @@ moc_*
 InvestigateMyClickWinnersConsole
 InvestigateMyClickWinnersDesktop
 *.lyx~
+
+site/
