@@ -2,31 +2,28 @@
 
 ## What is the authority of these questions and answers?
 
-None. 
+None.
 
-I have no relation with MyClickWinners. I am interested in the workings of it. 
+I have no relation with MyClickWinners. I am interested in the workings of it.
 These FAQ contain questions I sent to MyClickWinners and the answers I received.
 These answers I copy literally, except for some typo's that I fix and
 replacing symbols like the euro sign for the word 'euro' (put after the value).
 But it cannot be guaranteed I did not modify these answers beyond this :-)
 
 
-
 ## Where is the income coming from?
 
- * New members
- * Viewing ads does not generate revenue (yet). When a customer buys something, however, there is a margin on the profit that goes to MCW
- * The banners on the MCW website
-
-
+* New members
+* Viewing ads does not generate revenue (yet). When a customer buys something, however, there is a margin on the profit that goes to MCW
+* The banners on the MCW website
 
 
 ## What happens to your Winners when the ClickCard expires? [1,3]
 
 This depends on if you quit MyClickWinners:
 
- * If you quit MyClickWinners: you can continue clicking until the Winners saturate, then you can transfer your BankWallet to your personal bank account [2,5]. Note that [7] states something differently
- * If you do not replenish your ClickCard but stay a member of MyClickWinners: You have invested in a Winner, without success. You cannot get the Winners back. You can get access your ShopWallet and BankWallet [4,5]
+* If you quit MyClickWinners: you can continue clicking until the Winners saturate, then you can transfer your BankWallet to your personal bank account [2,5]. Note that [7] states something differently
+* If you do not replenish your ClickCard but stay a member of MyClickWinners: You have invested in a Winner, without success. You cannot get the Winners back. You can get access your ShopWallet and BankWallet [4,5]
 
 ### References
 
@@ -74,7 +71,7 @@ Stel, ik heb een Winner met 20 euro erop en mijn ClickCard is al verlopen. Ik we
 
 ```
 Wanneer u uw ClickCard niet vervangt, kunt u ook niet meer clicken. Daarmee heeft u geinvesteerd in een Winner die nog niet is volgelopen. U heeft enkel recht op het uitstaande geld in uw BankWallet en ShopWallet. De Winner is slechts een indicator van de ontvangen winst (BankWallet en ShopWallet samen) die u op dat moment heeft gerealiseerd.
-``` 
+```
 
 [5] Answer by Support Team MyClickWinners, sent at December 3rd 2015 8:42:
 
@@ -149,10 +146,7 @@ De verdeling van de nettowinst zoals u beschrijft is correct. Hierbij wordt 60% 
 ```
 
 
-
-
-
-## Can there be more money distributed to the active customers than allocated for the CompensationPlan [1]? 
+## Can there be more money distributed to the active customers than allocated for the CompensationPlan [1]?
 
 A: No [2]
 
@@ -169,9 +163,6 @@ A: No [2]
 ```
 1.       Bij de uitkering in het Compensatie Plan wordt iedere klantwaarde verdeeld over 3 niveau’s; te weten 20% op het eerste niveau, 30% op het tweede niveau en 50% op het derde niveau. Wanneer u 8 klanten op uw derde niveau heeft staan, krijgt u van iedere klant 50% van diens klantwaarde. Dat is wat anders dan dat elk 400%  zou krijgen.
 ```
-
-
-
 
 
 ## What happens to the money allocated to the Winners, would there be no Winners [1]?
@@ -193,9 +184,6 @@ A: It will go to reserves
 ```
 
 
-
-
-
 ## What happens if there are more costs than profit [1]?
 
 A: The reserves are used to cover these [2].
@@ -215,11 +203,8 @@ A: The reserves are used to cover these [2].
 ```
 
 
- 
-
- 
 ## Will MyClickWinners be transparant about the monthly costs [1]?
- 
+
 A: Yes, except for the organisational costs [2].
 
 ### References
@@ -237,13 +222,10 @@ A: Yes, except for the organisational costs [2].
 ```
 
 
-
-
-
 ## Why the email disclaimer?
 
 According the MyClickWinners [2] this is to preotect the integrity of the customer
-and could be considered a sign of professionalism. 
+and could be considered a sign of professionalism.
 
 Note that according to Lidstone, 2015, an email disclaimer is useless outside of advocacy.
 
@@ -279,11 +261,6 @@ inziens duidt dit enkel op onze mate van professionaliteit.
 ```
 
 
-
-
-
-
-
 ## Would MyClickWinners mind this FAQ?
 
 MyClickWinners does not stimulate me having this FAQ [1,2]
@@ -314,43 +291,39 @@ rechtvaardgen.
 ```
 
 
-
-
-
-
-
 ## Are there any signs that MCW is a MLM-based pyramid scheme?
 
 List from Bosley & McKeage, 2015:
 
- * Little/no demonstrated company revenue from retail sales to public (sales to those outside the MLM program): Agree
- * Participant income primarily derived from recruitment rates than sales of products: Agree
- * Sales pitch emphasizes recruiting: Disagree, but option is mentioned
- * Excessive earnings claims or promises of high returns in a short time period: Agree, there is a table in the presentation showing a calculation with a high return
- * Product is unproven and/or unfailry priced: Agree: what _is_ the product?
- * Buy-in required: Agree, ClickCard costs 60 euro per year
- * Vast majority of participants lose money: Unknown
- * No information of potential expenses (in writing): Undecided: there is no information about this, but they may be absent as well
- * Consumer complaints (from other regions or prioir waves): Unknown
- * High turnover of past participants: Unknown
- * Exponential growth in participation: Unknown
- * Messages of easy money or passive income: Agree, passive money is earned from the Compensation Plan
- * Complex commission structure: Agree, the Winners are complex, the Compensation plan is well
- * Required inventory purchases: Undecided: money will be sent to your ShopWallet, but you do not need to buy things
- * Mandatory purchases (beyond want or need) to stay in good standing: Disagree
- * No clear refund policy (in writing): Undecided, it is stated in the 'Terms And Conditions', but see FAQ `What happens to your Winners when the ClickCard expires?`
- * Past legal action against the company: Unknown
- * Rapid decline in participation: Unknown
- * Growth in participation despite recession: Unknown
- * High participation in economically depressed regions: Unknown
+* Little/no demonstrated company revenue from retail sales to public (sales to those outside the MLM program): Agree
+* Participant income primarily derived from recruitment rates than sales of products: Agree
+* Sales pitch emphasizes recruiting: Disagree, but option is mentioned
+* Excessive earnings claims or promises of high returns in a short time period: Agree, there is a table in the presentation showing a calculation with a high return
+* Product is unproven and/or unfailry priced: Agree: what _is_ the product?
+* Buy-in required: Agree, ClickCard costs 60 euro per year
+* Vast majority of participants lose money: Unknown
+* No information of potential expenses (in writing): Undecided: there is no information about this, but they may be absent as well
+* Consumer complaints (from other regions or prioir waves): Unknown
+* High turnover of past participants: Unknown
+* Exponential growth in participation: Unknown
+* Messages of easy money or passive income: Agree, passive money is earned from the Compensation Plan
+* Complex commission structure: Agree, the Winners are complex, the Compensation plan is well
+* Required inventory purchases: Undecided: money will be sent to your ShopWallet, but you do not need to buy things
+* Mandatory purchases (beyond want or need) to stay in good standing: Disagree
+* No clear refund policy (in writing): Undecided, it is stated in the 'Terms And Conditions', but see FAQ `What happens to your Winners when the ClickCard expires?`
+* Past legal action against the company: Unknown
+* Rapid decline in participation: Unknown
+* Growth in participation despite recession: Unknown
+* High participation in economically depressed regions: Unknown
 
 This brings the list to:
- * Agree: 7x
- * Disagree: 2x
- * Undescided: 3x
- * Unknown: 8x
+
+* Agree: 7x
+* Disagree: 2x
+* Undescided: 3x
+* Unknown: 8x
 
 ## References
 
- * [1] Bosley, Stacie, and Kim K. McKeage. "Multilevel Marketing Diffusion and the Risk of Pyramid Scheme Activity: The Case of Fortune Hi-Tech Marketing in Montana." American Marketing Association, 2015.
- * [2] Lidstone, Herrick K. "Email Disclaimers–A Worthwhile Endeavor or a Waste of Electronic Ink?." Available at SSRN 2656466 (2015)
+* [1] Bosley, Stacie, and Kim K. McKeage. "Multilevel Marketing Diffusion and the Risk of Pyramid Scheme Activity: The Case of Fortune Hi-Tech Marketing in Montana." American Marketing Association, 2015.
+* [2] Lidstone, Herrick K. "Email Disclaimers–A Worthwhile Endeavor or a Waste of Electronic Ink?." Available at SSRN 2656466 (2015)
