@@ -14,7 +14,8 @@ But it cannot be guaranteed I did not modify these answers beyond this :-)
 ## Where is the income coming from?
 
 * New members
-* Viewing ads does not generate revenue (yet). When a customer buys something, however, there is a margin on the profit that goes to MCW
+* Viewing ads does not generate revenue (yet). When a customer buys something,
+  however, there is a margin on the profit that goes to MCW
 * The banners on the MCW website
 
 
@@ -22,20 +23,24 @@ But it cannot be guaranteed I did not modify these answers beyond this :-)
 
 This depends on if you quit MyClickWinners:
 
-* If you quit MyClickWinners: you can continue clicking until the Winners saturate, then you can transfer your BankWallet to your personal bank account [2,5]. Note that [7] states something differently
-* If you do not replenish your ClickCard but stay a member of MyClickWinners: You have invested in a Winner, without success. You cannot get the Winners back. You can get access your ShopWallet and BankWallet [4,5]
+* If you quit MyClickWinners: you can continue clicking until the Winners
+  saturate, then you can transfer your BankWallet to your personal bank account
+  [2,5]. Note that [7] states something differently
+* If you do not replenish your ClickCard but stay a member of MyClickWinners:
+  You have invested in a Winner, without success. You cannot get the Winners
+  back. You can get access your ShopWallet and BankWallet [4,5]
 
 ### References
 
 [1] Message by Richel Bilderbeek, sent at November 13th 2015 10:09:
 
-```
+```text
 Stel ik besluit om mijn ClickCard niet te verlengen. Nadeel is dat ik een Winner heb met geld erop. Krijg ik dit geld terug (stel bijvoorbeeld dat er 39 of 49 euro op staat)? 
 ```
 
 [2] Answer by Support Team MyClickWinners, sent at November 13th 2015 13:38:
 
-```
+```text
 Iedere Winner vertegenwoordigt (als winstdelingscertificaat) een zekere waarde. Deze waarde is niet direct opeisbaar, aangezien deze hooguit weergeeft wat u reeds aan winstbijschrijving heeft ontvangen en hoeveel er nog aan winst kan worden bjgeschreven totdat deze zijn maximale waarde van € 50,- heeft bereikt.
 
 De bijschreven winst komt voor een groot deel in uw BankWallet terecht en een klein deel in uw ShopWallet. Als er voldoende saldo in uw BankWallet staat (minimaal € 40,-) en u heeft de automatische aankoop aan staan, wordt er een nieuwe Winner voor € 40,- aangekocht. Die wordt van uw BankWallet saldo afgeschreven. Op die wijze zal uw BankWallet saldo altijd onder de € 40,- blijven (er worden immers steeds Winners bijgekocht) en uw ShopWallet lich groeien, zolang u daar niets uit betaalt.
@@ -62,20 +67,20 @@ NB. Hoewel voor een overboeking naar de bankrekening en/of PrePaid CreditCard ee
 
 [3] Message by Richel Bilderbeek, sent at December 1st 2015 18:22:
 
-```
+```text
 Stel, ik heb een Winner met 20 euro erop en mijn ClickCard is al verlopen. Ik weet reeds, dat als ik lang genoeg door blijf klikken, ik dan het geld van de Winner terugkrijg als deze vervalt. Maar is het ook mogelijk om desondanks (een gedeelte) dit geld direct te krijgen?
 ```
 
 [4] Answer by Support Team MyClickWinners, sent at December 1st 2015 18:22:
 
 
-```
+```text
 Wanneer u uw ClickCard niet vervangt, kunt u ook niet meer clicken. Daarmee heeft u geinvesteerd in een Winner die nog niet is volgelopen. U heeft enkel recht op het uitstaande geld in uw BankWallet en ShopWallet. De Winner is slechts een indicator van de ontvangen winst (BankWallet en ShopWallet samen) die u op dat moment heeft gerealiseerd.
 ```
 
 [5] Answer by Support Team MyClickWinners, sent at December 3rd 2015 8:42:
 
-```
+```text
 In uw eerste mailbericht heb ik verwezen naar de procedure die te maken
 heeft met een opzegging. Hiervoor dient een klant een maand voor afloop
 van de ClickCard aan te geven te willen stoppen. In dat geval kan men
@@ -107,9 +112,10 @@ bankrekening. De ShopWallet zult u zelf moeten legen door een aankoop te
 doen.
 ```
 
-[6] The `terms_and_conditions_cardholders.pdf` downloaded from the MyClickWinners website
+[6] The `terms_and_conditions_cardholders.pdf` downloaded from the
+MyClickWinners website
 
-```
+```text
 Ending an account
 A CardHolder of MyClickWinners may terminate the associated account which holds that:
  * The  notice  no  later  than  one  month  prior  to  the  closing  date  of  the  last  published  ClickCard  will  be 
@@ -125,13 +131,14 @@ account, the remaining balance goes soon after closure automatically to MyClickW
 
 ## Why the percentages used? [1]
 
-The 10% allocated to the Holding, are to simply maintain [2]. All the rest goes back to the customer [2].
+The 10% allocated to the Holding, are to simply maintain [2]. All the rest goes
+back to the customer [2].
 
 ### References
 
 [1] Message by Richel Bilderbeek, sent at December 1st 2015 18:22:
 
-```
+```text
 De winst wordt als volgt verdeeld:
  * compensation_plan: 15%
  * holding: 10%
@@ -141,7 +148,7 @@ De winst wordt als volgt verdeeld:
 
 [2] Answer by Support Team MyClickWinners, sent at December 1st 2015 18:22:
 
-```
+```text
 De verdeling van de nettowinst zoals u beschrijft is correct. Hierbij wordt 60% teruggegeven aan de klanten, 30% wordt gereseveerd voor eventuele tegenvallers in de uitkeringen en 10% is voor de Holding. Daarmee is 90% voor de klanten beschikbaar en 10% voor de holding. Bij een grote klantenkring is dit voldoende voor de holding om te kunnen functioneren. Ons systeem is erop gebaseerd om vele mensen een extra inkomen te gunnen. Niet om de aandeelhouders tot onnodig rijke mensen te maken. Dat is onze missie en staat aan de basis voor deze verdeling.
 ```
 
@@ -154,13 +161,13 @@ A: No [2]
 
 [1] Message by Richel Bilderbeek, sent at November 9th 2015 21:59:
 
-```
+```text
 1) Is het wiskundig mogelijk dat er meer geld uitgekeerd moet worden met het CompensatiePlan dan ervoor is gereserveerd? Een versimpeld (en onmogelijk) voorbeeld: stel dat iedereen 8 actieve klanten op niveau 3 heeft. Dan krijgt elk 400% van de klantwaarde. Hoe gaat dit goed gaan?
 ```
 
 [2] Answer by Support Team MyClickWinners, sent at November 10th 2015 08:25:
 
-```
+```text
 1.       Bij de uitkering in het Compensatie Plan wordt iedere klantwaarde verdeeld over 3 niveau’s; te weten 20% op het eerste niveau, 30% op het tweede niveau en 50% op het derde niveau. Wanneer u 8 klanten op uw derde niveau heeft staan, krijgt u van iedere klant 50% van diens klantwaarde. Dat is wat anders dan dat elk 400%  zou krijgen.
 ```
 
@@ -173,13 +180,13 @@ A: It will go to reserves
 
 [1] Message by Richel Bilderbeek, sent at November 9th 2015 21:59:
 
-```
+```text
 2) Mocht er binnen het bedrijf geen Winners meer zijn, hoe worden dan deze inkomsten verdeeld (er zijn immers geen Winners om over te verdelen)? Gaat dit dan naar Holding, Reserveringen of CompensatiePlan?
 ```
 
 [2] Answer by Support Team MyClickWinners, sent at November 10th 2015 08:25:
 
-```
+```text
 2.       In het uiterste geval dat er geen Winners meer zouden zijn (hetgeen betekent dat er geen nieuwe klanten meer bijkomen en dat alle klanten hun account op handmatig zetten zodat er geen nieuwe Winners worden bijgekocht) en ook door blijven klikken totdat men het account leeghaalt, gaat de winst naar de Reserveringen.
 ```
 
@@ -192,13 +199,13 @@ A: The reserves are used to cover these [2].
 
 [1] Message by Richel Bilderbeek, sent at November 9th 2015 21:59:
 
-```
+```text
 3) Mocht er een slechte maand zijn zonder winst, dan vermoed ik dat de klanten geen inkomsten zullen krijgen. Dit is natuurlijk prima. Klopt het dat het tekort dan met de Reserveringen gedekt worden?
 ```
 
 [2] Answer by Support Team MyClickWinners, sent at November 10th 2015 08:25:
 
-```
+```text
 3.       Reserveringen zijn er inderdaad voor bedoeld om minder rendabele investeringen te kunnen opvangen, zodat er toch nog iets uitgekeerd kan worden t.b.v. Winners en Compensatie Plan.
 ```
 
@@ -211,29 +218,31 @@ A: Yes, except for the organisational costs [2].
 
 [1] Message by Richel Bilderbeek, sent at November 9th 2015 21:59:
 
-```
+```text
 4) Is MyClickWinners ook transparant over de kosten die maandelijks gemaakt worden? Zo ja, wat zijn deze?
 ```
 
 [2] Answer by Support Team MyClickWinners, sent at November 10th 2015 08:25:
 
-```
+```text
 4.       MyClickWinners is transparant over de besteding van ingelegde gelden van haar klanten en het rendement dat daarmee gemaakt wordt. Dus ook de verdiensten van de webshop, etc. Echter, de organisatiekosten worden uit de inkomsten van de ClickCards betaald en zijn (behoudens de verplichte jaarrekening) niet inzichtelijk. 
 ```
 
 
 ## Why the email disclaimer?
 
-According the MyClickWinners [2] this is to preotect the integrity of the customer
+According the MyClickWinners [2] this is to preotect the integrity of the
+customer
 and could be considered a sign of professionalism.
 
-Note that according to Lidstone, 2015, an email disclaimer is useless outside of advocacy.
+Note that according to Lidstone, 2015, an email disclaimer is useless outside of
+advocacy.
 
 ### References
 
 [1] Email by Richel Bulderbeek, sent at Dec 2nd 2015 19:07:
 
-```
+```text
 Het viel mij op, dat onderaan een email staat:
 
 This e-mail is intended for the addressee's eyes only. If you
@@ -251,7 +260,7 @@ onder staan?
 
 [2] Answer by Support Team MyClickWinners, sent at Dec 3rd 2015 9:14
 
-```
+```text
 Onze maildisclaimer zegt volgens mij niets over de mate van
 transparantie of openheid van onze organisatie. Deze is juist bedoeld om
 er voor te zorgen dat er geen misbruik kan worden gemaakt en dat de
@@ -269,7 +278,7 @@ MyClickWinners does not stimulate me having this FAQ [1,2]
 
 [1] Email by Richel Bulderbeek, sent at Dec 2nd 2015 19:07:
 
-```
+```text
 Ik zie dat de antwoorden op mijn vragen niet bij de FAQ ( =
 https://www.myclickwinners.com/nl/meer-informatie/faq.html ) van de =
 website komen. Waarom niet? Mocht dit een gedoe zijn, zou ik ook kunnen =
@@ -279,7 +288,7 @@ zetten. Is het mogelijk de FAQ aan te vullen?
 
 [2] Answer by Support Team MyClickWinners, sent at Dec 3rd 2015 9:14
 
-```
+```text
 Om de FAQ overzichtelijk te houden en slechts betrekking te geven op de
 belangrijkste vragen die bij consumenten leven, zullen wij niet alle
 mogelijke vragen en antwoorden hierin gaan plaatsen. Uw verzoek tot
@@ -295,22 +304,32 @@ rechtvaardgen.
 
 List from Bosley & McKeage, 2015:
 
-* Little/no demonstrated company revenue from retail sales to public (sales to those outside the MLM program): Agree
-* Participant income primarily derived from recruitment rates than sales of products: Agree
+* Little/no demonstrated company revenue from retail sales to public (sales to
+  those outside the MLM program): Agree
+* Participant income primarily derived from recruitment rates than sales of
+  products: Agree
 * Sales pitch emphasizes recruiting: Disagree, but option is mentioned
-* Excessive earnings claims or promises of high returns in a short time period: Agree, there is a table in the presentation showing a calculation with a high return
+* Excessive earnings claims or promises of high returns in a short time period:
+  Agree, there is a table in the presentation showing a calculation with a high
+  return
 * Product is unproven and/or unfailry priced: Agree: what _is_ the product?
 * Buy-in required: Agree, ClickCard costs 60 euro per year
 * Vast majority of participants lose money: Unknown
-* No information of potential expenses (in writing): Undecided: there is no information about this, but they may be absent as well
+* No information of potential expenses (in writing): Undecided: there is no
+  information about this, but they may be absent as well
 * Consumer complaints (from other regions or prioir waves): Unknown
 * High turnover of past participants: Unknown
 * Exponential growth in participation: Unknown
-* Messages of easy money or passive income: Agree, passive money is earned from the Compensation Plan
-* Complex commission structure: Agree, the Winners are complex, the Compensation plan is well
-* Required inventory purchases: Undecided: money will be sent to your ShopWallet, but you do not need to buy things
+* Messages of easy money or passive income: Agree, passive money is earned from
+  the Compensation Plan
+* Complex commission structure: Agree, the Winners are complex, the Compensation
+  plan is well
+* Required inventory purchases: Undecided: money will be sent to your
+  ShopWallet, but you do not need to buy things
 * Mandatory purchases (beyond want or need) to stay in good standing: Disagree
-* No clear refund policy (in writing): Undecided, it is stated in the 'Terms And Conditions', but see FAQ `What happens to your Winners when the ClickCard expires?`
+* No clear refund policy (in writing): Undecided, it is stated in the 'Terms And
+  Conditions', but see FAQ `What happens to your Winners when the ClickCard
+  expires?`
 * Past legal action against the company: Unknown
 * Rapid decline in participation: Unknown
 * Growth in participation despite recession: Unknown
@@ -325,5 +344,8 @@ This brings the list to:
 
 ## References
 
-* [1] Bosley, Stacie, and Kim K. McKeage. "Multilevel Marketing Diffusion and the Risk of Pyramid Scheme Activity: The Case of Fortune Hi-Tech Marketing in Montana." American Marketing Association, 2015.
-* [2] Lidstone, Herrick K. "Email Disclaimers–A Worthwhile Endeavor or a Waste of Electronic Ink?." Available at SSRN 2656466 (2015)
+* [1] Bosley, Stacie, and Kim K. McKeage. "Multilevel Marketing Diffusion and
+  the Risk of Pyramid Scheme Activity: The Case of Fortune Hi-Tech Marketing in
+  Montana." American Marketing Association, 2015.
+* [2] Lidstone, Herrick K. "Email Disclaimers–A Worthwhile Endeavor or a Waste
+  of Electronic Ink?." Available at SSRN 2656466 (2015)

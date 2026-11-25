@@ -2,7 +2,8 @@
 
 Simulate the flow of money of MyClickWinners.
 
-InvestigateMyClickWinners is one of [Richèl Bilderbeek's tools](https://richelbilderbeek.github.io/tools/).
+InvestigateMyClickWinners is one of [Richèl Bilderbeek's
+tools](https://richelbilderbeek.github.io/tools/).
 
 ![InvestigateMyClickWinners](InvestigateMyClickWinners_0_4.png)
 
