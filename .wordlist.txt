@@ -1,5 +1,6 @@
 Bilderbeek's
 ClickCard
+Codecov
 InvestigateMyClickWinners
 MyClickWinners
 Richèl
