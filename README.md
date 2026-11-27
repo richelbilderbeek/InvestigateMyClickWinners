@@ -1,5 +1,7 @@
 # InvestigateMyClickWinners
 
+[![Codecov](https://codecov.io/gh/richelbilderbeek/InvestigateMyClickWinners/branch/main/graph/badge.svg)](https://codecov.io/gh/richelbilderbeek/InvestigateMyClickWinners)
+
 [Go to the nicely rendered
 website](https://richelbilderbeek.github.io/InvestigateMyClickWinners/).
 
